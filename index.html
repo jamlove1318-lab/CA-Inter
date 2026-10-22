@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚖️</text></svg>" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CA Inter Pro - ICAI Master Exam Suite & AI Evaluator</title>
+    <link rel="manifest" href="./manifest.json" />
+    <meta name="theme-color" content="#1d4ed8" />
+    <meta name="description" content="Complete ICAI CA Intermediate preparation suite with AI Answer Evaluator, MCQs, Past Papers, Case Study Lab, and Game Zone. 100% Offline Capable." />
+    <!-- Fonts with offline system fallback -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <script>
+      // Register Service Worker for offline PWA installation
+      if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || window.location.hostname === 'localhost')) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js').then(
+            (reg) => console.log('CA Inter PWA Service Worker Registered', reg.scope),
+            (err) => console.log('Service Worker Registration failed', err)
+          );
+        });
+      }
+    </script>
+  </head>
+  <body class="bg-slate-900 text-slate-100 antialiased font-sans selection:bg-blue-600 selection:text-white">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

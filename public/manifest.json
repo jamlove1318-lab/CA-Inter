@@ -1,0 +1,19 @@
+{
+  "name": "CA Inter Pro - ICAI Master Exam Suite",
+  "short_name": "CA Inter Pro",
+  "description": "Complete study suite for ICAI CA Intermediate with AI Answer Evaluator, MCQs, Past Papers, and Game Zone. 100% Offline Capable.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0f172a",
+  "theme_color": "#1d4ed8",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚖️</text></svg>",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

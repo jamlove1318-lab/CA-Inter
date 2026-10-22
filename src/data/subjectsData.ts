@@ -1,0 +1,156 @@
+import { Subject } from '../types/subject';
+
+export const CA_INTER_SUBJECTS: Subject[] = [
+  {
+    id: 'p1_adv_acc',
+    paperNumber: 1,
+    code: 'P-1',
+    title: 'Advanced Accounting',
+    group: 'Group 1',
+    mcqMarks: 30,
+    descriptiveMarks: 70,
+    color: 'from-blue-600 to-indigo-700',
+    icon: 'Calculator',
+    standardsCount: 27,
+    chapters: [
+      { id: 'as_framework', name: 'Applicability of AS & Ind AS Framework', category: 'B', weightageMarks: '5-8 Marks' },
+      { id: 'as_revenue_inv', name: 'AS 2 (Inventory) & AS 9 (Revenue Recognition)', category: 'A', weightageMarks: '8-12 Marks' },
+      { id: 'as_ppe_dep', name: 'AS 10 (PPE) & AS 16 (Borrowing Costs)', category: 'A', weightageMarks: '10-14 Marks' },
+      { id: 'as_gov_fx', name: 'AS 11 (Forex) & AS 12 (Govt Grants)', category: 'B', weightageMarks: '5-10 Marks' },
+      { id: 'as_leases_eps', name: 'AS 19 (Leases) & AS 20 (EPS)', category: 'A', weightageMarks: '8-12 Marks' },
+      { id: 'as_taxes_prov', name: 'AS 22 (Taxes on Income) & AS 29 (Provisions)', category: 'A', weightageMarks: '8-10 Marks' },
+      { id: 'company_fs', name: 'Financial Statements of Companies (Schedule III)', category: 'A', weightageMarks: '10-14 Marks' },
+      { id: 'buyback', name: 'Buyback of Securities & Equity with Differential Rights', category: 'B', weightageMarks: '6-10 Marks' },
+      { id: 'internal_reconstruction', name: 'Internal Reconstruction of Companies', category: 'A', weightageMarks: '10-14 Marks' },
+      { id: 'amalgamation', name: 'Amalgamation of Companies (AS 14)', category: 'A', weightageMarks: '12-16 Marks' },
+      { id: 'cfs', name: 'Consolidated Financial Statements (AS 21, 23, 27)', category: 'A', weightageMarks: '12-16 Marks' },
+      { id: 'branch_accounts', name: 'Accounting for Branches including Foreign Branches', category: 'B', weightageMarks: '8-10 Marks' }
+    ]
+  },
+  {
+    id: 'p2_law',
+    paperNumber: 2,
+    code: 'P-2',
+    title: 'Corporate & Other Laws',
+    group: 'Group 1',
+    mcqMarks: 30,
+    descriptiveMarks: 70,
+    color: 'from-amber-600 to-rose-700',
+    icon: 'Scale',
+    sectionsCount: 148,
+    chapters: [
+      { id: 'prelim_incorp', name: 'Preliminary & Incorporation (Sec 1-22)', category: 'B', weightageMarks: '6-8 Marks' },
+      { id: 'prospectus_allot', name: 'Prospectus and Allotment of Securities (Sec 23-42)', category: 'A', weightageMarks: '8-10 Marks' },
+      { id: 'share_capital', name: 'Share Capital and Debentures (Sec 43-72)', category: 'A', weightageMarks: '10-14 Marks' },
+      { id: 'deposits', name: 'Acceptance of Deposits by Companies (Sec 73-76A)', category: 'A', weightageMarks: '6-8 Marks' },
+      { id: 'charges', name: 'Registration of Charges (Sec 77-87)', category: 'A', weightageMarks: '6-8 Marks' },
+      { id: 'mgmt_admin', name: 'Management & Administration - AGM/EGM/Postal Ballot (Sec 88-122)', category: 'A', weightageMarks: '12-16 Marks' },
+      { id: 'dividend', name: 'Declaration and Payment of Dividend (Sec 123-127)', category: 'A', weightageMarks: '6-10 Marks' },
+      { id: 'accounts_csr', name: 'Accounts of Companies & CSR (Sec 128-137 & Sec 135)', category: 'A', weightageMarks: '10-14 Marks' },
+      { id: 'audit_auditors', name: 'Audit and Auditors (Sec 139-148)', category: 'A', weightageMarks: '10-14 Marks' },
+      { id: 'llp_act', name: 'The Limited Liability Partnership Act, 2008', category: 'B', weightageMarks: '8-10 Marks' },
+      { id: 'general_clauses', name: 'The General Clauses Act, 1897', category: 'B', weightageMarks: '6-8 Marks' },
+      { id: 'interpretation', name: 'Interpretation of Statutes, Deeds and Documents', category: 'B', weightageMarks: '6-8 Marks' },
+      { id: 'fema', name: 'The Foreign Exchange Management Act, 1999 (FEMA)', category: 'A', weightageMarks: '8-10 Marks' }
+    ]
+  },
+  {
+    id: 'p3_tax',
+    paperNumber: 3,
+    code: 'P-3',
+    title: 'Taxation (Income Tax & GST)',
+    group: 'Group 1',
+    mcqMarks: 30,
+    descriptiveMarks: 70,
+    color: 'from-emerald-600 to-teal-800',
+    icon: 'Receipt',
+    sectionsCount: 120,
+    chapters: [
+      { id: 'res_status', name: 'Basic Concepts & Residential Status (Sec 1-6)', category: 'A', weightageMarks: '6-8 Marks' },
+      { id: 'salaries', name: 'Salaries (Sec 15-17)', category: 'A', weightageMarks: '8-12 Marks' },
+      { id: 'house_prop', name: 'Income from House Property (Sec 22-27)', category: 'B', weightageMarks: '6-8 Marks' },
+      { id: 'pgbp', name: 'Profits and Gains of Business or Profession (Sec 28-44DB)', category: 'A', weightageMarks: '12-16 Marks' },
+      { id: 'capital_gains', name: 'Capital Gains & Sec 54 Exemptions (Sec 45-55A)', category: 'A', weightageMarks: '10-14 Marks' },
+      { id: 'ifos_clubbing', name: 'Income from Other Sources, Clubbing & Set-off', category: 'B', weightageMarks: '8-10 Marks' },
+      { id: 'deductions_vi_a', name: 'Deductions from GTI (Sec 80C to 80U)', category: 'A', weightageMarks: '8-10 Marks' },
+      { id: 'total_income_comp', name: 'Computation of Total Income & Tax (Sec 115BAC Default Regime)', category: 'A', weightageMarks: '14-16 Marks' },
+      { id: 'tds_tcs_advance', name: 'TDS, TCS, Advance Tax & Filing of Return', category: 'A', weightageMarks: '8-12 Marks' },
+      { id: 'gst_supply_charge', name: 'GST: Supply Concept & Reverse Charge Mechanism (Sec 7, 8, 9)', category: 'A', weightageMarks: '8-12 Marks' },
+      { id: 'gst_exemptions', name: 'GST: Exemptions from Tax', category: 'B', weightageMarks: '5-8 Marks' },
+      { id: 'gst_time_value', name: 'GST: Time & Value of Supply (Sec 12, 13, 15)', category: 'A', weightageMarks: '8-12 Marks' },
+      { id: 'gst_itc', name: 'GST: Input Tax Credit (Sec 16, 17, 18)', category: 'A', weightageMarks: '12-16 Marks' },
+      { id: 'gst_invoice_reg', name: 'GST: Registration, Tax Invoice, E-way Bill & Returns', category: 'A', weightageMarks: '8-12 Marks' }
+    ]
+  },
+  {
+    id: 'p4_costing',
+    paperNumber: 4,
+    code: 'P-4',
+    title: 'Cost & Management Accounting',
+    group: 'Group 2',
+    mcqMarks: 0, // In ICAI, Costing has practical/objective problems
+    descriptiveMarks: 100,
+    color: 'from-cyan-600 to-blue-800',
+    icon: 'PieChart',
+    chapters: [
+      { id: 'cost_sheet', name: 'Cost Sheet and Classification of Costs', category: 'A', weightageMarks: '8-10 Marks' },
+      { id: 'material_cost', name: 'Material Cost (EOQ, Stock Levels, Inventory Controls)', category: 'A', weightageMarks: '10-12 Marks' },
+      { id: 'employee_cost', name: 'Employee Cost (Labour Turnover, Halsey & Rowan Schemes)', category: 'B', weightageMarks: '8-10 Marks' },
+      { id: 'overheads', name: 'Overheads (Machine Hour Rate, Reciprocal Apportionment)', category: 'A', weightageMarks: '10-14 Marks' },
+      { id: 'abc_costing', name: 'Activity Based Costing (ABC Cost Drivers)', category: 'A', weightageMarks: '8-12 Marks' },
+      { id: 'job_contract', name: 'Job Costing, Batch Costing & Contract Costing', category: 'B', weightageMarks: '8-10 Marks' },
+      { id: 'process_costing', name: 'Process Costing (Equivalent Production, Normal/Abnormal Loss)', category: 'A', weightageMarks: '10-14 Marks' },
+      { id: 'service_costing', name: 'Service / Operating Costing (Transport, Hospital, Hotels)', category: 'A', weightageMarks: '8-12 Marks' },
+      { id: 'standard_costing', name: 'Standard Costing (Material, Labour & Overhead Variances)', category: 'A', weightageMarks: '12-16 Marks' },
+      { id: 'marginal_costing', name: 'Marginal Costing (CVP, BEP, MOS, Key Factor Decisions)', category: 'A', weightageMarks: '12-16 Marks' },
+      { id: 'budgetary_control', name: 'Budgets & Budgetary Control (Flexible & Cash Budget)', category: 'B', weightageMarks: '8-10 Marks' }
+    ]
+  },
+  {
+    id: 'p5_audit',
+    paperNumber: 5,
+    code: 'P-5',
+    title: 'Auditing & Ethics',
+    group: 'Group 2',
+    mcqMarks: 30,
+    descriptiveMarks: 70,
+    color: 'from-purple-600 to-violet-800',
+    icon: 'ShieldCheck',
+    standardsCount: 26,
+    chapters: [
+      { id: 'audit_nature_sqc', name: 'Nature, Objective and Scope of Audit & SQC 1', category: 'B', weightageMarks: '6-8 Marks' },
+      { id: 'audit_strategy', name: 'Audit Strategy, Planning and Execution (SA 300, 320)', category: 'B', weightageMarks: '6-8 Marks' },
+      { id: 'risk_assessment', name: 'Risk Assessment and Internal Control (SA 315, 330)', category: 'A', weightageMarks: '10-12 Marks' },
+      { id: 'audit_evidence', name: 'Audit Evidence (SA 500, 501, 505, 510, 520, 530, 550, 560, 570, 580)', category: 'A', weightageMarks: '14-18 Marks' },
+      { id: 'automated_env', name: 'Audit in an Automated Environment', category: 'B', weightageMarks: '6-8 Marks' },
+      { id: 'audit_fs_items', name: 'Audit of Items of Financial Statements (Assertions & Substantive)', category: 'A', weightageMarks: '12-16 Marks' },
+      { id: 'company_audit', name: 'Company Audit (Sec 139-148 & CARO 2020)', category: 'A', weightageMarks: '14-16 Marks' },
+      { id: 'audit_report', name: 'Audit Report (SA 700, 701, 705, 706)', category: 'A', weightageMarks: '10-12 Marks' },
+      { id: 'special_audits', name: 'Audit of Special Entities (Banks, Co-operatives, Hotels, Trusts)', category: 'B', weightageMarks: '8-10 Marks' }
+    ]
+  },
+  {
+    id: 'p6_fm_sm',
+    paperNumber: 6,
+    code: 'P-6',
+    title: 'Financial Management & Strategic Management',
+    group: 'Group 2',
+    mcqMarks: 30,
+    descriptiveMarks: 70,
+    color: 'from-rose-600 to-pink-800',
+    icon: 'TrendingUp',
+    chapters: [
+      { id: 'fm_ratios', name: 'Financial Analysis through Ratios', category: 'A', weightageMarks: '8-10 Marks' },
+      { id: 'fm_cost_capital', name: 'Cost of Capital (Ke, Kd, Kp, WACC)', category: 'A', weightageMarks: '8-12 Marks' },
+      { id: 'fm_capital_struct', name: 'Financing Decisions & Capital Structure Theories (EBIT-EPS, MM)', category: 'A', weightageMarks: '8-10 Marks' },
+      { id: 'fm_leverages', name: 'Leverages (Operating, Financial & Combined Leverage)', category: 'A', weightageMarks: '6-8 Marks' },
+      { id: 'fm_cap_budgeting', name: 'Investment Decisions: Capital Budgeting (NPV, IRR, Payback, PI)', category: 'A', weightageMarks: '10-14 Marks' },
+      { id: 'fm_dividend', name: 'Dividend Decisions (Walter, Gordon & MM Model)', category: 'B', weightageMarks: '6-8 Marks' },
+      { id: 'fm_working_capital', name: 'Management of Working Capital (Operating Cycle & Cash/Debtors)', category: 'A', weightageMarks: '10-12 Marks' },
+      { id: 'sm_intro', name: 'SM: Introduction to Strategic Management & Levels', category: 'B', weightageMarks: '6-8 Marks' },
+      { id: 'sm_analysis', name: 'SM: Strategic Analysis - External (PESTEL, Porter) & Internal', category: 'A', weightageMarks: '10-14 Marks' },
+      { id: 'sm_choices', name: 'SM: Strategic Choices (Ansoff Matrix, BCG, Porter Generic Strategies)', category: 'A', weightageMarks: '12-16 Marks' },
+      { id: 'sm_exec', name: 'SM: Strategy Implementation and Evaluation (BSC, McKinsey 7S)', category: 'A', weightageMarks: '10-14 Marks' }
+    ]
+  }
+];
