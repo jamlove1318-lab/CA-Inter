@@ -13,7 +13,8 @@ import {
   VolumeX,
   Flame,
   WifiOff,
-  Smartphone
+  Smartphone,
+  RotateCw
 } from 'lucide-react';
 import { AudioService } from '../services/audioService';
 
@@ -41,6 +42,28 @@ export const Navbar: React.FC<NavbarProps> = ({
   const handleToggleSound = () => {
     const newState = AudioService.toggleSound();
     setSoundOn(newState);
+  };
+
+  const handleForceUpdate = async () => {
+    try {
+      if ('serviceWorker' in navigator) {
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        for (const reg of registrations) {
+          await reg.unregister();
+        }
+      }
+      if ('caches' in window) {
+        const keys = await caches.keys();
+        for (const key of keys) {
+          await caches.delete(key);
+        }
+      }
+    } catch (e) {
+      console.error('Error clearing cache:', e);
+    }
+    const url = new URL(window.location.href);
+    url.searchParams.set('v', Date.now().toString());
+    window.location.href = url.toString();
   };
 
   const handleInstallApp = async () => {
@@ -97,6 +120,16 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* Quick Action Tools */}
           <div className="flex items-center gap-1.5 sm:gap-2">
+            {/* Force Update / Sync Latest */}
+            <button
+              onClick={handleForceUpdate}
+              className="flex items-center gap-1 px-2 sm:px-2.5 py-1.5 text-xs font-semibold text-amber-300 bg-amber-950/60 hover:bg-amber-900/60 rounded-lg border border-amber-700/60 transition-all shadow-sm"
+              title="Force Update to Latest Version"
+            >
+              <RotateCw className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+              <span className="text-[11px]">Sync</span>
+            </button>
+
             {/* Install PWA Button */}
             <button
               onClick={handleInstallApp}

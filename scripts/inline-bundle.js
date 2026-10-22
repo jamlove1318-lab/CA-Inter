@@ -65,12 +65,24 @@ const standaloneHtml = `<!DOCTYPE html>
         console.log('[PWA] CA Inter Pro successfully installed on device!');
       });
 
-      // Register Service Worker for offline PWA installation
+      // Register Service Worker for offline PWA installation with active update polling
       if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || window.location.hostname === 'localhost')) {
         window.addEventListener('load', function() {
-          navigator.serviceWorker.register('./sw.js', { scope: './' }).then(
+          navigator.serviceWorker.register('./sw.js?t=' + Date.now(), { scope: './' }).then(
             function(reg) {
               console.log('[PWA] Service Worker Registered with scope:', reg.scope);
+              reg.update();
+              reg.addEventListener('updatefound', function() {
+                var newWorker = reg.installing;
+                if (newWorker) {
+                  newWorker.addEventListener('statechange', function() {
+                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                      console.log('[PWA] New version ready, auto-refreshing...');
+                      window.location.reload();
+                    }
+                  });
+                }
+              });
             },
             function(err) {
               console.log('[PWA] Service Worker Registration failed:', err);

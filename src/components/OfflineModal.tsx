@@ -114,6 +114,23 @@ export const OfflineModal: React.FC<OfflineModalProps> = ({ isOpen, onClose }) =
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
               <span>Offline cache is automatically managed by the built-in Service Worker.</span>
             </div>
+
+            <button
+              onClick={async () => {
+                if ('serviceWorker' in navigator) {
+                  const regs = await navigator.serviceWorker.getRegistrations();
+                  for (const r of regs) await r.unregister();
+                }
+                if ('caches' in window) {
+                  const keys = await caches.keys();
+                  for (const k of keys) await caches.delete(k);
+                }
+                window.location.href = window.location.href.split('?')[0] + '?reload=' + Date.now();
+              }}
+              className="w-full py-2 bg-slate-800 hover:bg-slate-700 text-amber-300 text-xs font-semibold rounded-xl border border-slate-700 transition-all text-center"
+            >
+              🔄 Seeing Old Version? Tap here to Force Reload to Latest
+            </button>
           </div>
         </div>
 
