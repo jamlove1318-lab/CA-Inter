@@ -12,7 +12,8 @@ import {
   Volume2, 
   VolumeX,
   Flame,
-  WifiOff
+  WifiOff,
+  Smartphone
 } from 'lucide-react';
 import { AudioService } from '../services/audioService';
 
@@ -40,6 +41,23 @@ export const Navbar: React.FC<NavbarProps> = ({
   const handleToggleSound = () => {
     const newState = AudioService.toggleSound();
     setSoundOn(newState);
+  };
+
+  const handleInstallApp = async () => {
+    const promptEvent = (window as any).deferredInstallPrompt;
+    if (promptEvent) {
+      try {
+        promptEvent.prompt();
+        const choice = await promptEvent.userChoice;
+        console.log('Install prompt result:', choice);
+        (window as any).deferredInstallPrompt = null;
+      } catch (e) {
+        console.error('Error invoking install prompt:', e);
+        openOfflineModal();
+      }
+    } else {
+      openOfflineModal();
+    }
   };
 
   const navItems = [
@@ -79,6 +97,17 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* Quick Action Tools */}
           <div className="flex items-center gap-1.5 sm:gap-2">
+            {/* Install PWA Button */}
+            <button
+              onClick={handleInstallApp}
+              className="flex items-center gap-1 px-2.5 sm:px-3 py-1.5 text-xs font-bold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 rounded-lg shadow-sm transition-all"
+              title="Install App on Phone or PC"
+            >
+              <Smartphone className="w-3.5 h-3.5 text-blue-200 shrink-0" />
+              <span className="hidden sm:inline">Install App</span>
+              <span className="sm:hidden text-[11px]">Install</span>
+            </button>
+
             {/* Offline Mode / Download */}
             <button
               onClick={openOfflineModal}

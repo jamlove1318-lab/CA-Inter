@@ -19,6 +19,22 @@ export const OfflineModal: React.FC<OfflineModalProps> = ({ isOpen, onClose }) =
     document.body.removeChild(link);
   };
 
+  const handleTriggerInstall = async () => {
+    const promptEvent = (window as any).deferredInstallPrompt;
+    if (promptEvent) {
+      try {
+        promptEvent.prompt();
+        const choice = await promptEvent.userChoice;
+        console.log('Install prompt result:', choice);
+        (window as any).deferredInstallPrompt = null;
+      } catch (err) {
+        console.error('Install prompt failed:', err);
+      }
+    } else {
+      alert("📱 How to install on your phone:\n\n• On iPhone / iPad (Safari): Tap the Share button (square with upward arrow) ➔ tap 'Add to Home Screen'.\n\n• On Android (Chrome / Brave): Tap the 3 dots menu (⋮) at top right ➔ tap 'Install app' or 'Add to Home screen'.\n\n• On Laptop / PC (Chrome / Edge): Click the install icon (⊕) inside your browser address bar.");
+    }
+  };
+
   return (
     <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
       <div className="bg-slate-800 border border-slate-700 rounded-3xl max-w-xl w-full p-6 shadow-2xl space-y-6 animate-in zoom-in-95 duration-200">
@@ -85,6 +101,14 @@ export const OfflineModal: React.FC<OfflineModalProps> = ({ isOpen, onClose }) =
             <p className="text-xs text-slate-300 leading-relaxed font-sans">
               Open the web link on any phone (Android / iOS) or computer. Tap your browser menu (<kbd className="px-1 bg-slate-800 rounded text-slate-300">⋮</kbd> or <kbd className="px-1 bg-slate-800 rounded text-slate-300">Share</kbd>) and select <strong>"Add to Home Screen"</strong> or <strong>"Install App"</strong>. The app installs locally and works completely offline forever!
             </p>
+
+            <button
+              onClick={handleTriggerInstall}
+              className="w-full flex items-center justify-center gap-2 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold rounded-xl shadow-md transition-all"
+            >
+              <Smartphone className="w-4 h-4" />
+              <span>Tap Here to Trigger App Installation</span>
+            </button>
 
             <div className="flex items-center gap-2 text-[11px] text-slate-400">
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
