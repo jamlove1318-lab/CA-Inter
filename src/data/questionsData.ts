@@ -339,6 +339,178 @@ export const MCQS_DATABASE: McqQuestion[] = [
     correctOptionId: 'a',
     trapNote: 'Porter introduced Value Chain and Generic Strategies; Prahalad and Hamel introduced Core Competence.',
     explanation: 'The concept of Core Competence was originated by C.K. Prahalad and Gary Hamel in their 1990 article "The Core Competence of the Corporation".'
+  },
+  // Additional High-Yield MCQs for Paper 4: Costing
+  {
+    id: 'mcq_p4_01',
+    subjectId: 'p4_costing',
+    chapterId: 'marginal_costing',
+    type: 'mcq',
+    importance: 'HIGH',
+    source: 'ICAI May 2024 Exam (2 Marks)',
+    marks: 2,
+    difficulty: 'Examiner Favorite',
+    icaiReference: 'Margin of Safety = Profit / PV Ratio',
+    questionText: 'A manufacturing firm has Total Sales of ₹ 20,00,000 with a P/V Ratio of 40%. The firm incurs Fixed Costs of ₹ 5,00,000. What is the Margin of Safety (in Rupees)?',
+    options: [
+      { id: 'a', text: '₹ 7,50,000' },
+      { id: 'b', text: '₹ 12,50,000' },
+      { id: 'c', text: '₹ 8,00,000' },
+      { id: 'd', text: '₹ 5,00,000' }
+    ],
+    correctOptionId: 'a',
+    trapNote: 'Break-even sales = Fixed Cost / PV ratio = 5,00,000 / 0.4 = ₹ 12,50,000. Margin of Safety = Total Sales - Break Even Sales = 20,00,000 - 12,50,000 = ₹ 7,50,000 (or Profit ₹ 3,00,000 / 0.40).',
+    explanation: 'Break-Even Sales = Fixed Cost / P/V Ratio = ₹ 5,00,000 / 0.40 = ₹ 12,50,000. Margin of Safety = Actual Sales - Break-Even Sales = ₹ 20,00,000 - ₹ 12,50,000 = ₹ 7,50,000. Alternatively: Profit = (20,00,000 × 40%) - 5,00,000 = ₹ 3,00,000. MOS = Profit / PV Ratio = 3,00,000 / 0.40 = ₹ 7,50,000.'
+  },
+  {
+    id: 'mcq_p4_02',
+    subjectId: 'p4_costing',
+    chapterId: 'employee_cost',
+    type: 'mcq',
+    importance: 'HIGH',
+    source: 'RTP Nov 2024',
+    marks: 2,
+    difficulty: 'Standard ICAI',
+    icaiReference: 'Halsey 50% Incentive Scheme',
+    questionText: 'Standard time allowed for a job is 50 hours at standard wage rate of ₹ 80 per hour. A skilled worker completes the job in 40 hours. What are the total earnings of the worker under the Halsey (50% Sharing) Scheme?',
+    options: [
+      { id: 'a', text: '₹ 3,600 (Time Taken Wages ₹ 3,200 + Bonus ₹ 400)' },
+      { id: 'b', text: '₹ 4,000 (Standard Wages for 50 hours)' },
+      { id: 'c', text: '₹ 3,200 (Wages for actual 40 hours without bonus)' },
+      { id: 'd', text: '₹ 3,840 (Calculated under Rowan Scheme)' }
+    ],
+    correctOptionId: 'a',
+    trapNote: 'Halsey bonus is 50% of (Time Saved × Time Rate). Time saved = 10 hrs. Bonus = 10 × 80 × 50% = ₹ 400.',
+    explanation: 'Earnings under Halsey Scheme = (Time Taken × Rate) + 50% × (Time Saved × Rate) = (40 hrs × ₹ 80) + 50% × (10 hrs × ₹ 80) = ₹ 3,200 + ₹ 400 = ₹ 3,600.'
+  },
+  // Additional High-Yield MCQs for Paper 2: Law
+  {
+    id: 'mcq_p2_04',
+    subjectId: 'p2_law',
+    chapterId: 'mgmt_admin',
+    type: 'mcq',
+    importance: 'HIGH',
+    source: 'ICAI May 2023 Exam (2 Marks)',
+    marks: 2,
+    difficulty: 'Examiner Favorite',
+    icaiReference: 'Section 103(1)(a) Companies Act, 2013',
+    questionText: 'Zenith Global Ltd is a public company having 6,400 members as on the date of its Annual General Meeting. As per Section 103 of the Companies Act, 2013, what is the statutory quorum required for the meeting unless articles provide for a larger number?',
+    options: [
+      { id: 'a', text: '30 members personally present' },
+      { id: 'b', text: '15 members personally present' },
+      { id: 'c', text: '5 members personally present' },
+      { id: 'd', text: '50 members personally present or represented by proxy' }
+    ],
+    correctOptionId: 'a',
+    trapNote: 'Section 103 thresholds for Public Co: <= 1000 members = 5; 1001 to 5000 members = 15; exceeding 5000 members = 30 members personally present (proxies not counted).',
+    explanation: 'Under Section 103(1)(a)(iii) of the Companies Act, 2013, if the number of members as on the date of meeting is more than 5,000, the quorum for a general meeting of a public company is 30 members personally present.'
+  },
+  {
+    id: 'mcq_p2_05',
+    subjectId: 'p2_law',
+    chapterId: 'accounts_csr',
+    type: 'mcq',
+    importance: 'HIGH',
+    source: 'RTP May 2024',
+    marks: 2,
+    difficulty: 'Standard ICAI',
+    icaiReference: 'Section 138 read with Rule 13 of Companies (Accounts) Rules, 2014',
+    questionText: 'An unlisted public company has Paid-up share capital of ₹ 40 Crores, Turnover of ₹ 180 Crores, Outstanding loans from banks of ₹ 115 Crores, and Outstanding deposits of ₹ 18 Crores during the preceding financial year. Is internal audit mandatory for this company under Section 138?',
+    options: [
+      { id: 'a', text: 'Yes, because outstanding loans/borrowings from banks/PFIs exceed ₹ 100 Crores' },
+      { id: 'b', text: 'No, because Turnover is below ₹ 200 Crores and Paid-up capital is below ₹ 50 Crores' },
+      { id: 'c', text: 'No, internal audit applies only to listed companies' },
+      { id: 'd', text: 'Yes, because deposits exceed ₹ 10 Crores' }
+    ],
+    correctOptionId: 'a',
+    trapNote: 'For an unlisted public company, internal audit triggers if ANY of: Capital >= 50 Cr, Turnover >= 200 Cr, Loans >= 100 Cr, or Deposits >= 25 Cr. Since loans (115 Cr) >= 100 Cr, it is mandatory.',
+    explanation: 'As per Rule 13 of Companies (Accounts) Rules, 2014, an unlisted public company is required to appoint an internal auditor if outstanding loans or borrowings from banks or public financial institutions exceed ₹ 100 Crore at any point of time during the preceding financial year.'
+  },
+  // Additional High-Yield MCQs for Paper 3: Tax
+  {
+    id: 'mcq_p3_04',
+    subjectId: 'p3_tax',
+    chapterId: 'capital_gains',
+    type: 'mcq',
+    importance: 'HIGH',
+    source: 'ICAI Nov 2023 Exam (2 Marks)',
+    marks: 2,
+    difficulty: 'Examiner Favorite',
+    icaiReference: 'Section 54EC of Income Tax Act, 1961',
+    questionText: 'What is the maximum investment an assessee can make in eligible bonds (REC, NHAI, PFC, IRFC) under Section 54EC to claim exemption from long-term capital gains in any financial year?',
+    options: [
+      { id: 'a', text: '₹ 50 Lakhs' },
+      { id: 'b', text: '₹ 1 Crore' },
+      { id: 'c', text: '₹ 25 Lakhs' },
+      { id: 'd', text: 'No monetary limit as long as invested within 6 months' }
+    ],
+    correctOptionId: 'a',
+    trapNote: 'Proviso to Section 54EC specifically caps the investment in eligible bonds at ₹ 50 Lakhs during any financial year.',
+    explanation: 'Under Section 54EC(1), the investment made in the long-term specified asset (bonds of NHAI, REC, etc.) by an assessee during any financial year cannot exceed ₹ 50 Lakhs. The investment must be made within 6 months from the date of transfer.'
+  },
+  {
+    id: 'mcq_p3_05',
+    subjectId: 'p3_tax',
+    chapterId: 'gst_time_value',
+    type: 'mcq',
+    importance: 'HIGH',
+    source: 'RTP Nov 2024',
+    marks: 2,
+    difficulty: 'Standard ICAI',
+    icaiReference: 'Section 15(3) of CGST Act, 2017',
+    questionText: 'Under Section 15 of the CGST Act, 2017, when can a discount given after the supply has been effected be deducted from the value of taxable supply?',
+    options: [
+      { id: 'a', text: 'If established in terms of an agreement entered into before or at the time of supply and linked to relevant invoices, with proportionate ITC reversed by recipient' },
+      { id: 'b', text: 'Discounts given after supply can never be deducted under GST under any circumstance' },
+      { id: 'c', text: 'If the discount is up to 10% of total invoice value without requiring any ITC reversal' },
+      { id: 'd', text: 'Only if approved in writing by the jurisdictional GST Commissioner' }
+    ],
+    correctOptionId: 'a',
+    trapNote: 'Section 15(3)(b) requires both: (i) pre-existing agreement linked to invoices, and (ii) proportionate ITC reversal by recipient.',
+    explanation: 'As per Section 15(3)(b) of the CGST Act, post-supply discount is excluded from value of supply only if: (i) it is established in terms of an agreement entered into at or before the time of such supply and linked to relevant invoices; and (ii) input tax credit attributable to the discount has been reversed by the recipient.'
+  },
+  // Additional High-Yield MCQs for Paper 5: Audit
+  {
+    id: 'mcq_p5_04',
+    subjectId: 'p5_audit',
+    chapterId: 'company_audit',
+    type: 'mcq',
+    importance: 'HIGH',
+    source: 'ICAI May 2024 Exam (2 Marks)',
+    marks: 2,
+    difficulty: 'Examiner Favorite',
+    icaiReference: 'Section 139(7) Companies Act, 2013',
+    questionText: 'Bharat Heavy Electronics Ltd is a newly incorporated Government Company owned 75% by the Central Government. Who is authorized to appoint the first auditor of the company, and within what time period from registration?',
+    options: [
+      { id: 'a', text: 'The Comptroller and Auditor-General of India (C&AG) within 60 days of registration' },
+      { id: 'b', text: 'The Board of Directors within 30 days of registration' },
+      { id: 'c', text: 'The Central Government (MCA) within 90 days of registration' },
+      { id: 'd', text: 'The Shareholders in the First Annual General Meeting' }
+    ],
+    correctOptionId: 'a',
+    trapNote: 'For a Government Company, the first auditor is appointed by C&AG within 60 days. If C&AG fails, the Board appoints within 30 days. If Board fails, members in EGM within 60 days.',
+    explanation: 'Under Section 139(7) of the Companies Act, in the case of a Government company or any other company owned/controlled by Central/State Government, the first auditor shall be appointed by the Comptroller and Auditor-General of India within 60 days from the date of registration.'
+  },
+  {
+    id: 'mcq_p5_05',
+    subjectId: 'p5_audit',
+    chapterId: 'audit_evidence',
+    type: 'mcq',
+    importance: 'HIGH',
+    source: 'MTP Series 1 2024',
+    marks: 2,
+    difficulty: 'Standard ICAI',
+    icaiReference: 'SA 500 Audit Evidence - Para 5 & 6',
+    questionText: 'In the context of SA 500 "Audit Evidence", which of the following statements regarding the sufficiency and appropriateness of audit evidence is CORRECT?',
+    options: [
+      { id: 'a', text: 'Sufficiency is the measure of the quantity of audit evidence; Appropriateness is the measure of the quality (relevance and reliability)' },
+      { id: 'b', text: 'Sufficiency refers to quality while Appropriateness refers to numerical count of vouchers' },
+      { id: 'c', text: 'A high quantity of audit evidence can compensate for evidence of poor quality' },
+      { id: 'd', text: 'Oral inquiry alone from management provides sufficient appropriate audit evidence' }
+    ],
+    correctOptionId: 'a',
+    trapNote: 'Merely obtaining a large volume of low-quality or biased evidence can NEVER compensate for lack of appropriateness.',
+    explanation: 'Under SA 500, Sufficiency is the measure of the quantity of audit evidence, influenced by risk of misstatement. Appropriateness is the measure of the quality of audit evidence, that is, its relevance and its reliability in providing support for the auditor’s opinion.'
   }
 ];
 

@@ -241,5 +241,238 @@ During the year-end statutory audit, the engagement team headed by CA. Vikram en
   - Include "Basis for Qualified Opinion" quantifying the overstatement of inventory by ₹ 2.40 Crores and overstatement of Profit Before Tax by ₹ 2.40 Crores.`
       }
     ]
+  },
+  {
+    id: 'case_03_cost_fm',
+    subjectId: 'p4_costing',
+    chapterId: 'marginal_costing',
+    title: 'Integrated Case Scenario: Nova Automotive Ltd (Marginal Costing, Make or Buy & Leverages)',
+    source: 'ICAI Integrated Case Study (RTP May 2024 Pattern)',
+    importance: 'HIGH',
+    totalMarks: 15,
+    scenarioText: `Nova Automotive Ltd. manufactures electric two-wheeler motors in Chennai. The installed capacity is 50,000 motors per annum, and the current operating capacity utilization is 70% (35,000 units).
+
+Cost and financial structure for the current year are as follows:
+1. Per Unit Cost Structure (at 35,000 units):
+   - Direct Materials: ₹ 1,200
+   - Direct Labour: ₹ 600
+   - Variable Manufacturing Overheads: ₹ 400
+   - Fixed Manufacturing Overheads: ₹ 500 (Total Fixed OH = ₹ 1,75,00,000)
+   - Total Manufacturing Cost: ₹ 2,700
+   - Selling Price per unit: ₹ 3,600
+
+2. Special Export Order Proposal:
+   - A multinational fleet operator from Vietnam offers to purchase 10,000 units at a special export offer price of ₹ 2,500 per unit.
+   - Additional export packaging and sea freight will cost ₹ 100 per unit.
+   - No additional fixed costs will be incurred, and domestic sales price and volume will not be impacted.
+
+3. Capital Structure & Financing:
+   - Nova Automotive Ltd has an existing 12% Bank Term Loan of ₹ 2.5 Crores (Annual Interest = ₹ 30 Lakhs).
+   - Equity Share Capital: ₹ 5 Crores (50 Lakh shares of ₹ 10 each).
+   - Corporate Tax rate is 25%.`,
+    mcqs: [
+      {
+        id: 'case_03_mcq_1',
+        subjectId: 'p4_costing',
+        chapterId: 'marginal_costing',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'Case Scenario Q1',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'Marginal Costing - Export Order & Relevant Costing',
+        questionText: 'What is the incremental contribution per unit from accepting the special export order of 10,000 units from Vietnam?',
+        options: [
+          { id: 'a', text: '₹ 200 per unit (Profit of ₹ 20,00,000)' },
+          { id: 'b', text: '- ₹ 200 per unit (Loss of ₹ 20,00,000 against total cost)' },
+          { id: 'c', text: '₹ 100 per unit (Profit of ₹ 10,00,000)' },
+          { id: 'd', text: '₹ 300 per unit (Profit of ₹ 30,00,000)' }
+        ],
+        correctOptionId: 'a',
+        trapNote: 'Fixed overheads are SUNK and irrelevant for spare capacity export order! Relevant variable cost = 1200 + 600 + 400 + 100 (special packaging) = ₹ 2,300.',
+        explanation: 'Relevant Variable Cost per unit for export = Direct Material (₹ 1,200) + Direct Labour (₹ 600) + Variable OH (₹ 400) + Export Packaging (₹ 100) = ₹ 2,300. Incremental Contribution per unit = Export Selling Price (₹ 2,500) - Relevant Cost (₹ 2,300) = ₹ 200 per unit. Total incremental profit = 10,000 × ₹ 200 = ₹ 20,00,000. Since capacity exists (15,000 idle units), the order should be accepted.'
+      },
+      {
+        id: 'case_03_mcq_2',
+        subjectId: 'p6_fm_sm',
+        chapterId: 'fm_leverages',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'Case Scenario Q2',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'Degree of Financial Leverage (DFL = EBIT / EBT)',
+        questionText: 'Assuming current domestic operations generate EBIT of ₹ 3,15,00,000, what is the Degree of Financial Leverage (DFL)?',
+        options: [
+          { id: 'a', text: '1.105 (EBIT ₹ 3.15 Cr / EBT ₹ 2.85 Cr)' },
+          { id: 'b', text: '1.250' },
+          { id: 'c', text: '1.000' },
+          { id: 'd', text: '1.420' }
+        ],
+        correctOptionId: 'a',
+        trapNote: 'DFL = EBIT / (EBIT - Interest) = ₹ 3,15,00,000 / (₹ 3,15,00,000 - ₹ 30,00,000) = 315 / 285 = 1.105.',
+        explanation: 'EBIT = ₹ 3,15,00,000. Interest = ₹ 30,00,000. EBT = ₹ 3,15,00,000 - ₹ 30,00,000 = ₹ 2,85,00,000. Degree of Financial Leverage (DFL) = EBIT / EBT = 3,15,00,000 / 2,85,00,000 = 1.105.'
+      }
+    ],
+    descriptiveQuestions: [
+      {
+        id: 'case_03_desc_1',
+        subjectId: 'p4_costing',
+        chapterId: 'marginal_costing',
+        type: 'descriptive',
+        importance: 'HIGH',
+        source: 'Case Scenario Q3 (Descriptive - 6 Marks)',
+        marks: 6,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'Break-Even Analysis, Margin of Safety & Export Order Decision',
+        questionText: `Based on the domestic operating parameters of Nova Automotive Ltd:
+(i) Calculate the domestic Break-Even Point (in units and value) and the Margin of Safety percentage.
+(ii) Advise management with detailed calculations whether the Vietnam export order should be accepted and show the overall revised profit of the company after accepting the order.`,
+        rubrics: [
+          {
+            step: 'Break-Even Point and Margin of Safety Computation',
+            marks: 3,
+            expectedKeywords: ['Contribution per unit = ₹ 1,400', 'BEP units = 12,500 units', 'BEP Value = ₹ 4,50,00,000', 'Margin of Safety % = 64.29%'],
+            description: 'Contribution = 3,600 - 2,200 = ₹ 1,400/unit. BEP = 1,75,00,000 / 1,400 = 12,500 units. MOS % = (35,000 - 12,500)/35,000 = 64.29%.'
+          },
+          {
+            step: 'Evaluation of Export Order and Revised Profitability',
+            marks: 3,
+            expectedKeywords: ['Idle capacity = 15,000 units', 'Accept export order', 'Incremental contribution = ₹ 20,00,000', 'Revised Total EBIT = ₹ 3,35,00,000'],
+            description: 'State that since 15,000 units capacity is idle and incremental contribution is positive (₹ 20 Lakhs), accept order. Revised EBIT = ₹ 3.15 Cr + ₹ 0.20 Cr = ₹ 3.35 Crores.'
+          }
+        ],
+        suggestedAnswer: `1. Domestic Break-Even Point & Margin of Safety:
+- Selling Price per unit = ₹ 3,600
+- Variable Cost per unit = Direct Material (₹ 1,200) + Direct Labour (₹ 600) + Variable OH (₹ 400) = ₹ 2,200
+- Contribution per unit = ₹ 3,600 - ₹ 2,200 = ₹ 1,400 per unit
+- P/V Ratio = (₹ 1,400 / ₹ 3,600) × 100 = 38.89%
+- Total Fixed Overheads = ₹ 1,75,00,000
+- Break-Even Point (in units) = Fixed Costs / Contribution per unit = ₹ 1,75,00,000 / ₹ 1,400 = 12,500 units
+- Break-Even Point (in value) = 12,500 units × ₹ 3,600 = ₹ 4,50,00,000
+- Margin of Safety (in units) = Actual Sales (35,000) - BEP Sales (12,500) = 22,500 units
+- Margin of Safety (%) = (22,500 / 35,000) × 100 = 64.29%
+
+2. Evaluation and Advice on Special Export Order:
+- Available Idle Capacity = Installed Capacity (50,000) - Current Domestic (35,000) = 15,000 units.
+- The export order requires 10,000 units, which is well within the idle capacity of 15,000 units.
+- Export Selling Price = ₹ 2,500 per unit
+- Relevant Variable Cost = Domestic Variable Cost (₹ 2,200) + Special Packaging (₹ 100) = ₹ 2,300 per unit
+- Incremental Contribution = ₹ 2,500 - ₹ 2,300 = ₹ 200 per unit
+- Total Incremental Profit from Export = 10,000 units × ₹ 200 = ₹ 20,00,000.
+Recommendation: The company should accept the export order as it utilizes idle capacity and contributes ₹ 20,00,000 directly to net profit without increasing fixed overheads.
+Revised Operating Profit (EBIT) = Current Domestic EBIT (₹ 3,15,00,000) + Export Profit (₹ 20,00,000) = ₹ 3,35,00,000.`
+      }
+    ]
+  },
+  {
+    id: 'case_04_tax_law',
+    subjectId: 'p3_tax',
+    chapterId: 'capital_gains',
+    title: 'Integrated Case Scenario: Zenith Infotech & Director Disqualifications (Taxation & Corporate Law)',
+    source: 'ICAI Integrated Case Study (Nov 2024 Pattern)',
+    importance: 'HIGH',
+    totalMarks: 15,
+    scenarioText: `Zenith Infotech Pvt Ltd is an Indian software consultancy company headquartered in Bengaluru.
+
+Key events during the financial year 2023-24 (AY 2024-25):
+1. Transfer of Commercial Property & Section 50C:
+   - On 15th October 2023, Zenith Infotech sold an office building in Whitefield for ₹ 3.5 Crores.
+   - The agreement to sell was entered on 1st March 2023 with an advance of ₹ 30 Lakhs received via account payee bank draft.
+   - Stamp Duty Value (SDV) on 1st March 2023 was ₹ 3.7 Crores.
+   - SDV on registration date (15th October 2023) was ₹ 4.1 Crores.
+   - The company's tax consultant is debating whether SDV of March 2023 or October 2023 applies.
+
+2. Director Meetings & Compliance under Companies Act:
+   - The company has 4 directors. A Board meeting was convened on 20th November 2023. Notice of meeting was given only 3 days prior. 
+   - Director Mr. Alok was in the US and attended via video-conferencing.
+   - Another director, Mr. Raman, has not filed his annual financial returns and statements for 3 consecutive financial years in another private company where he is also a director.`,
+    mcqs: [
+      {
+        id: 'case_04_mcq_1',
+        subjectId: 'p3_tax',
+        chapterId: 'capital_gains',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'Case Scenario Q1',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'Section 50C Provisos - Agreement Date SDV vs Registration Date SDV',
+        questionText: 'For computing capital gains under Section 50C, which Stamp Duty Value should be taken as the benchmark, and is any full value of consideration adjustment required?',
+        options: [
+          { id: 'a', text: 'SDV on agreement date (₹ 3.7 Cr) is considered, and since it is within 110% of agreed consideration (₹ 3.85 Cr), actual consideration ₹ 3.5 Cr is taken' },
+          { id: 'b', text: 'SDV on registration date (₹ 4.1 Cr) must mandatorily be taken in all circumstances' },
+          { id: 'c', text: '₹ 4.1 Crores is deemed consideration because advance was not paid in cash' },
+          { id: 'd', text: 'The average of ₹ 3.7 Cr and ₹ 4.1 Cr must be taken' }
+        ],
+        correctOptionId: 'a',
+        trapNote: 'First proviso to Section 50C: If consideration or part thereof is received by account payee cheque/draft/ECS on or before the date of agreement, SDV on the date of agreement (₹ 3.7 Cr) applies! 110% of ₹ 3.5 Cr = ₹ 3.85 Cr. Since ₹ 3.7 Cr <= ₹ 3.85 Cr, no addition is made under Section 50C!',
+        explanation: 'Under the first proviso to Section 50C, where the date of agreement and registration are not the same, the SDV on the date of agreement can be taken provided part consideration was received by banking channels on or before agreement date. Here ₹ 30 Lakhs was received via bank draft. Therefore, agreement date SDV (₹ 3.7 Cr) applies. Furthermore, under the third proviso, if SDV does not exceed 110% of agreed consideration (₹ 3.5 Cr × 110% = ₹ 3.85 Cr), the actual consideration of ₹ 3.5 Crores is treated as Full Value of Consideration.'
+      },
+      {
+        id: 'case_04_mcq_2',
+        subjectId: 'p2_law',
+        chapterId: 'mgmt_admin',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'Case Scenario Q2',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'Section 164(2) Disqualification of Directors',
+        questionText: 'What is the legal consequence for Mr. Raman regarding his directorship under Section 164(2) of the Companies Act, 2013 for non-filing of financial statements for 3 consecutive years?',
+        options: [
+          { id: 'a', text: 'Disqualified from being re-appointed in that company or appointed in any other company for 5 years, and must vacate office under Section 167(1)(a)' },
+          { id: 'b', text: 'Only a monetary penalty of ₹ 50,000 with no disqualification' },
+          { id: 'c', text: 'Disqualified for only 1 year provided fine is paid' },
+          { id: 'd', text: 'No impact on directorship in other companies' }
+        ],
+        correctOptionId: 'a',
+        trapNote: 'Section 164(2)(a) imposes 5-year disqualification across all companies and triggers vacation of office under Section 167(1)(a).',
+        explanation: 'Under Section 164(2)(a) of the Companies Act, 2013, no person who is or has been a director of a company which has not filed financial statements or annual returns for any continuous period of three financial years shall be eligible to be re-appointed as a director of that company or appointed in other company for a period of five years. Under Section 167(1)(a), the office of director becomes vacant in all companies other than the defaulting company.'
+      }
+    ],
+    descriptiveQuestions: [
+      {
+        id: 'case_04_desc_1',
+        subjectId: 'p2_law',
+        chapterId: 'mgmt_admin',
+        type: 'descriptive',
+        importance: 'HIGH',
+        source: 'Case Scenario Q3 (Descriptive - 6 Marks)',
+        marks: 6,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'Section 173(3) Board Meeting at Shorter Notice & Video Conferencing Rules',
+        questionText: `Examine the legal validity of the Board Meeting of Zenith Infotech Pvt Ltd held on 20th November 2023 with reference to:
+(i) Calling the Board meeting with only 3 days notice under Section 173(3).
+(ii) Attendance of Director Mr. Alok via video conferencing and requirements for valid quorum under Section 174 and Rule 3 of Companies (Meetings of Board and its Powers) Rules, 2014.`,
+        rubrics: [
+          {
+            step: 'Provisions regarding Notice of Board Meeting under Section 173(3)',
+            marks: 3,
+            expectedKeywords: ['Section 173(3)', 'Not less than 7 days notice in writing', 'Shorter notice valid if at least one Independent Director is present', 'Private company or ratification by majority'],
+            mandatoryCitations: ['Section 173(3)'],
+            description: 'State that statutory notice is 7 days. Shorter notice is permissible to transact urgent business if at least 1 independent director is present, or if ratified by majority of directors.'
+          },
+          {
+            step: 'Participation via Video Conferencing & Quorum Validity',
+            marks: 3,
+            expectedKeywords: ['Section 173(2)', 'Rule 3 Video Conferencing', 'counted for quorum under Section 174', 'roll call and integrity of proceedings'],
+            mandatoryCitations: ['Section 173(2)', 'Section 174'],
+            description: 'Confirm that participation via video-conferencing is legally recognized for both attendance and quorum under Section 174.'
+          }
+        ],
+        suggestedAnswer: `(i) Validity of Shorter Notice for Board Meeting [Section 173(3)]:
+1. General Statutory Rule: As per Section 173(3) of the Companies Act, 2013, a meeting of the Board shall be called by giving not less than seven (7) days notice in writing to every director at his registered address by hand delivery, post, or electronic means.
+2. Shorter Notice Exception: A Board meeting may be called at shorter notice to transact urgent business subject to the condition that at least one independent director, if any, shall be present at the meeting.
+3. In the case of a private company (which does not require independent directors), or where no independent director is present, decisions taken at such a shorter notice meeting shall be circulated to all directors and shall be final only on ratification by at least one independent director or majority of directors.
+Hence, the meeting called at 3 days notice is valid subject to ratification by majority of directors.
+
+(ii) Participation via Video Conferencing and Quorum [Section 173(2) & 174]:
+1. Under Section 173(2) read with Rule 3 of Companies (Meetings of Board and its Powers) Rules, 2014, directors may participate in Board meetings in person or through video conferencing or other audio-visual means capable of recording and recognizing the participation.
+2. Quorum under Section 174: Directors participating through video conferencing or other audio-visual means are validly counted for the purpose of quorum under Section 174.
+3. Necessary safeguards (storing recordings, roll call identifying director and location, ensuring secrecy) must be followed by the chairperson.
+Conclusion: Mr. Alok's participation through video conferencing from the US is legally valid and counts toward the statutory quorum.`
+      }
+    ]
   }
 ];

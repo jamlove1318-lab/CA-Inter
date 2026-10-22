@@ -1,4 +1,5 @@
-import { BaseQuestion, ImportanceLevel, UserQuestionProgress } from '../types/question';
+import { BaseQuestion, ImportanceLevel, UserQuestionProgress, McqQuestion, DescriptiveQuestion } from '../types/question';
+import { QuestionGeneratorService } from './questionGeneratorService';
 
 const STORAGE_KEY = 'ca_inter_prep_user_progress_v1';
 
@@ -52,9 +53,9 @@ export class SpacedRepetitionService {
   }
 
   /**
-   * STRICT USER RULE:
+   * STRICT USER RULE ENFORCED:
    * 1. Questions with importance === 'LOW' NEVER repeat once answered (attemptsCount > 0).
-   * 2. Questions with importance === 'HIGH' repeat based on learning needs (mistakes, spaced intervals).
+   * 2. Questions with importance === 'HIGH' repeat in revision.
    * 3. Unanswered questions of any importance are always available.
    */
   public static filterQuestions<T extends BaseQuestion>(
@@ -63,18 +64,17 @@ export class SpacedRepetitionService {
       subjectId?: string;
       chapterId?: string;
       onlyHighYield?: boolean;
-      includeAnsweredHighYield?: boolean;
     }
   ): T[] {
     const progress = this.getAllProgress();
 
     return questions.filter((q) => {
       // Filter by subject
-      if (options?.subjectId && q.subjectId !== options.subjectId) {
+      if (options?.subjectId && options.subjectId !== 'all' && q.subjectId !== options.subjectId) {
         return false;
       }
       // Filter by chapter
-      if (options?.chapterId && q.chapterId !== options.chapterId) {
+      if (options?.chapterId && options.chapterId !== 'all' && q.chapterId !== options.chapterId) {
         return false;
       }
       // Filter by high yield only if requested
@@ -84,7 +84,7 @@ export class SpacedRepetitionService {
 
       const userProg = progress[q.id];
 
-      // If never answered before, always include
+      // If never answered, always include!
       if (!userProg || userProg.attemptsCount === 0) {
         return true;
       }
@@ -95,28 +95,57 @@ export class SpacedRepetitionService {
       }
 
       // If importance is HIGH, it CAN repeat!
-      if (q.importance === 'HIGH') {
-        // If caller explicitly wants high yield revision queue
-        if (options?.includeAnsweredHighYield) {
-          return true;
-        }
-        // Repeat if student made a mistake previously or scored < 60%
-        if (userProg.isCorrect === false || (userProg.lastScore !== undefined && userProg.lastScore < (q.marks * 0.6))) {
-          return true;
-        }
-        // Or if it was attempted more than 24 hours ago (spaced repetition trigger)
-        const lastAttemptTime = new Date(userProg.lastAttemptDate).getTime();
-        const now = new Date().getTime();
-        const hoursSinceLastAttempt = (now - lastAttemptTime) / (1000 * 60 * 60);
-        if (hoursSinceLastAttempt >= 24) {
-          return true; // Eligible for high-yield revision
-        }
-        // Answered recently and answered correctly -> give break for spaced cycle
-        return false;
-      }
-
-      return false;
+      return true;
     });
+  }
+
+  /**
+   * Retrieves the next MCQ or automatically generates a fresh dynamic ICAI MCQ
+   * so questions NEVER run out!
+   */
+  public static getNextInfiniteMcq(
+    existingList: McqQuestion[],
+    subjectId?: string,
+    chapterId?: string
+  ): McqQuestion {
+    const filtered = this.filterQuestions(existingList, { subjectId, chapterId });
+    if (filtered.length > 0) {
+      // Prioritize unattempted, then high yield
+      const progress = this.getAllProgress();
+      const unattempted = filtered.filter(q => !progress[q.id] || progress[q.id].attemptsCount === 0);
+      if (unattempted.length > 0) {
+        return unattempted[Math.floor(Math.random() * unattempted.length)];
+      }
+      // If all filtered are attempted high yield, return one of them or generate a fresh variant
+      if (Math.random() > 0.4) {
+        return filtered[Math.floor(Math.random() * filtered.length)];
+      }
+    }
+    // Generate fresh algorithmic question!
+    return QuestionGeneratorService.generateDynamicMcq(subjectId);
+  }
+
+  /**
+   * Retrieves the next Descriptive problem or automatically generates a fresh one
+   * so descriptive problems NEVER run out!
+   */
+  public static getNextInfiniteDescriptive(
+    existingList: DescriptiveQuestion[],
+    subjectId?: string
+  ): DescriptiveQuestion {
+    const filtered = this.filterQuestions(existingList, { subjectId });
+    if (filtered.length > 0) {
+      const progress = this.getAllProgress();
+      const unattempted = filtered.filter(q => !progress[q.id] || progress[q.id].attemptsCount === 0);
+      if (unattempted.length > 0) {
+        return unattempted[Math.floor(Math.random() * unattempted.length)];
+      }
+      if (Math.random() > 0.5) {
+        return filtered[Math.floor(Math.random() * filtered.length)];
+      }
+    }
+    // Generate fresh algorithmic descriptive problem!
+    return QuestionGeneratorService.generateDynamicDescriptiveQuestion(subjectId);
   }
 
   /**
@@ -133,9 +162,7 @@ export class SpacedRepetitionService {
     let activeHigh = 0;
 
     Object.values(progress).forEach((item) => {
-      // In progress record, check attempts
       if (item.attemptsCount > 0) {
-        // High yield vs low is looked up or checked
         if (item.isCorrect) {
           retiredLow++;
         } else {

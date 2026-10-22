@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { CA_INTER_SUBJECTS } from '../data/subjectsData';
 import { MCQS_DATABASE, DESCRIPTIVE_DATABASE } from '../data/questionsData';
+import { QuestionGeneratorService } from '../services/questionGeneratorService';
 import { EvaluatorService } from '../services/evaluatorService';
 import { AudioService } from '../services/audioService';
 
@@ -34,10 +35,23 @@ export const ExamSimulator: React.FC = () => {
   const [examSubmitted, setExamSubmitted] = React.useState<boolean>(false);
   const [finalScore, setFinalScore] = React.useState<{ totalAwarded: number; maxMarks: number; passed: boolean } | null>(null);
 
-  // Filter paper questions
+  // Filter paper questions with guaranteed full sets
   const paperSubject = CA_INTER_SUBJECTS.find(s => s.id === selectedSubjectId) || CA_INTER_SUBJECTS[0];
-  const paperMcqs = MCQS_DATABASE.filter(q => q.subjectId === selectedSubjectId).slice(0, 5);
-  const paperDesc = DESCRIPTIVE_DATABASE.filter(q => q.subjectId === selectedSubjectId).slice(0, 3);
+  const paperMcqs = React.useMemo(() => {
+    const list = [...MCQS_DATABASE.filter(q => q.subjectId === selectedSubjectId)];
+    while (list.length < 5) {
+      list.push(QuestionGeneratorService.generateDynamicMcq(selectedSubjectId));
+    }
+    return list.slice(0, 5);
+  }, [selectedSubjectId]);
+
+  const paperDesc = React.useMemo(() => {
+    const list = [...DESCRIPTIVE_DATABASE.filter(q => q.subjectId === selectedSubjectId)];
+    while (list.length < 3) {
+      list.push(QuestionGeneratorService.generateDynamicDescriptiveQuestion(selectedSubjectId));
+    }
+    return list.slice(0, 3);
+  }, [selectedSubjectId]);
   const totalQuestions = paperMcqs.length + paperDesc.length;
 
   // Timers

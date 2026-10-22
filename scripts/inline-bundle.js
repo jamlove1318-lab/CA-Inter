@@ -100,6 +100,7 @@ console.log('✓ Overwrote dist/index.html with standalone inlined PWA version.'
 // Also write ca-inter-offline.html in root directory so users can double-click it directly
 const rootStandalone = path.join(rootDir, 'ca-inter-offline.html');
 fs.writeFileSync(rootStandalone, standaloneHtml, 'utf-8');
+fs.writeFileSync(path.join(distDir, 'ca-inter-offline.html'), standaloneHtml, 'utf-8');
 console.log(`✓ Generated standalone file: ${rootStandalone}`);
 console.log(`File size: ${(fs.statSync(rootStandalone).size / 1024).toFixed(1)} KB`);
 
