@@ -18,6 +18,7 @@ import { MCQS_DATABASE, DESCRIPTIVE_DATABASE } from '../data/questionsData';
 import { QuestionGeneratorService } from '../services/questionGeneratorService';
 import { EvaluatorService } from '../services/evaluatorService';
 import { AudioService } from '../services/audioService';
+import { shuffleMcqOptions } from '../utils/mcqUtils';
 
 export const ExamSimulator: React.FC = () => {
   const [selectedSubjectId, setSelectedSubjectId] = React.useState<string>(CA_INTER_SUBJECTS[1].id); // Law
@@ -38,7 +39,7 @@ export const ExamSimulator: React.FC = () => {
   // Filter paper questions with guaranteed full sets
   const paperSubject = CA_INTER_SUBJECTS.find(s => s.id === selectedSubjectId) || CA_INTER_SUBJECTS[0];
   const paperMcqs = React.useMemo(() => {
-    const list = [...MCQS_DATABASE.filter(q => q.subjectId === selectedSubjectId)];
+    const list = MCQS_DATABASE.filter(q => q.subjectId === selectedSubjectId).map(q => shuffleMcqOptions(q));
     while (list.length < 5) {
       list.push(QuestionGeneratorService.generateDynamicMcq(selectedSubjectId));
     }

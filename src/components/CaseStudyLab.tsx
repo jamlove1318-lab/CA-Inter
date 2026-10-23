@@ -15,6 +15,7 @@ import { CASE_STUDIES_DATABASE } from '../data/caseStudiesData';
 import { CaseStudyQuestion, McqQuestion, DescriptiveQuestion } from '../types/question';
 import { EvaluatorService } from '../services/evaluatorService';
 import { AudioService } from '../services/audioService';
+import { shuffleMcqOptions } from '../utils/mcqUtils';
 
 export const CaseStudyLab: React.FC = () => {
   const [selectedCaseIndex, setSelectedCaseIndex] = React.useState<number>(0);
@@ -24,6 +25,9 @@ export const CaseStudyLab: React.FC = () => {
   const [descEvaluation, setDescEvaluation] = React.useState<Record<string, ReturnType<typeof EvaluatorService.evaluateAnswer>>>({});
 
   const currentCase: CaseStudyQuestion = CASE_STUDIES_DATABASE[selectedCaseIndex] || CASE_STUDIES_DATABASE[0];
+  const caseMcqs = React.useMemo(() => {
+    return currentCase.mcqs.map(q => shuffleMcqOptions(q));
+  }, [currentCase]);
 
   const handleSelectOption = (questionId: string, optId: string, correctId: string) => {
     if (userMcqAnswers[questionId]) return; // already answered
@@ -140,7 +144,7 @@ export const CaseStudyLab: React.FC = () => {
           {/* Sub-Tab Content: MCQs */}
           {selectedSubTab === 'mcqs' && (
             <div className="space-y-6">
-              {currentCase.mcqs.map((mcq, qIdx) => {
+              {caseMcqs.map((mcq, qIdx) => {
                 const selectedOpt = userMcqAnswers[mcq.id];
                 const isAnswered = selectedOpt !== undefined;
 

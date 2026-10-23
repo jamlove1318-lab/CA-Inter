@@ -120,35 +120,14 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* Quick Action Tools */}
           <div className="flex items-center gap-1.5 sm:gap-2">
-            {/* Force Update / Sync Latest */}
+            {/* Sync / Refresh from Server */}
             <button
               onClick={handleForceUpdate}
-              className="flex items-center gap-1 px-2 sm:px-2.5 py-1.5 text-xs font-semibold text-amber-300 bg-amber-950/60 hover:bg-amber-900/60 rounded-lg border border-amber-700/60 transition-all shadow-sm"
-              title="Force Update to Latest Version"
+              className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold text-amber-300 bg-amber-950/60 hover:bg-amber-900/60 rounded-lg border border-amber-700/60 transition-all shadow-sm"
+              title="Refresh and Sync Latest Questions from Online Server"
             >
               <RotateCw className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-              <span className="text-[11px]">Sync</span>
-            </button>
-
-            {/* Install PWA Button */}
-            <button
-              onClick={handleInstallApp}
-              className="flex items-center gap-1 px-2.5 sm:px-3 py-1.5 text-xs font-bold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 rounded-lg shadow-sm transition-all"
-              title="Install App on Phone or PC"
-            >
-              <Smartphone className="w-3.5 h-3.5 text-blue-200 shrink-0" />
-              <span className="hidden sm:inline">Install App</span>
-              <span className="sm:hidden text-[11px]">Install</span>
-            </button>
-
-            {/* Offline Mode / Download */}
-            <button
-              onClick={openOfflineModal}
-              className="flex items-center gap-1 px-2.5 sm:px-3 py-1.5 text-xs font-semibold text-emerald-300 bg-emerald-950/60 hover:bg-emerald-900/60 rounded-lg border border-emerald-700/60 transition-all shadow-sm"
-              title="Run 100% Offline without Server"
-            >
-              <WifiOff className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-              <span className="hidden md:inline">Offline</span>
+              <span className="text-[11px] font-bold">Live Sync</span>
             </button>
 
             {/* Search Sections / Standards Directory */}

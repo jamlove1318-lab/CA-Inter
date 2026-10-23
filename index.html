@@ -7,56 +7,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
     <title>CA Inter Pro - ICAI Master Exam Suite & AI Evaluator</title>
     
-    <!-- PWA & Mobile Web App Meta Tags -->
-    <link rel="manifest" href="./manifest.json" />
     <meta name="theme-color" content="#0b2545" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="CA Inter Pro" />
-    <meta name="application-name" content="CA Inter Pro" />
-    <meta name="description" content="Complete ICAI CA Intermediate preparation suite with AI Answer Evaluator, MCQs, Past Papers, Case Study Lab, and Game Zone. 100% Offline Capable." />
+    <meta name="description" content="Complete ICAI CA Intermediate preparation platform with AI Answer Evaluator, Unlimited MCQs, Past Papers, Case Study Lab, and Game Zone." />
 
-    <!-- Fonts with offline system fallback -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 
     <script>
-      // Global PWA Deferred Install Prompt handler
-      window.deferredInstallPrompt = null;
-      window.addEventListener('beforeinstallprompt', (e) => {
-        // Prevent default mini-infobar and save prompt event
-        e.preventDefault();
-        window.deferredInstallPrompt = e;
-        window.dispatchEvent(new CustomEvent('pwa-installable'));
-        console.log('[PWA] App is installable! Prompt captured.');
-      });
-
-      window.addEventListener('appinstalled', () => {
-        window.deferredInstallPrompt = null;
-        console.log('[PWA] CA Inter Pro successfully installed on device!');
-      });
-
-      // Register Service Worker for offline PWA installation
-      if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || window.location.hostname === 'localhost')) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('./sw.js', { scope: './' }).then(
-            (reg) => {
-              console.log('[PWA] Service Worker Registered with scope:', reg.scope);
-              reg.onupdatefound = () => {
-                const installingWorker = reg.installing;
-                if (installingWorker) {
-                  installingWorker.onstatechange = () => {
-                    if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                      console.log('[PWA] New offline content available.');
-                    }
-                  };
-                }
-              };
-            },
-            (err) => console.log('[PWA] Service Worker Registration failed:', err)
-          );
+      // Clear legacy service worker registrations and caches to enforce 100% online freshness
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+          for (var i = 0; i < registrations.length; i++) {
+            registrations[i].unregister();
+          }
+        });
+      }
+      if ('caches' in window) {
+        caches.keys().then(function(keys) {
+          for (var i = 0; i < keys.length; i++) {
+            caches.delete(keys[i]);
+          }
         });
       }
     </script>

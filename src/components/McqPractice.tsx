@@ -19,6 +19,7 @@ import { McqQuestion } from '../types/question';
 import { SpacedRepetitionService } from '../services/spacedRepetitionService';
 import { QuestionGeneratorService } from '../services/questionGeneratorService';
 import { AudioService } from '../services/audioService';
+import { shuffleMcqOptions } from '../utils/mcqUtils';
 
 interface McqPracticeProps {
   initialSubjectId?: string;
@@ -55,11 +56,11 @@ export const McqPractice: React.FC<McqPracticeProps> = ({
       onlyHighYield
     });
 
-    // Populate with curated questions + guaranteed dynamic questions
-    const initialList: McqQuestion[] = [...curated];
+    // Populate with curated questions (options shuffled) + guaranteed dynamic questions
+    const initialList: McqQuestion[] = curated.map(q => shuffleMcqOptions(q));
     
-    // Always add at least 5 fresh dynamic questions to guarantee infinite flow
-    for (let i = 0; i < 5; i++) {
+    // Always add fresh dynamic questions to guarantee infinite flow
+    for (let i = 0; i < 8; i++) {
       initialList.push(QuestionGeneratorService.generateDynamicMcq(selectedSubjectId));
     }
 

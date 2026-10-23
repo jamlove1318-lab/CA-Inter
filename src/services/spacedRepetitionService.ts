@@ -1,5 +1,6 @@
 import { BaseQuestion, ImportanceLevel, UserQuestionProgress, McqQuestion, DescriptiveQuestion } from '../types/question';
 import { QuestionGeneratorService } from './questionGeneratorService';
+import { shuffleMcqOptions } from '../utils/mcqUtils';
 
 const STORAGE_KEY = 'ca_inter_prep_user_progress_v1';
 
@@ -114,11 +115,11 @@ export class SpacedRepetitionService {
       const progress = this.getAllProgress();
       const unattempted = filtered.filter(q => !progress[q.id] || progress[q.id].attemptsCount === 0);
       if (unattempted.length > 0) {
-        return unattempted[Math.floor(Math.random() * unattempted.length)];
+        return shuffleMcqOptions(unattempted[Math.floor(Math.random() * unattempted.length)]);
       }
       // If all filtered are attempted high yield, return one of them or generate a fresh variant
       if (Math.random() > 0.4) {
-        return filtered[Math.floor(Math.random() * filtered.length)];
+        return shuffleMcqOptions(filtered[Math.floor(Math.random() * filtered.length)]);
       }
     }
     // Generate fresh algorithmic question!

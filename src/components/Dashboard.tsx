@@ -77,7 +77,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
             </h1>
             
             <p className="text-sm text-slate-300 leading-relaxed">
-              Solve unlimited high-yield MCQs, write descriptive answers with instant ICAI step-marking feedback, and master integrated case scenarios offline or online.
+              Solve unlimited high-yield MCQs, write descriptive answers with instant ICAI step-marking feedback, and master integrated case scenarios across the entire syllabus.
             </p>
           </div>
 

@@ -48,46 +48,22 @@ const standaloneHtml = `<!DOCTYPE html>
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="CA Inter Pro" />
     <meta name="application-name" content="CA Inter Pro" />
-    <meta name="description" content="Complete ICAI CA Intermediate study suite with AI Answer Evaluator, MCQs, Past Papers, and Game Zone. 100% Offline Capable." />
+    <meta name="description" content="Complete ICAI CA Intermediate study suite with AI Answer Evaluator, Unlimited MCQs, Past Papers, and Game Zone." />
 
     <script>
-      // Global PWA Deferred Install Prompt handler
-      window.deferredInstallPrompt = null;
-      window.addEventListener('beforeinstallprompt', function(e) {
-        e.preventDefault();
-        window.deferredInstallPrompt = e;
-        window.dispatchEvent(new CustomEvent('pwa-installable'));
-        console.log('[PWA] App is installable! Prompt captured.');
-      });
-
-      window.addEventListener('appinstalled', function() {
-        window.deferredInstallPrompt = null;
-        console.log('[PWA] CA Inter Pro successfully installed on device!');
-      });
-
-      // Register Service Worker for offline PWA installation with active update polling
-      if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || window.location.hostname === 'localhost')) {
-        window.addEventListener('load', function() {
-          navigator.serviceWorker.register('./sw.js?t=' + Date.now(), { scope: './' }).then(
-            function(reg) {
-              console.log('[PWA] Service Worker Registered with scope:', reg.scope);
-              reg.update();
-              reg.addEventListener('updatefound', function() {
-                var newWorker = reg.installing;
-                if (newWorker) {
-                  newWorker.addEventListener('statechange', function() {
-                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                      console.log('[PWA] New version ready, auto-refreshing...');
-                      window.location.reload();
-                    }
-                  });
-                }
-              });
-            },
-            function(err) {
-              console.log('[PWA] Service Worker Registration failed:', err);
-            }
-          );
+      // Clear legacy service worker registrations and caches to enforce 100% online freshness
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+          for (var i = 0; i < registrations.length; i++) {
+            registrations[i].unregister();
+          }
+        });
+      }
+      if ('caches' in window) {
+        caches.keys().then(function(keys) {
+          for (var i = 0; i < keys.length; i++) {
+            caches.delete(keys[i]);
+          }
         });
       }
     </script>
