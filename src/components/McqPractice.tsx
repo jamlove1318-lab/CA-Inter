@@ -36,6 +36,14 @@ export const McqPractice: React.FC<McqPracticeProps> = ({
   const [selectedChapterId, setSelectedChapterId] = React.useState<string>('all');
   const [onlyHighYield, setOnlyHighYield] = React.useState<boolean>(false);
 
+  // Sync selectedSubjectId if initialSubjectId prop changes
+  React.useEffect(() => {
+    if (initialSubjectId && initialSubjectId !== selectedSubjectId) {
+      setSelectedSubjectId(initialSubjectId);
+      setSelectedChapterId('all');
+    }
+  }, [initialSubjectId]);
+
   // Infinite Question Queue
   const [questionQueue, setQuestionQueue] = React.useState<McqQuestion[]>([]);
   const [currentIndex, setCurrentIndex] = React.useState<number>(0);

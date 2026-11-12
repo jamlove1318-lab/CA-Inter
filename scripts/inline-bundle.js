@@ -49,6 +49,9 @@ const standaloneHtml = `<!DOCTYPE html>
     <meta name="apple-mobile-web-app-title" content="CA Inter Pro" />
     <meta name="application-name" content="CA Inter Pro" />
     <meta name="description" content="Complete ICAI CA Intermediate study suite with AI Answer Evaluator, Unlimited MCQs, Past Papers, and Game Zone." />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
 
     <script>
       // Clear legacy service worker registrations and caches to enforce 100% online freshness

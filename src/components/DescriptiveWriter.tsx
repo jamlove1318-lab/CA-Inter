@@ -51,6 +51,28 @@ export const DescriptiveWriter: React.FC<DescriptiveWriterProps> = ({
   });
   const [historyIndex, setHistoryIndex] = React.useState<number>(0);
 
+  // Synchronize when initialQuestion is provided externally (e.g. from modal or dashboard)
+  React.useEffect(() => {
+    if (initialQuestion) {
+      setHistory([initialQuestion]);
+      setHistoryIndex(0);
+      setSelectedSubjectId(initialQuestion.subjectId);
+    }
+  }, [initialQuestion]);
+
+  // Synchronize when subject is changed externally from dashboard
+  React.useEffect(() => {
+    if (initialSubjectId && initialSubjectId !== selectedSubjectId && !initialQuestion) {
+      setSelectedSubjectId(initialSubjectId);
+      const nextQ = SpacedRepetitionService.getNextInfiniteDescriptive(
+        DESCRIPTIVE_DATABASE,
+        initialSubjectId === 'all' ? undefined : initialSubjectId
+      );
+      setHistory([nextQ]);
+      setHistoryIndex(0);
+    }
+  }, [initialSubjectId]);
+
   const [userAnswer, setUserAnswer] = React.useState<string>('');
   const [evaluation, setEvaluation] = React.useState<EvaluationResult | null>(null);
   const [isEvaluating, setIsEvaluating] = React.useState<boolean>(false);

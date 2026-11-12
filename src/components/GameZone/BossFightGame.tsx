@@ -3,6 +3,8 @@ import { Heart, Shield, Sparkles, HelpCircle, Flame, Award, Skull, AlertCircle }
 import { MCQS_DATABASE } from '../../data/questionsData';
 import { McqQuestion } from '../../types/question';
 import { AudioService } from '../../services/audioService';
+import { QuestionGeneratorService } from '../../services/questionGeneratorService';
+import { shuffleMcqOptions } from '../../utils/mcqUtils';
 
 interface BossFightGameProps {
   onAddXp: (xp: number) => void;
@@ -22,14 +24,27 @@ export const BossFightGame: React.FC<BossFightGameProps> = ({ onAddXp, onBossDef
   const [showHint, setShowHint] = React.useState<boolean>(false);
   const [gameResult, setGameResult] = React.useState<'win' | 'lose' | null>(null);
 
-  // Pick high-importance questions for boss fight
-  const bossQuestions = React.useMemo(() => {
-    return MCQS_DATABASE.filter(q => q.importance === 'HIGH').slice(0, 6);
-  }, []);
+  // Dynamic & randomized high-importance questions for boss fight with shuffled options
+  const [bossQuestions, setBossQuestions] = React.useState<McqQuestion[]>(() => {
+    const highYield = MCQS_DATABASE.filter(q => q.importance === 'HIGH');
+    const shuffled = [...highYield].sort(() => Math.random() - 0.5);
+    const questions = shuffled.slice(0, 8).map(q => shuffleMcqOptions(q));
+    while (questions.length < 6) {
+      questions.push(shuffleMcqOptions(QuestionGeneratorService.generateDynamicMcq('all')));
+    }
+    return questions;
+  });
 
   const currentQuestion: McqQuestion = bossQuestions[currentQIndex] || bossQuestions[0];
 
   const startBattle = () => {
+    const highYield = MCQS_DATABASE.filter(q => q.importance === 'HIGH');
+    const shuffled = [...highYield].sort(() => Math.random() - 0.5);
+    const questions = shuffled.slice(0, 8).map(q => shuffleMcqOptions(q));
+    while (questions.length < 6) {
+      questions.push(shuffleMcqOptions(QuestionGeneratorService.generateDynamicMcq('all')));
+    }
+    setBossQuestions(questions);
     setIsPlaying(true);
     setBossHp(1000);
     setPlayerHearts(3);
@@ -60,7 +75,13 @@ export const BossFightGame: React.FC<BossFightGameProps> = ({ onAddXp, onBossDef
 
       // Next question
       setTimeout(() => {
-        setCurrentQIndex(prev => (prev + 1) % bossQuestions.length);
+        if (currentQIndex >= bossQuestions.length - 2) {
+          setBossQuestions(prev => [
+            ...prev,
+            shuffleMcqOptions(QuestionGeneratorService.generateDynamicMcq('all'))
+          ]);
+        }
+        setCurrentQIndex(prev => prev + 1);
         setEliminatedOptions([]);
         setShowHint(false);
       }, 500);

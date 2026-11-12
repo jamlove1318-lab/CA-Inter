@@ -15,12 +15,12 @@ export const MCQS_DATABASE: McqQuestion[] = [
     icaiReference: 'AS 16 Borrowing Costs - Para 6 & 14',
     questionText: 'Bharat Ltd. took a specific bank loan of ₹ 50,00,000 at 10% p.a. on 1st April 2023 for construction of a factory building (a qualifying asset). Construction was actively in progress from 1st April 2023 to 31st December 2023. Due to an unusual prolonged flood in the region, all construction was halted from 1st October to 30th November 2023. Prior to utilization, surplus funds earned interest income of ₹ 45,000. What is the net borrowing cost to be capitalized as per AS 16?',
     options: [
-      { id: 'a', text: '₹ 2,88,333' },
+      { id: 'a', text: '₹ 2,46,667' },
       { id: 'b', text: '₹ 3,75,000' },
-      { id: 'c', text: '₹ 2,46,667' },
+      { id: 'c', text: '₹ 2,88,333' },
       { id: 'd', text: '₹ 3,30,000' }
     ],
-    correctOptionId: 'a',
+    correctOptionId: 'c',
     trapNote: 'Trap: Students forget that suspension of capitalization is required during extended periods in which active development is interrupted (2 months: Oct & Nov). Active period is 7 months (April to Sept = 6 mos + Dec = 1 mo). Total interest for 7 mos = 50L * 10% * 7/12 = 2,91,667. Net after temporary interest income (45,000 * 7/9 or proportionate): AS 16 requires deducting actual temporary income earned during the period.',
     explanation: 'As per AS 16 Borrowing Costs, capitalization should be suspended during extended periods in which active development is interrupted. Total loan interest for 9 months active loan = 3,75,000. Interest for 2 suspended months (Oct & Nov) = 50,00,000 * 10% * 2/12 = ₹ 83,333 (charged to P&L). Capitalizable interest before income = 3,75,000 - 83,333 = ₹ 2,91,667. Deducting net interest earned during active period ₹ 3,334 results in ₹ 2,88,333 to be capitalized.'
   },
@@ -83,12 +83,12 @@ export const MCQS_DATABASE: McqQuestion[] = [
     icaiReference: 'Section 135(5) Companies Act, 2013',
     questionText: 'Zenith Logistics Ltd. has an unspent CSR amount of ₹ 25 Lakhs relating to an ongoing project for the FY 2023-24. As per Section 135(6) of the Companies Act, 2013, within what time period must this unspent amount be transferred to a special "Unspent Corporate Social Responsibility Account"?',
     options: [
-      { id: 'a', text: 'Within 30 days from the end of the financial year (i.e. by 30th April 2024)' },
+      { id: 'a', text: 'Within 90 days from the end of the financial year' },
       { id: 'b', text: 'Within 6 months from the end of the financial year (i.e. by 30th September 2024)' },
       { id: 'c', text: 'Within 30 days of the Annual General Meeting' },
-      { id: 'd', text: 'Within 90 days from the end of the financial year' }
+      { id: 'd', text: 'Within 30 days from the end of the financial year (i.e. by 30th April 2024)' }
     ],
-    correctOptionId: 'a',
+    correctOptionId: 'd',
     trapNote: 'Do not confuse ongoing project transfer (30 days to special bank account) with non-ongoing project transfer (6 months to Schedule VII fund).',
     explanation: 'Under Section 135(6), any amount remaining unspent pursuant to any ongoing project undertaken by a company shall be transferred within a period of thirty days from the end of the financial year to a special account opened in that behalf for that financial year in any scheduled bank to be called the "Unspent Corporate Social Responsibility Account".'
   },
@@ -127,12 +127,12 @@ export const MCQS_DATABASE: McqQuestion[] = [
     icaiReference: 'Section 3(26) General Clauses Act, 1897',
     questionText: 'Under Section 3(26) of the General Clauses Act, 1897, which of the following is NOT included in the definition of "Immovable Property"?',
     options: [
-      { id: 'a', text: 'Growing crops and standing timber' },
+      { id: 'a', text: 'Benefits to arise out of land' },
       { id: 'b', text: 'Land' },
-      { id: 'c', text: 'Benefits to arise out of land' },
+      { id: 'c', text: 'Growing crops and standing timber' },
       { id: 'd', text: 'Things attached to the earth or permanently fastened to anything attached to the earth' }
     ],
-    correctOptionId: 'a',
+    correctOptionId: 'c',
     trapNote: 'Growing crops, standing timber, and grass are specifically excluded from immovable property and treated as movable.',
     explanation: 'Section 3(26) defines "immovable property" shall include land, benefits to arise out of land, and things attached to the earth, or permanently fastened to anything attached to the earth. Growing crops and standing timber are excluded and governed as movable property.'
   },
@@ -173,12 +173,12 @@ export const MCQS_DATABASE: McqQuestion[] = [
     icaiReference: 'Section 17(5)(a) of CGST Act, 2017',
     questionText: 'PQR Manufacturing Ltd. purchased a 5-seater luxury car for ₹ 20 Lakhs (+ 28% GST) for the official travel of its Managing Director. In the same month, it purchased a 25-seater passenger bus for transportation of factory workers. Can PQR Ltd claim Input Tax Credit (ITC) under GST?',
     options: [
-      { id: 'a', text: 'ITC is blocked on the 5-seater car, but fully eligible on the 25-seater bus' },
+      { id: 'a', text: 'ITC is blocked on both vehicles under Section 17(5)' },
       { id: 'b', text: 'ITC is eligible on both since both are used for official/business purposes' },
-      { id: 'c', text: 'ITC is blocked on both vehicles under Section 17(5)' },
+      { id: 'c', text: 'ITC is blocked on the 5-seater car, but fully eligible on the 25-seater bus' },
       { id: 'd', text: 'ITC is eligible only up to 50% on both vehicles' }
     ],
-    correctOptionId: 'a',
+    correctOptionId: 'c',
     trapNote: 'Seating capacity <= 13 is blocked unless used for supply/transport/driving school. Passenger capacity > 13 is NOT blocked under Section 17(5)(a).',
     explanation: 'Under Section 17(5)(a) of the CGST Act, ITC is blocked on motor vehicles for transportation of persons having approved seating capacity of not more than 13 persons (including driver). Since the bus has seating capacity of 25 persons (> 13), ITC on the bus is fully available. The 5-seater car is blocked.'
   },
@@ -195,12 +195,12 @@ export const MCQS_DATABASE: McqQuestion[] = [
     icaiReference: 'Rule 138 of CGST Rules, 2017',
     questionText: 'An E-way bill is valid for one day for every _______ km or part thereof in case of other than Over Dimensional Cargo.',
     options: [
-      { id: 'a', text: '200 km' },
-      { id: 'b', text: '100 km' },
+      { id: 'a', text: '100 km' },
+      { id: 'b', text: '200 km' },
       { id: 'c', text: '300 km' },
       { id: 'd', text: '50 km' }
     ],
-    correctOptionId: 'a',
+    correctOptionId: 'b',
     trapNote: 'The distance was updated from 100 km to 200 km in 2021.',
     explanation: 'As per Rule 138(10) of CGST Rules, the validity of an e-way bill is 1 day for every 200 km or part thereof for general cargo, and 1 day for every 20 km for Over Dimensional Cargo.'
   },
@@ -219,12 +219,12 @@ export const MCQS_DATABASE: McqQuestion[] = [
     icaiReference: 'SA 705 (Revised) - Modifications to Opinion',
     questionText: 'An auditor obtains sufficient appropriate audit evidence that misstatements, individually or in the aggregate, are BOTH material and pervasive to the financial statements. Which form of audit opinion should the auditor express as per SA 705?',
     options: [
-      { id: 'a', text: 'Adverse Opinion' },
+      { id: 'a', text: 'Unmodified Opinion with Key Audit Matter paragraph' },
       { id: 'b', text: 'Qualified Opinion' },
       { id: 'c', text: 'Disclaimer of Opinion' },
-      { id: 'd', text: 'Unmodified Opinion with Key Audit Matter paragraph' }
+      { id: 'd', text: 'Adverse Opinion' }
     ],
-    correctOptionId: 'a',
+    correctOptionId: 'd',
     trapNote: 'Disclaimer is when evidence CANNOT be obtained and effect is material & pervasive. Adverse is when evidence IS obtained and misstatement is material & pervasive.',
     explanation: 'As per SA 705 (Revised), the auditor shall express an Adverse Opinion when the auditor, having obtained sufficient appropriate audit evidence, concludes that misstatements are both material and pervasive to the financial statements.'
   },
@@ -263,12 +263,12 @@ export const MCQS_DATABASE: McqQuestion[] = [
     icaiReference: 'SQC 1 Quality Control for Firms',
     questionText: 'As per SQC 1, what is the minimum retention period for engagement documentation / audit working papers from the date of the auditor’s report?',
     options: [
-      { id: 'a', text: '7 years' },
+      { id: 'a', text: '5 years' },
       { id: 'b', text: '8 years' },
-      { id: 'c', text: '5 years' },
+      { id: 'c', text: '7 years' },
       { id: 'd', text: '3 years' }
     ],
-    correctOptionId: 'a',
+    correctOptionId: 'c',
     trapNote: 'Companies Act requires 8 years for books of accounts, but SQC 1 mandates 7 years for audit working paper files!',
     explanation: 'Under SQC 1 (Quality Control for Firms that Perform Audits and Reviews of Historical Financial Information), the retention period for audit documentation ordinarily is no shorter than seven years from the date of the auditor’s report.'
   },
@@ -287,12 +287,12 @@ export const MCQS_DATABASE: McqQuestion[] = [
     icaiReference: 'Leverages Formula: DCL = DOL * DFL',
     questionText: 'A firm has Degree of Operating Leverage (DOL) = 2.5 and Degree of Financial Leverage (DFL) = 1.6. If sales increase by 10%, what will be the percentage change in Earnings Per Share (EPS)?',
     options: [
-      { id: 'a', text: 'Increase by 40%' },
-      { id: 'b', text: 'Increase by 25%' },
+      { id: 'a', text: 'Increase by 25%' },
+      { id: 'b', text: 'Increase by 40%' },
       { id: 'c', text: 'Increase by 16%' },
       { id: 'd', text: 'Increase by 4.1%' }
     ],
-    correctOptionId: 'a',
+    correctOptionId: 'b',
     trapNote: 'Degree of Combined Leverage (DCL) is the product of DOL and DFL (2.5 * 1.6 = 4.0), not the sum (4.1).',
     explanation: 'Degree of Combined Leverage (DCL) = DOL × DFL = 2.5 × 1.6 = 4.0. Since DCL = (% change in EPS) / (% change in Sales), % change in EPS = 4.0 × 10% = 40%.'
   },
@@ -331,12 +331,12 @@ export const MCQS_DATABASE: McqQuestion[] = [
     icaiReference: 'Strategic Implementation - Core Competency',
     questionText: 'Who coined the concept of "Core Competence" in corporate strategy in their landmark 1990 Harvard Business Review paper?',
     options: [
-      { id: 'a', text: 'C.K. Prahalad and Gary Hamel' },
+      { id: 'a', text: 'Henry Mintzberg' },
       { id: 'b', text: 'Michael E. Porter' },
       { id: 'c', text: 'Igor Ansoff' },
-      { id: 'd', text: 'Henry Mintzberg' }
+      { id: 'd', text: 'C.K. Prahalad and Gary Hamel' }
     ],
-    correctOptionId: 'a',
+    correctOptionId: 'd',
     trapNote: 'Porter introduced Value Chain and Generic Strategies; Prahalad and Hamel introduced Core Competence.',
     explanation: 'The concept of Core Competence was originated by C.K. Prahalad and Gary Hamel in their 1990 article "The Core Competence of the Corporation".'
   },
@@ -353,12 +353,12 @@ export const MCQS_DATABASE: McqQuestion[] = [
     icaiReference: 'Margin of Safety = Profit / PV Ratio',
     questionText: 'A manufacturing firm has Total Sales of ₹ 20,00,000 with a P/V Ratio of 40%. The firm incurs Fixed Costs of ₹ 5,00,000. What is the Margin of Safety (in Rupees)?',
     options: [
-      { id: 'a', text: '₹ 7,50,000' },
+      { id: 'a', text: '₹ 8,00,000' },
       { id: 'b', text: '₹ 12,50,000' },
-      { id: 'c', text: '₹ 8,00,000' },
+      { id: 'c', text: '₹ 7,50,000' },
       { id: 'd', text: '₹ 5,00,000' }
     ],
-    correctOptionId: 'a',
+    correctOptionId: 'c',
     trapNote: 'Break-even sales = Fixed Cost / PV ratio = 5,00,000 / 0.4 = ₹ 12,50,000. Margin of Safety = Total Sales - Break Even Sales = 20,00,000 - 12,50,000 = ₹ 7,50,000 (or Profit ₹ 3,00,000 / 0.40).',
     explanation: 'Break-Even Sales = Fixed Cost / P/V Ratio = ₹ 5,00,000 / 0.40 = ₹ 12,50,000. Margin of Safety = Actual Sales - Break-Even Sales = ₹ 20,00,000 - ₹ 12,50,000 = ₹ 7,50,000. Alternatively: Profit = (20,00,000 × 40%) - 5,00,000 = ₹ 3,00,000. MOS = Profit / PV Ratio = 3,00,000 / 0.40 = ₹ 7,50,000.'
   },
@@ -374,12 +374,12 @@ export const MCQS_DATABASE: McqQuestion[] = [
     icaiReference: 'Halsey 50% Incentive Scheme',
     questionText: 'Standard time allowed for a job is 50 hours at standard wage rate of ₹ 80 per hour. A skilled worker completes the job in 40 hours. What are the total earnings of the worker under the Halsey (50% Sharing) Scheme?',
     options: [
-      { id: 'a', text: '₹ 3,600 (Time Taken Wages ₹ 3,200 + Bonus ₹ 400)' },
-      { id: 'b', text: '₹ 4,000 (Standard Wages for 50 hours)' },
+      { id: 'a', text: '₹ 4,000 (Standard Wages for 50 hours)' },
+      { id: 'b', text: '₹ 3,600 (Time Taken Wages ₹ 3,200 + Bonus ₹ 400)' },
       { id: 'c', text: '₹ 3,200 (Wages for actual 40 hours without bonus)' },
       { id: 'd', text: '₹ 3,840 (Calculated under Rowan Scheme)' }
     ],
-    correctOptionId: 'a',
+    correctOptionId: 'b',
     trapNote: 'Halsey bonus is 50% of (Time Saved × Time Rate). Time saved = 10 hrs. Bonus = 10 × 80 × 50% = ₹ 400.',
     explanation: 'Earnings under Halsey Scheme = (Time Taken × Rate) + 50% × (Time Saved × Rate) = (40 hrs × ₹ 80) + 50% × (10 hrs × ₹ 80) = ₹ 3,200 + ₹ 400 = ₹ 3,600.'
   },
@@ -417,12 +417,12 @@ export const MCQS_DATABASE: McqQuestion[] = [
     icaiReference: 'Section 138 read with Rule 13 of Companies (Accounts) Rules, 2014',
     questionText: 'An unlisted public company has Paid-up share capital of ₹ 40 Crores, Turnover of ₹ 180 Crores, Outstanding loans from banks of ₹ 115 Crores, and Outstanding deposits of ₹ 18 Crores during the preceding financial year. Is internal audit mandatory for this company under Section 138?',
     options: [
-      { id: 'a', text: 'Yes, because outstanding loans/borrowings from banks/PFIs exceed ₹ 100 Crores' },
-      { id: 'b', text: 'No, because Turnover is below ₹ 200 Crores and Paid-up capital is below ₹ 50 Crores' },
-      { id: 'c', text: 'No, internal audit applies only to listed companies' },
-      { id: 'd', text: 'Yes, because deposits exceed ₹ 10 Crores' }
+      { id: 'a', text: 'No, because Turnover is below ₹ 200 Crores and Paid-up capital is below ₹ 50 Crores' },
+      { id: 'b', text: 'No, internal audit applies only to listed companies' },
+      { id: 'c', text: 'Yes, because deposits exceed ₹ 10 Crores' },
+      { id: 'd', text: 'Yes, because outstanding loans/borrowings from banks/PFIs exceed ₹ 100 Crores' }
     ],
-    correctOptionId: 'a',
+    correctOptionId: 'd',
     trapNote: 'For an unlisted public company, internal audit triggers if ANY of: Capital >= 50 Cr, Turnover >= 200 Cr, Loans >= 100 Cr, or Deposits >= 25 Cr. Since loans (115 Cr) >= 100 Cr, it is mandatory.',
     explanation: 'As per Rule 13 of Companies (Accounts) Rules, 2014, an unlisted public company is required to appoint an internal auditor if outstanding loans or borrowings from banks or public financial institutions exceed ₹ 100 Crore at any point of time during the preceding financial year.'
   },
@@ -439,12 +439,12 @@ export const MCQS_DATABASE: McqQuestion[] = [
     icaiReference: 'Section 54EC of Income Tax Act, 1961',
     questionText: 'What is the maximum investment an assessee can make in eligible bonds (REC, NHAI, PFC, IRFC) under Section 54EC to claim exemption from long-term capital gains in any financial year?',
     options: [
-      { id: 'a', text: '₹ 50 Lakhs' },
+      { id: 'a', text: '₹ 25 Lakhs' },
       { id: 'b', text: '₹ 1 Crore' },
-      { id: 'c', text: '₹ 25 Lakhs' },
+      { id: 'c', text: '₹ 50 Lakhs' },
       { id: 'd', text: 'No monetary limit as long as invested within 6 months' }
     ],
-    correctOptionId: 'a',
+    correctOptionId: 'c',
     trapNote: 'Proviso to Section 54EC specifically caps the investment in eligible bonds at ₹ 50 Lakhs during any financial year.',
     explanation: 'Under Section 54EC(1), the investment made in the long-term specified asset (bonds of NHAI, REC, etc.) by an assessee during any financial year cannot exceed ₹ 50 Lakhs. The investment must be made within 6 months from the date of transfer.'
   },
@@ -460,12 +460,12 @@ export const MCQS_DATABASE: McqQuestion[] = [
     icaiReference: 'Section 15(3) of CGST Act, 2017',
     questionText: 'Under Section 15 of the CGST Act, 2017, when can a discount given after the supply has been effected be deducted from the value of taxable supply?',
     options: [
-      { id: 'a', text: 'If established in terms of an agreement entered into before or at the time of supply and linked to relevant invoices, with proportionate ITC reversed by recipient' },
-      { id: 'b', text: 'Discounts given after supply can never be deducted under GST under any circumstance' },
+      { id: 'a', text: 'Discounts given after supply can never be deducted under GST under any circumstance' },
+      { id: 'b', text: 'If established in terms of an agreement entered into before or at the time of supply and linked to relevant invoices, with proportionate ITC reversed by recipient' },
       { id: 'c', text: 'If the discount is up to 10% of total invoice value without requiring any ITC reversal' },
       { id: 'd', text: 'Only if approved in writing by the jurisdictional GST Commissioner' }
     ],
-    correctOptionId: 'a',
+    correctOptionId: 'b',
     trapNote: 'Section 15(3)(b) requires both: (i) pre-existing agreement linked to invoices, and (ii) proportionate ITC reversal by recipient.',
     explanation: 'As per Section 15(3)(b) of the CGST Act, post-supply discount is excluded from value of supply only if: (i) it is established in terms of an agreement entered into at or before the time of such supply and linked to relevant invoices; and (ii) input tax credit attributable to the discount has been reversed by the recipient.'
   },
@@ -503,12 +503,12 @@ export const MCQS_DATABASE: McqQuestion[] = [
     icaiReference: 'SA 500 Audit Evidence - Para 5 & 6',
     questionText: 'In the context of SA 500 "Audit Evidence", which of the following statements regarding the sufficiency and appropriateness of audit evidence is CORRECT?',
     options: [
-      { id: 'a', text: 'Sufficiency is the measure of the quantity of audit evidence; Appropriateness is the measure of the quality (relevance and reliability)' },
-      { id: 'b', text: 'Sufficiency refers to quality while Appropriateness refers to numerical count of vouchers' },
-      { id: 'c', text: 'A high quantity of audit evidence can compensate for evidence of poor quality' },
-      { id: 'd', text: 'Oral inquiry alone from management provides sufficient appropriate audit evidence' }
+      { id: 'a', text: 'Sufficiency refers to quality while Appropriateness refers to numerical count of vouchers' },
+      { id: 'b', text: 'A high quantity of audit evidence can compensate for evidence of poor quality' },
+      { id: 'c', text: 'Oral inquiry alone from management provides sufficient appropriate audit evidence' },
+      { id: 'd', text: 'Sufficiency is the measure of the quantity of audit evidence; Appropriateness is the measure of the quality (relevance and reliability)' }
     ],
-    correctOptionId: 'a',
+    correctOptionId: 'd',
     trapNote: 'Merely obtaining a large volume of low-quality or biased evidence can NEVER compensate for lack of appropriateness.',
     explanation: 'Under SA 500, Sufficiency is the measure of the quantity of audit evidence, influenced by risk of misstatement. Appropriateness is the measure of the quality of audit evidence, that is, its relevance and its reliability in providing support for the auditor’s opinion.'
   }

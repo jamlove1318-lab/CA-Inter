@@ -61,12 +61,12 @@ During the Financial Year 2023-24, the following transactions and corporate even
         icaiReference: 'Notification No. 13/2017 - Central Tax (Rate) - Reverse Charge',
         questionText: 'Regarding the sitting fees and commission of ₹ 12 Lakhs paid to independent directors, what is the GST liability and mechanism?',
         options: [
-          { id: 'a', text: 'Apex Agrochem Ltd. is liable to pay GST under Reverse Charge Mechanism (RCM) under Section 9(3)' },
-          { id: 'b', text: 'The independent directors must register and pay GST under forward charge' },
+          { id: 'a', text: 'The independent directors must register and pay GST under forward charge' },
+          { id: 'b', text: 'Apex Agrochem Ltd. is liable to pay GST under Reverse Charge Mechanism (RCM) under Section 9(3)' },
           { id: 'c', text: 'It is an employer-employee transaction covered in Schedule III, hence outside GST' },
           { id: 'd', text: 'Exempt from GST if director income is below ₹ 20 Lakhs' }
         ],
-        correctOptionId: 'a',
+        correctOptionId: 'b',
         trapNote: 'Whole-time directors drawing salary subject to TDS u/s 192 are Schedule III (exempt). Non-executive / independent directors receiving sitting fees are taxable under RCM paid by company!',
         explanation: 'As per Notification No. 13/2017-CT(Rate), services supplied by a director of a company or a body corporate to the said company/body corporate are subject to GST under Reverse Charge Mechanism (RCM), where the company is liable to discharge GST.'
       }
@@ -158,12 +158,12 @@ During the year-end statutory audit, the engagement team headed by CA. Vikram en
         icaiReference: 'SA 501 Audit Evidence - Specific Considerations for Selected Items',
         questionText: 'When physical inventory count attendance is impracticable due to unforeseen safety issues on the balance sheet date, what is the auditor’s duty under SA 501?',
         options: [
-          { id: 'a', text: 'Perform alternative audit procedures, or observe count on an alternative date and perform audit procedures on intervening transactions' },
-          { id: 'b', text: 'Immediately issue an adverse audit report without testing' },
-          { id: 'c', text: 'Accept management representation letter as sole conclusive evidence' },
+          { id: 'a', text: 'Immediately issue an adverse audit report without testing' },
+          { id: 'b', text: 'Accept management representation letter as sole conclusive evidence' },
+          { id: 'c', text: 'Perform alternative audit procedures, or observe count on an alternative date and perform audit procedures on intervening transactions' },
           { id: 'd', text: 'Resign from the audit engagement immediately' }
         ],
-        correctOptionId: 'a',
+        correctOptionId: 'c',
         trapNote: 'SA 501 specifically provides for alternative date counts + roll-back/roll-forward procedures on intervening transactions.',
         explanation: 'Under SA 501 Para 7, if attendance at physical inventory counting is impracticable, the auditor shall perform alternative audit procedures to obtain sufficient appropriate audit evidence regarding the existence and condition of inventory. If possible, perform or observe physical counts on an alternative date, and perform audit procedures on intervening transactions.'
       },
@@ -179,12 +179,12 @@ During the year-end statutory audit, the engagement team headed by CA. Vikram en
         icaiReference: 'AS 2 Valuation of Inventories - Para 5 & 13',
         questionText: 'What is the correct valuation per unit of the 10,000 finished OLED display units as per AS 2?',
         options: [
-          { id: 'a', text: '₹ 6,800 per unit (Net Realisable Value = ₹ 7,200 - ₹ 400)' },
-          { id: 'b', text: '₹ 8,000 per unit (Original Cost)' },
-          { id: 'c', text: '₹ 7,200 per unit (Gross Selling Price)' },
-          { id: 'd', text: '₹ 7,600 per unit (Average of Cost and Selling Price)' }
+          { id: 'a', text: '₹ 8,000 per unit (Original Cost)' },
+          { id: 'b', text: '₹ 7,200 per unit (Gross Selling Price)' },
+          { id: 'c', text: '₹ 7,600 per unit (Average of Cost and Selling Price)' },
+          { id: 'd', text: '₹ 6,800 per unit (Net Realisable Value = ₹ 7,200 - ₹ 400)' }
         ],
-        correctOptionId: 'a',
+        correctOptionId: 'd',
         trapNote: 'Net Realisable Value is Estimated Selling Price LESS Estimated Costs necessary to make the sale. 7,200 - 400 = 6,800. Since 6,800 < Cost of 8,000, value at 6,800.',
         explanation: 'As per AS 2, inventories should be valued at the lower of cost and Net Realisable Value (NRV). NRV = Estimated selling price in ordinary course of business less estimated costs of completion and estimated costs necessary to make the sale = ₹ 7,200 - ₹ 400 = ₹ 6,800. Since NRV (₹ 6,800) is lower than Cost (₹ 8,000), inventory must be written down to ₹ 6,800, creating an inventory write-down loss of ₹ 1,200 per unit (Total ₹ 1.2 Crores).'
       }
@@ -283,12 +283,12 @@ Cost and financial structure for the current year are as follows:
         icaiReference: 'Marginal Costing - Export Order & Relevant Costing',
         questionText: 'What is the incremental contribution per unit from accepting the special export order of 10,000 units from Vietnam?',
         options: [
-          { id: 'a', text: '₹ 200 per unit (Profit of ₹ 20,00,000)' },
-          { id: 'b', text: '- ₹ 200 per unit (Loss of ₹ 20,00,000 against total cost)' },
+          { id: 'a', text: '- ₹ 200 per unit (Loss of ₹ 20,00,000 against total cost)' },
+          { id: 'b', text: '₹ 200 per unit (Profit of ₹ 20,00,000)' },
           { id: 'c', text: '₹ 100 per unit (Profit of ₹ 10,00,000)' },
           { id: 'd', text: '₹ 300 per unit (Profit of ₹ 30,00,000)' }
         ],
-        correctOptionId: 'a',
+        correctOptionId: 'b',
         trapNote: 'Fixed overheads are SUNK and irrelevant for spare capacity export order! Relevant variable cost = 1200 + 600 + 400 + 100 (special packaging) = ₹ 2,300.',
         explanation: 'Relevant Variable Cost per unit for export = Direct Material (₹ 1,200) + Direct Labour (₹ 600) + Variable OH (₹ 400) + Export Packaging (₹ 100) = ₹ 2,300. Incremental Contribution per unit = Export Selling Price (₹ 2,500) - Relevant Cost (₹ 2,300) = ₹ 200 per unit. Total incremental profit = 10,000 × ₹ 200 = ₹ 20,00,000. Since capacity exists (15,000 idle units), the order should be accepted.'
       },
@@ -304,12 +304,12 @@ Cost and financial structure for the current year are as follows:
         icaiReference: 'Degree of Financial Leverage (DFL = EBIT / EBT)',
         questionText: 'Assuming current domestic operations generate EBIT of ₹ 3,15,00,000, what is the Degree of Financial Leverage (DFL)?',
         options: [
-          { id: 'a', text: '1.105 (EBIT ₹ 3.15 Cr / EBT ₹ 2.85 Cr)' },
-          { id: 'b', text: '1.250' },
-          { id: 'c', text: '1.000' },
+          { id: 'a', text: '1.250' },
+          { id: 'b', text: '1.000' },
+          { id: 'c', text: '1.105 (EBIT ₹ 3.15 Cr / EBT ₹ 2.85 Cr)' },
           { id: 'd', text: '1.420' }
         ],
-        correctOptionId: 'a',
+        correctOptionId: 'c',
         trapNote: 'DFL = EBIT / (EBIT - Interest) = ₹ 3,15,00,000 / (₹ 3,15,00,000 - ₹ 30,00,000) = 315 / 285 = 1.105.',
         explanation: 'EBIT = ₹ 3,15,00,000. Interest = ₹ 30,00,000. EBT = ₹ 3,15,00,000 - ₹ 30,00,000 = ₹ 2,85,00,000. Degree of Financial Leverage (DFL) = EBIT / EBT = 3,15,00,000 / 2,85,00,000 = 1.105.'
       }
@@ -400,12 +400,12 @@ Key events during the financial year 2023-24 (AY 2024-25):
         icaiReference: 'Section 50C Provisos - Agreement Date SDV vs Registration Date SDV',
         questionText: 'For computing capital gains under Section 50C, which Stamp Duty Value should be taken as the benchmark, and is any full value of consideration adjustment required?',
         options: [
-          { id: 'a', text: 'SDV on agreement date (₹ 3.7 Cr) is considered, and since it is within 110% of agreed consideration (₹ 3.85 Cr), actual consideration ₹ 3.5 Cr is taken' },
-          { id: 'b', text: 'SDV on registration date (₹ 4.1 Cr) must mandatorily be taken in all circumstances' },
-          { id: 'c', text: '₹ 4.1 Crores is deemed consideration because advance was not paid in cash' },
-          { id: 'd', text: 'The average of ₹ 3.7 Cr and ₹ 4.1 Cr must be taken' }
+          { id: 'a', text: 'SDV on registration date (₹ 4.1 Cr) must mandatorily be taken in all circumstances' },
+          { id: 'b', text: '₹ 4.1 Crores is deemed consideration because advance was not paid in cash' },
+          { id: 'c', text: 'The average of ₹ 3.7 Cr and ₹ 4.1 Cr must be taken' },
+          { id: 'd', text: 'SDV on agreement date (₹ 3.7 Cr) is considered, and since it is within 110% of agreed consideration (₹ 3.85 Cr), actual consideration ₹ 3.5 Cr is taken' }
         ],
-        correctOptionId: 'a',
+        correctOptionId: 'd',
         trapNote: 'First proviso to Section 50C: If consideration or part thereof is received by account payee cheque/draft/ECS on or before the date of agreement, SDV on the date of agreement (₹ 3.7 Cr) applies! 110% of ₹ 3.5 Cr = ₹ 3.85 Cr. Since ₹ 3.7 Cr <= ₹ 3.85 Cr, no addition is made under Section 50C!',
         explanation: 'Under the first proviso to Section 50C, where the date of agreement and registration are not the same, the SDV on the date of agreement can be taken provided part consideration was received by banking channels on or before agreement date. Here ₹ 30 Lakhs was received via bank draft. Therefore, agreement date SDV (₹ 3.7 Cr) applies. Furthermore, under the third proviso, if SDV does not exceed 110% of agreed consideration (₹ 3.5 Cr × 110% = ₹ 3.85 Cr), the actual consideration of ₹ 3.5 Crores is treated as Full Value of Consideration.'
       },
