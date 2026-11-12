@@ -15,7 +15,9 @@ import {
   BookOpen,
   Search,
   CheckCircle2,
-  RefreshCw
+  RefreshCw,
+  Compass,
+  GraduationCap
 } from 'lucide-react';
 import { CA_INTER_SUBJECTS } from '../data/subjectsData';
 import { ActiveTab } from './Navbar';
@@ -23,19 +25,22 @@ import { SpacedRepetitionService } from '../services/spacedRepetitionService';
 
 interface DashboardProps {
   setActiveTab: (tab: ActiveTab) => void;
-  onSelectSubject: (subjectId: string, mode: 'mcqs' | 'descriptive') => void;
+  onSelectSubject: (subjectId: string, mode: 'mcqs' | 'descriptive', tier?: 'all' | 'beginner' | 'intermediate' | 'hard') => void;
   openSearchModal: () => void;
   openGeneratorModal: () => void;
+  openBeginnerGuide: (subjectId?: string) => void;
 }
 
 export const Dashboard: React.FC<DashboardProps> = ({
   setActiveTab,
   onSelectSubject,
   openSearchModal,
-  openGeneratorModal
+  openGeneratorModal,
+  openBeginnerGuide
 }) => {
   const [stats, setStats] = React.useState(SpacedRepetitionService.getRepetitionStats());
   const [selectedGroup, setSelectedGroup] = React.useState<'All' | 'Group 1' | 'Group 2'>('All');
+  const [selectedMasteryTier, setSelectedMasteryTier] = React.useState<'all' | 'beginner' | 'intermediate' | 'hard'>('all');
 
   React.useEffect(() => {
     setStats(SpacedRepetitionService.getRepetitionStats());
@@ -117,6 +122,33 @@ export const Dashboard: React.FC<DashboardProps> = ({
         </div>
       </div>
 
+      {/* Beginner / Fresher Zero-to-Hero Foundation Banner */}
+      <div className="bg-gradient-to-r from-emerald-950/70 via-slate-850 to-teal-950/70 border border-emerald-700/60 rounded-2xl p-4 sm:p-5 shadow-md flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div className="flex items-center gap-3.5">
+          <div className="w-11 h-11 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 flex items-center justify-center text-2xl shrink-0">
+            🌱
+          </div>
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">Fresher in CA Intermediate?</span>
+              <span className="px-2 py-0.2 rounded text-[10px] font-bold bg-emerald-900 text-emerald-200 border border-emerald-700">Learn from Scratch</span>
+            </div>
+            <p className="text-xs sm:text-sm text-slate-300 font-medium">
+              Don’t know anything about the subjects yet? Learn all 6 papers from ground zero with simple plain-English concepts, real-world analogies, and golden passing rules.
+            </p>
+          </div>
+        </div>
+
+        <button
+          onClick={() => openBeginnerGuide()}
+          className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold rounded-xl shadow-lg shadow-emerald-950/50 transition-all shrink-0 active:scale-95 whitespace-nowrap"
+        >
+          <Compass className="w-4 h-4" />
+          <span>Zero-to-Hero Guide</span>
+          <ArrowRight className="w-3.5 h-3.5" />
+        </button>
+      </div>
+
       {/* Fast Navigation Utility Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <button
@@ -174,26 +206,53 @@ export const Dashboard: React.FC<DashboardProps> = ({
 
       {/* ICAI Papers Grid */}
       <div className="space-y-4 pt-2">
-        <div className="flex items-center justify-between">
-          <h2 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-            <span>Choose a Paper to Practice</span>
-          </h2>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h2 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+              <span>Choose a Paper to Practice</span>
+            </h2>
+            <p className="text-xs text-slate-400">Select your proficiency level to adjust question complexity</p>
+          </div>
 
-          {/* Group Filter */}
-          <div className="flex items-center bg-slate-800 p-1 rounded-xl border border-slate-700 text-xs">
-            {(['All', 'Group 1', 'Group 2'] as const).map((group) => (
-              <button
-                key={group}
-                onClick={() => setSelectedGroup(group)}
-                className={`px-3 py-1 font-semibold rounded-lg transition-all ${
-                  selectedGroup === group
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'text-slate-400 hover:text-white'
-                }`}
-              >
-                {group}
-              </button>
-            ))}
+          <div className="flex flex-wrap items-center gap-2">
+            {/* Proficiency Level Switcher */}
+            <div className="flex items-center bg-slate-800 p-1 rounded-xl border border-slate-700 text-xs">
+              {[
+                { id: 'all', label: 'All Levels' },
+                { id: 'beginner', label: '🌱 Beginner' },
+                { id: 'intermediate', label: '🔵 Intermediate' },
+                { id: 'hard', label: '🔥 Hard' }
+              ].map(tier => (
+                <button
+                  key={tier.id}
+                  onClick={() => setSelectedMasteryTier(tier.id as any)}
+                  className={`px-2.5 py-1 font-semibold rounded-lg transition-all ${
+                    selectedMasteryTier === tier.id
+                      ? 'bg-emerald-600 text-white shadow-sm'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  {tier.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Group Filter */}
+            <div className="flex items-center bg-slate-800 p-1 rounded-xl border border-slate-700 text-xs">
+              {(['All', 'Group 1', 'Group 2'] as const).map((group) => (
+                <button
+                  key={group}
+                  onClick={() => setSelectedGroup(group)}
+                  className={`px-3 py-1 font-semibold rounded-lg transition-all ${
+                    selectedGroup === group
+                      ? 'bg-blue-600 text-white shadow-sm'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  {group}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -219,6 +278,15 @@ export const Dashboard: React.FC<DashboardProps> = ({
                       </h3>
                     </div>
                   </div>
+
+                  {/* 1-Tap Primer Button */}
+                  <button
+                    onClick={() => openBeginnerGuide(subject.id)}
+                    className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-emerald-950/60 hover:bg-emerald-900/80 text-emerald-300 border border-emerald-800/80 text-[11px] font-bold transition-all shrink-0"
+                    title="Learn from scratch"
+                  >
+                    <span>🌱 Primer</span>
+                  </button>
                 </div>
 
                 <div className="flex flex-wrap items-center gap-1.5 text-[11px] text-slate-400 pt-1">
@@ -234,7 +302,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
               {/* Direct Practice Buttons */}
               <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-700/60">
                 <button
-                  onClick={() => onSelectSubject(subject.id, 'mcqs')}
+                  onClick={() => onSelectSubject(subject.id, 'mcqs', selectedMasteryTier)}
                   className="flex items-center justify-center gap-1 px-3 py-2 bg-blue-600/20 hover:bg-blue-600 text-blue-300 hover:text-white rounded-xl text-xs font-semibold border border-blue-500/30 transition-all active:scale-95"
                 >
                   <HelpCircle className="w-3.5 h-3.5" />
@@ -242,7 +310,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
                 </button>
 
                 <button
-                  onClick={() => onSelectSubject(subject.id, 'descriptive')}
+                  onClick={() => onSelectSubject(subject.id, 'descriptive', selectedMasteryTier)}
                   className="flex items-center justify-center gap-1 px-3 py-2 bg-emerald-600/20 hover:bg-emerald-600 text-emerald-300 hover:text-white rounded-xl text-xs font-semibold border border-emerald-500/30 transition-all active:scale-95"
                 >
                   <PenTool className="w-3.5 h-3.5" />

@@ -23,18 +23,25 @@ import { shuffleMcqOptions } from '../utils/mcqUtils';
 
 interface McqPracticeProps {
   initialSubjectId?: string;
+  initialMasteryTier?: 'all' | 'beginner' | 'intermediate' | 'hard';
   onOpenGenerator: () => void;
+  onOpenBeginnerGuide?: (subjectId?: string) => void;
 }
 
 export const McqPractice: React.FC<McqPracticeProps> = ({
   initialSubjectId,
-  onOpenGenerator
+  initialMasteryTier,
+  onOpenGenerator,
+  onOpenBeginnerGuide
 }) => {
   const [selectedSubjectId, setSelectedSubjectId] = React.useState<string>(
     initialSubjectId || 'all'
   );
   const [selectedChapterId, setSelectedChapterId] = React.useState<string>('all');
   const [onlyHighYield, setOnlyHighYield] = React.useState<boolean>(false);
+  const [masteryTier, setMasteryTier] = React.useState<'all' | 'beginner' | 'intermediate' | 'hard'>(
+    initialMasteryTier || 'all'
+  );
 
   // Sync selectedSubjectId if initialSubjectId prop changes
   React.useEffect(() => {
@@ -43,6 +50,13 @@ export const McqPractice: React.FC<McqPracticeProps> = ({
       setSelectedChapterId('all');
     }
   }, [initialSubjectId]);
+
+  // Sync masteryTier if initialMasteryTier prop changes
+  React.useEffect(() => {
+    if (initialMasteryTier && initialMasteryTier !== masteryTier) {
+      setMasteryTier(initialMasteryTier);
+    }
+  }, [initialMasteryTier]);
 
   // Infinite Question Queue
   const [questionQueue, setQuestionQueue] = React.useState<McqQuestion[]>([]);
@@ -56,29 +70,36 @@ export const McqPractice: React.FC<McqPracticeProps> = ({
   const [sessionTotal, setSessionTotal] = React.useState<number>(0);
   const [currentStreak, setCurrentStreak] = React.useState<number>(0);
 
-  // Initialize or re-populate queue when subject/filter changes
+  // Initialize or re-populate queue when subject/filter/tier changes
   React.useEffect(() => {
     const curated = SpacedRepetitionService.filterQuestions(MCQS_DATABASE, {
       subjectId: selectedSubjectId,
       chapterId: selectedChapterId,
-      onlyHighYield
+      onlyHighYield,
+      masteryTier
     });
 
-    // Populate with curated questions (options shuffled) + guaranteed dynamic questions
+    // Populate with curated questions (options shuffled) + guaranteed dynamic questions matching tier
     const initialList: McqQuestion[] = curated.map(q => shuffleMcqOptions(q));
     
-    // Always add fresh dynamic questions to guarantee infinite flow
+    // Always add fresh dynamic questions matching tier
     for (let i = 0; i < 8; i++) {
-      initialList.push(QuestionGeneratorService.generateDynamicMcq(selectedSubjectId));
+      initialList.push(QuestionGeneratorService.generateDynamicMcq(
+        selectedSubjectId,
+        masteryTier === 'all' ? undefined : masteryTier
+      ));
     }
 
     setQuestionQueue(initialList);
     setCurrentIndex(0);
     setSelectedOptionId(null);
     setShowExplanation(false);
-  }, [selectedSubjectId, selectedChapterId, onlyHighYield]);
+  }, [selectedSubjectId, selectedChapterId, onlyHighYield, masteryTier]);
 
-  const currentQuestion: McqQuestion = questionQueue[currentIndex] || QuestionGeneratorService.generateDynamicMcq(selectedSubjectId);
+  const currentQuestion: McqQuestion = questionQueue[currentIndex] || QuestionGeneratorService.generateDynamicMcq(
+    selectedSubjectId,
+    masteryTier === 'all' ? undefined : masteryTier
+  );
 
   React.useEffect(() => {
     if (currentQuestion) {
@@ -90,12 +111,11 @@ export const McqPractice: React.FC<McqPracticeProps> = ({
 
   // Ensure queue never runs dry: auto-append questions as user progresses
   const handleNextQuestion = () => {
-    // If approaching end of queue, append 3 more fresh questions immediately
     if (currentIndex >= questionQueue.length - 2) {
       const moreQuestions = [
-        QuestionGeneratorService.generateDynamicMcq(selectedSubjectId),
-        QuestionGeneratorService.generateDynamicMcq(selectedSubjectId),
-        QuestionGeneratorService.generateDynamicMcq(selectedSubjectId)
+        QuestionGeneratorService.generateDynamicMcq(selectedSubjectId, masteryTier === 'all' ? undefined : masteryTier),
+        QuestionGeneratorService.generateDynamicMcq(selectedSubjectId, masteryTier === 'all' ? undefined : masteryTier),
+        QuestionGeneratorService.generateDynamicMcq(selectedSubjectId, masteryTier === 'all' ? undefined : masteryTier)
       ];
       setQuestionQueue(prev => [...prev, ...moreQuestions]);
     }
@@ -209,6 +229,41 @@ export const McqPractice: React.FC<McqPracticeProps> = ({
             <span>Unlimited Mode Active</span>
           </div>
         </div>
+
+        {/* Mastery Tier Switcher (Beginner -> Intermediate -> Hard) */}
+        <div className="w-full pt-2 border-t border-slate-700/60 flex flex-wrap items-center justify-between gap-3 text-xs">
+          <div className="flex flex-wrap items-center gap-1.5 bg-slate-900/90 p-1 rounded-xl border border-slate-700">
+            <span className="text-[11px] font-semibold text-slate-400 pl-2 pr-1">Proficiency Level:</span>
+            {[
+              { id: 'all', label: 'All Levels' },
+              { id: 'beginner', label: '🌱 Beginner (Learn from Scratch)' },
+              { id: 'intermediate', label: '🔵 Intermediate (Standard ICAI)' },
+              { id: 'hard', label: '🔥 Hard / Examiner Favorite' }
+            ].map(tier => (
+              <button
+                key={tier.id}
+                onClick={() => setMasteryTier(tier.id as any)}
+                className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
+                  masteryTier === tier.id
+                    ? 'bg-blue-600 text-white shadow-sm'
+                    : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                }`}
+              >
+                {tier.label}
+              </button>
+            ))}
+          </div>
+
+          {onOpenBeginnerGuide && (
+            <button
+              onClick={() => onOpenBeginnerGuide(selectedSubjectId === 'all' ? undefined : selectedSubjectId)}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-950 text-emerald-300 hover:bg-emerald-900 border border-emerald-800 rounded-xl font-bold transition-all text-xs"
+            >
+              <BookOpen className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Zero-to-Hero Concept Guide</span>
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Main MCQ Card (High Contrast, Tactile, Beautiful) */}
@@ -224,8 +279,16 @@ export const McqPractice: React.FC<McqPracticeProps> = ({
               <span className="px-2 py-0.5 rounded-lg text-xs font-semibold bg-slate-900 text-slate-300 border border-slate-700">
                 {currentQuestion.marks} Marks
               </span>
-              <span className="px-2 py-0.5 rounded-lg text-xs font-semibold bg-slate-900 text-amber-300 border border-slate-700">
-                {currentQuestion.difficulty}
+              <span className={`px-2 py-0.5 rounded-lg text-xs font-semibold border ${
+                currentQuestion.difficulty === 'Beginner / Foundation' || currentQuestion.masteryTier === 'beginner'
+                  ? 'bg-emerald-950/80 text-emerald-300 border-emerald-800'
+                  : currentQuestion.difficulty === 'Examiner Favorite' || currentQuestion.masteryTier === 'hard'
+                    ? 'bg-rose-950/80 text-rose-300 border-rose-800'
+                    : 'bg-slate-900 text-amber-300 border-slate-700'
+              }`}>
+                {currentQuestion.difficulty === 'Beginner / Foundation' || currentQuestion.masteryTier === 'beginner'
+                  ? '🌱 Beginner Concept'
+                  : currentQuestion.difficulty}
               </span>
             </div>
 

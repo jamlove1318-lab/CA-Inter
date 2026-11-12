@@ -65,6 +65,7 @@ export class SpacedRepetitionService {
       subjectId?: string;
       chapterId?: string;
       onlyHighYield?: boolean;
+      masteryTier?: 'all' | 'beginner' | 'intermediate' | 'hard';
     }
   ): T[] {
     const progress = this.getAllProgress();
@@ -81,6 +82,16 @@ export class SpacedRepetitionService {
       // Filter by high yield only if requested
       if (options?.onlyHighYield && q.importance !== 'HIGH') {
         return false;
+      }
+      // Filter by mastery tier if specified
+      if (options?.masteryTier && options.masteryTier !== 'all') {
+        if (options.masteryTier === 'beginner') {
+          if (q.difficulty !== 'Beginner / Foundation' && q.masteryTier !== 'beginner') return false;
+        } else if (options.masteryTier === 'hard') {
+          if (q.difficulty !== 'Tough / Tricky' && q.difficulty !== 'Examiner Favorite' && q.masteryTier !== 'hard') return false;
+        } else if (options.masteryTier === 'intermediate') {
+          if (q.difficulty === 'Beginner / Foundation') return false;
+        }
       }
 
       const userProg = progress[q.id];

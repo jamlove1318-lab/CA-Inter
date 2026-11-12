@@ -27,10 +27,26 @@ export class QuestionGeneratorService {
 
   /**
    * Generates an infinite stream of brand-new, high-quality ICAI MCQs across the ENTIRE syllabus.
+   * Supports 'beginner' (foundation/scratch concepts), 'intermediate' (standard ICAI), and 'hard' (examiner favorites/traps).
    */
-  public static generateDynamicMcq(subjectId?: string): McqQuestion {
+  public static generateDynamicMcq(
+    subjectId?: string,
+    tier?: 'beginner' | 'intermediate' | 'hard'
+  ): McqQuestion {
     const subjects = ['p1_adv_acc', 'p2_law', 'p3_tax', 'p4_costing', 'p5_audit', 'p6_fm_sm'];
     const chosenSubject = subjectId && subjectId !== 'all' ? subjectId : subjects[Math.floor(Math.random() * subjects.length)];
+
+    if (tier === 'beginner') {
+      switch (chosenSubject) {
+        case 'p1_adv_acc': return this.generateAccountsBeginnerMcq();
+        case 'p2_law': return this.generateLawBeginnerMcq();
+        case 'p3_tax': return this.generateTaxBeginnerMcq();
+        case 'p4_costing': return this.generateCostingBeginnerMcq();
+        case 'p5_audit': return this.generateAuditBeginnerMcq();
+        case 'p6_fm_sm':
+        default: return this.generateFmSmBeginnerMcq();
+      }
+    }
 
     switch (chosenSubject) {
       case 'p1_adv_acc':
@@ -2255,5 +2271,243 @@ Under AS 16, borrowing costs eligible for capitalization on a specific borrowing
 - Less: Temporary investment income = ₹ ${interestIncome.toLocaleString('en-IN')}
 - Net Borrowing Cost to be Capitalized = ₹ ${netCapitalized.toLocaleString('en-IN')}.`
     };
+  }
+
+  // =========================================================================
+  // ZERO TO HERO: BEGINNER / FOUNDATION GENERATORS (WHOLE SYLLABUS)
+  // =========================================================================
+
+  public static generateAccountsBeginnerMcq(): McqQuestion {
+    const variants = [
+      {
+        q: 'Under AS 2 (Valuation of Inventories), what is the golden valuation principle for finished goods and raw materials in the balance sheet?',
+        correct: 'Lower of historical Cost and Net Realisable Value (NRV)',
+        wrong: ['Higher of Cost and Selling Price', 'Always at original Purchase Invoice Cost without write-down', 'At Replacement Market Cost']
+      },
+      {
+        q: 'As per AS 16 Borrowing Costs, what qualifies an asset as a "Qualifying Asset" for interest capitalization?',
+        correct: 'An asset that necessarily takes a substantial period of time to get ready for its intended use or sale',
+        wrong: ['Any asset bought using bank loan funds regardless of time taken', 'Only financial assets like listed equity shares and bonds', 'Inventories purchased and sold within ordinary daily business']
+      },
+      {
+        q: 'In the vertical format of a Company Balance Sheet prescribed under Schedule III of the Companies Act 2013, under which major head is "Securities Premium" presented?',
+        correct: 'Shareholders’ Funds ➔ Reserves & Surplus',
+        wrong: ['Non-Current Liabilities ➔ Long Term Borrowings', 'Current Liabilities ➔ Other Financial Liabilities', 'Current Assets ➔ Cash & Cash Equivalents']
+      }
+    ];
+    const pick = variants[Math.floor(Math.random() * variants.length)];
+    return this.buildShuffledMcq(
+      {
+        id: `dyn_beg_acc_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        subjectId: 'p1_adv_acc',
+        chapterId: 'as_framework',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'Beginner Foundation (Learn from Scratch)',
+        marks: 2,
+        difficulty: 'Beginner / Foundation',
+        masteryTier: 'beginner',
+        icaiReference: 'ICAI Foundation & AS Core Concepts',
+        questionText: pick.q,
+        explanation: 'Foundation Concept: Understanding the core standard prevents confusion. Always remember statutory prudence and vertical Schedule III classifications.'
+      },
+      pick.correct,
+      pick.wrong
+    );
+  }
+
+  public static generateLawBeginnerMcq(): McqQuestion {
+    const variants = [
+      {
+        q: 'As per Section 101 of the Companies Act 2013, what is the statutory minimum notice required for calling an Annual General Meeting (AGM)?',
+        correct: 'Not less than 21 clear days notice in writing or by electronic mode',
+        wrong: ['7 days notice', '14 days notice', '30 days notice']
+      },
+      {
+        q: 'Under the Companies Act 2013, what is the required majority to pass a "Special Resolution" in a general meeting?',
+        correct: 'Votes cast in favor must be at least 3 times the votes cast against (75% or more)',
+        wrong: ['Simple majority of votes (> 50%)', '100% unanimous consent of all registered members', 'Consent of Board of Directors alone without members']
+      },
+      {
+        q: 'Under Section 103, what is the statutory quorum for an AGM of a Public Company having less than or equal to 1,000 members?',
+        correct: '5 members personally present',
+        wrong: ['2 members personally present', '15 members personally present', '30 members personally present']
+      }
+    ];
+    const pick = variants[Math.floor(Math.random() * variants.length)];
+    return this.buildShuffledMcq(
+      {
+        id: `dyn_beg_law_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        subjectId: 'p2_law',
+        chapterId: 'mgmt_admin',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'Beginner Foundation (Learn from Scratch)',
+        marks: 2,
+        difficulty: 'Beginner / Foundation',
+        masteryTier: 'beginner',
+        icaiReference: 'Companies Act 2013 Core Provisions',
+        questionText: pick.q,
+        explanation: 'Foundation Law Concept: Clear days exclude day of sending and meeting. Quorum counts only members personally present, not proxies.'
+      },
+      pick.correct,
+      pick.wrong
+    );
+  }
+
+  public static generateTaxBeginnerMcq(): McqQuestion {
+    const variants = [
+      {
+        q: 'In Income Tax terminology, what is the fundamental difference between Previous Year (PY) and Assessment Year (AY)?',
+        correct: 'Income earned during the Previous Year is evaluated and taxed in the following Assessment Year',
+        wrong: ['Previous Year is when you pay tax, Assessment Year is when you earn money', 'Both terms mean the exact same 12-month period', 'Previous Year applies only to companies, Assessment Year applies only to individuals']
+      },
+      {
+        q: 'Under Section 14 of the Income Tax Act 1961, all taxable income is categorized into how many Heads of Income?',
+        correct: '5 Heads (Salaries, House Property, PGBP, Capital Gains, Other Sources)',
+        wrong: ['3 Heads (Salaries, Business, Capital Gains)', '7 Heads (including Agriculture and Dividends)', 'Only 2 Heads (Direct Income and Indirect Income)']
+      },
+      {
+        q: 'When goods are supplied between two different States (e.g. from Gujarat to Karnataka), which type of GST is levied?',
+        correct: 'Integrated GST (IGST) levied by the Central Government',
+        wrong: ['Central GST (CGST) and State GST (SGST) equally', 'Only Gujarat SGST', 'Customs Import Duty']
+      }
+    ];
+    const pick = variants[Math.floor(Math.random() * variants.length)];
+    return this.buildShuffledMcq(
+      {
+        id: `dyn_beg_tax_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        subjectId: 'p3_tax',
+        chapterId: 'res_status',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'Beginner Foundation (Learn from Scratch)',
+        marks: 2,
+        difficulty: 'Beginner / Foundation',
+        masteryTier: 'beginner',
+        icaiReference: 'Income Tax & GST Basic Architecture',
+        questionText: pick.q,
+        explanation: 'Foundation Tax Concept: PY is the earning year, AY is assessment year. Inter-state supply is governed by the IGST Act.'
+      },
+      pick.correct,
+      pick.wrong
+    );
+  }
+
+  public static generateCostingBeginnerMcq(): McqQuestion {
+    const variants = [
+      {
+        q: 'In Cost Accounting, what comprises "Prime Cost" in the Cost Sheet?',
+        correct: 'Direct Materials Consumed + Direct Labour + Direct Expenses',
+        wrong: ['Factory Cost + Administrative Overheads', 'Total Sales minus Net Profit', 'Direct Materials + Factory Rent']
+      },
+      {
+        q: 'When the volume of factory production increases, how does Fixed Cost behave?',
+        correct: 'Total Fixed Cost remains constant, while Fixed Cost per unit decreases',
+        wrong: ['Total Fixed Cost increases in direct proportion to units produced', 'Fixed Cost per unit remains constant', 'Both total and per unit fixed costs increase']
+      },
+      {
+        q: 'What does the "Break-Even Point (BEP)" represent in Marginal Costing?',
+        correct: 'The sales volume where Total Revenue equals Total Costs (Zero Profit and Zero Loss)',
+        wrong: ['The point of maximum possible profit', 'The sales volume where Variable Costs are zero', 'The point where only income tax is paid']
+      }
+    ];
+    const pick = variants[Math.floor(Math.random() * variants.length)];
+    return this.buildShuffledMcq(
+      {
+        id: `dyn_beg_cost_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        subjectId: 'p4_costing',
+        chapterId: 'marginal_costing',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'Beginner Foundation (Learn from Scratch)',
+        marks: 2,
+        difficulty: 'Beginner / Foundation',
+        masteryTier: 'beginner',
+        icaiReference: 'Cost Accounting Fundamentals',
+        questionText: pick.q,
+        explanation: 'Foundation Costing Concept: Prime cost represents direct production costs. Break-even occurs when Contribution equals Fixed Cost.'
+      },
+      pick.correct,
+      pick.wrong
+    );
+  }
+
+  public static generateAuditBeginnerMcq(): McqQuestion {
+    const variants = [
+      {
+        q: 'What is the primary objective of an independent statutory audit of financial statements as per SA 200?',
+        correct: 'To express an independent professional opinion on whether the financial statements give a True and Fair View',
+        wrong: ['To guarantee 100% mathematical accuracy with zero risk of error', 'To prepare and write the company books of accounts', 'To act as an insurance policy against company bankruptcy']
+      },
+      {
+        q: 'In SA 500 "Audit Evidence", what do the terms "Sufficiency" and "Appropriateness" signify?',
+        correct: 'Sufficiency is the measure of the quantity of evidence; Appropriateness is the measure of the quality (relevance and reliability)',
+        wrong: ['Sufficiency refers to quality while Appropriateness refers to quantity', 'Both terms mean the exact number of physical invoices inspected', 'Sufficiency applies to management while Appropriateness applies to auditors']
+      },
+      {
+        q: 'When an auditor concludes that financial statements give a true and fair view in accordance with accounting standards without any material reservation, which report is issued?',
+        correct: 'Unmodified (Clean) Audit Opinion',
+        wrong: ['Qualified Opinion', 'Adverse Opinion', 'Disclaimer of Opinion']
+      }
+    ];
+    const pick = variants[Math.floor(Math.random() * variants.length)];
+    return this.buildShuffledMcq(
+      {
+        id: `dyn_beg_aud_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        subjectId: 'p5_audit',
+        chapterId: 'audit_report',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'Beginner Foundation (Learn from Scratch)',
+        marks: 2,
+        difficulty: 'Beginner / Foundation',
+        masteryTier: 'beginner',
+        icaiReference: 'SA 200, 500 & 700 Core Concepts',
+        questionText: pick.q,
+        explanation: 'Foundation Auditing Concept: Auditors provide reasonable assurance (not absolute), expressing an opinion on True and Fair view.'
+      },
+      pick.correct,
+      pick.wrong
+    );
+  }
+
+  public static generateFmSmBeginnerMcq(): McqQuestion {
+    const variants = [
+      {
+        q: 'Why is ₹ 1,00,000 received today worth more than ₹ 1,00,000 to be received three years from now?',
+        correct: 'Because money today can earn interest, and future purchasing power is eroded by inflation and risk',
+        wrong: ['Because the face value of currency notes expires in 3 years', 'Because taxes are never paid on money received today', 'Because accounting standards prohibit receiving money in the future']
+      },
+      {
+        q: 'In Financial Management, how is the Degree of Combined Leverage (DCL) mathematically determined?',
+        correct: 'Degree of Operating Leverage × Degree of Financial Leverage (DOL × DFL)',
+        wrong: ['Degree of Operating Leverage + Degree of Financial Leverage (DOL + DFL)', 'Operating Profit divided by Sales', 'Net Profit divided by Total Assets']
+      },
+      {
+        q: 'In Strategic Management, which elements of the SWOT framework represent INTERNAL factors of the organization?',
+        correct: 'Strengths and Weaknesses',
+        wrong: ['Opportunities and Threats', 'Strengths and Opportunities', 'Weaknesses and Threats']
+      }
+    ];
+    const pick = variants[Math.floor(Math.random() * variants.length)];
+    return this.buildShuffledMcq(
+      {
+        id: `dyn_beg_fmsm_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        subjectId: 'p6_fm_sm',
+        chapterId: 'fm_leverages',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'Beginner Foundation (Learn from Scratch)',
+        marks: 2,
+        difficulty: 'Beginner / Foundation',
+        masteryTier: 'beginner',
+        icaiReference: 'FM & SM Core Principles',
+        questionText: pick.q,
+        explanation: 'Foundation FM-SM Concept: Time value of money reflects earning power & inflation. Strengths and Weaknesses are internal factors in SWOT.'
+      },
+      pick.correct,
+      pick.wrong
+    );
   }
 }

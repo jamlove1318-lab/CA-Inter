@@ -10,20 +10,40 @@ import { GameZone } from './components/GameZone/GameZone';
 import { SectionDirectoryModal } from './components/SectionDirectoryModal';
 import { InfiniteQuestionModal } from './components/InfiniteQuestionModal';
 import { OfflineModal } from './components/OfflineModal';
+import { BeginnerGuideModal } from './components/BeginnerGuideModal';
 import { DescriptiveQuestion } from './types/question';
 import { Layers, HelpCircle, PenTool, FileText, Gamepad2, BookOpen } from 'lucide-react';
 
 export function App() {
   const [activeTab, setActiveTab] = React.useState<ActiveTab>('dashboard');
   const [selectedSubjectId, setSelectedSubjectId] = React.useState<string>('p2_law');
+  const [activeMasteryTier, setActiveMasteryTier] = React.useState<'all' | 'beginner' | 'intermediate' | 'hard'>('all');
   const [activeDescriptiveQuestion, setActiveDescriptiveQuestion] = React.useState<DescriptiveQuestion | undefined>(undefined);
   const [isSearchModalOpen, setIsSearchModalOpen] = React.useState<boolean>(false);
   const [isGeneratorModalOpen, setIsGeneratorModalOpen] = React.useState<boolean>(false);
   const [isOfflineModalOpen, setIsOfflineModalOpen] = React.useState<boolean>(false);
+  const [isBeginnerGuideOpen, setIsBeginnerGuideOpen] = React.useState<boolean>(false);
+  const [beginnerGuideSubjectId, setBeginnerGuideSubjectId] = React.useState<string | undefined>(undefined);
   const [streakCount, setStreakCount] = React.useState<number>(4);
 
-  const handleSelectSubjectFromDashboard = (subjectId: string, mode: 'mcqs' | 'descriptive') => {
+  const handleSelectSubjectFromDashboard = (
+    subjectId: string, 
+    mode: 'mcqs' | 'descriptive',
+    tier?: 'all' | 'beginner' | 'intermediate' | 'hard'
+  ) => {
     setSelectedSubjectId(subjectId);
+    if (tier) setActiveMasteryTier(tier);
+    setActiveTab(mode);
+  };
+
+  const handleOpenBeginnerGuide = (subjectId?: string) => {
+    setBeginnerGuideSubjectId(subjectId);
+    setIsBeginnerGuideOpen(true);
+  };
+
+  const handleStartBeginnerPractice = (subjectId: string, mode: 'mcqs' | 'descriptive') => {
+    setSelectedSubjectId(subjectId);
+    setActiveMasteryTier('beginner');
     setActiveTab(mode);
   };
 
@@ -42,6 +62,7 @@ export function App() {
         openSearchModal={() => setIsSearchModalOpen(true)}
         openGeneratorModal={() => setIsGeneratorModalOpen(true)}
         openOfflineModal={() => setIsOfflineModalOpen(true)}
+        openBeginnerGuide={() => handleOpenBeginnerGuide()}
         streakCount={streakCount}
       />
 
@@ -53,13 +74,16 @@ export function App() {
             onSelectSubject={handleSelectSubjectFromDashboard}
             openSearchModal={() => setIsSearchModalOpen(true)}
             openGeneratorModal={() => setIsGeneratorModalOpen(true)}
+            openBeginnerGuide={handleOpenBeginnerGuide}
           />
         )}
 
         {activeTab === 'mcqs' && (
           <McqPractice
             initialSubjectId={selectedSubjectId}
+            initialMasteryTier={activeMasteryTier}
             onOpenGenerator={() => setIsGeneratorModalOpen(true)}
+            onOpenBeginnerGuide={handleOpenBeginnerGuide}
           />
         )}
 
@@ -136,6 +160,13 @@ export function App() {
       <OfflineModal
         isOpen={isOfflineModalOpen}
         onClose={() => setIsOfflineModalOpen(false)}
+      />
+
+      <BeginnerGuideModal
+        isOpen={isBeginnerGuideOpen}
+        onClose={() => setIsBeginnerGuideOpen(false)}
+        initialSubjectId={beginnerGuideSubjectId}
+        onStartBeginnerPractice={handleStartBeginnerPractice}
       />
     </div>
   );

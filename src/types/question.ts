@@ -1,5 +1,6 @@
 export type QuestionType = 'mcq' | 'descriptive' | 'case_study';
 export type ImportanceLevel = 'HIGH' | 'LOW';
+export type MasteryTier = 'beginner' | 'intermediate' | 'hard';
 
 export interface EvaluationRubric {
   step: string;
@@ -20,7 +21,8 @@ export interface BaseQuestion {
   marks: number;
   questionText: string;
   explanation?: string;
-  difficulty: 'Standard ICAI' | 'Tough / Tricky' | 'Examiner Favorite';
+  difficulty: 'Beginner / Foundation' | 'Standard ICAI' | 'Tough / Tricky' | 'Examiner Favorite';
+  masteryTier?: MasteryTier;
   icaiReference?: string; // e.g. "Sec 135(1) Companies Act, 2013", "AS 10 PPE Para 14"
 }
 
