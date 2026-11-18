@@ -23,18 +23,17 @@ import { DESCRIPTIVE_DATABASE } from '../data/questionsData';
 import { DescriptiveQuestion, EvaluationResult } from '../types/question';
 import { EvaluatorService } from '../services/evaluatorService';
 import { SpacedRepetitionService } from '../services/spacedRepetitionService';
+import { QuestionGeneratorService } from '../services/questionGeneratorService';
 import { AudioService } from '../services/audioService';
 
 interface DescriptiveWriterProps {
   initialSubjectId?: string;
   initialQuestion?: DescriptiveQuestion;
-  onOpenGenerator: () => void;
 }
 
 export const DescriptiveWriter: React.FC<DescriptiveWriterProps> = ({
   initialSubjectId,
-  initialQuestion,
-  onOpenGenerator
+  initialQuestion
 }) => {
   const [selectedSubjectId, setSelectedSubjectId] = React.useState<string>(
     initialSubjectId || 'p2_law'
@@ -126,6 +125,15 @@ export const DescriptiveWriter: React.FC<DescriptiveWriterProps> = ({
     }
   };
 
+  // Generate a brand new algorithmic problem immediately
+  const handleGenerateFreshQuestion = () => {
+    const freshQ = QuestionGeneratorService.generateDynamicDescriptiveQuestion(
+      selectedSubjectId === 'all' ? undefined : selectedSubjectId
+    );
+    setHistory(prev => [...prev, freshQ]);
+    setHistoryIndex(history.length);
+  };
+
   // Evaluate the answer using EvaluatorService
   const handleEvaluate = () => {
     if (!currentQuestion || userAnswer.trim().length < 10) return;
@@ -203,11 +211,11 @@ export const DescriptiveWriter: React.FC<DescriptiveWriterProps> = ({
           </div>
 
           <button
-            onClick={onOpenGenerator}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-600 hover:bg-amber-500 text-white text-xs font-semibold rounded-lg shadow-sm transition-all"
+            onClick={handleGenerateFreshQuestion}
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold rounded-lg shadow-sm transition-all"
           >
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Generate Q</span>
+            <span>New Fresh Problem</span>
           </button>
         </div>
       </div>

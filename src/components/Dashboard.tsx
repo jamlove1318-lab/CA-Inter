@@ -26,16 +26,12 @@ import { SpacedRepetitionService } from '../services/spacedRepetitionService';
 interface DashboardProps {
   setActiveTab: (tab: ActiveTab) => void;
   onSelectSubject: (subjectId: string, mode: 'mcqs' | 'descriptive', tier?: 'all' | 'beginner' | 'intermediate' | 'hard') => void;
-  openSearchModal: () => void;
-  openGeneratorModal: () => void;
   openBeginnerGuide: (subjectId?: string) => void;
 }
 
 export const Dashboard: React.FC<DashboardProps> = ({
   setActiveTab,
   onSelectSubject,
-  openSearchModal,
-  openGeneratorModal,
   openBeginnerGuide
 }) => {
   const [stats, setStats] = React.useState(SpacedRepetitionService.getRepetitionStats());

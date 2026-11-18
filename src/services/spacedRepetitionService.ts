@@ -66,6 +66,8 @@ export class SpacedRepetitionService {
       chapterId?: string;
       onlyHighYield?: boolean;
       masteryTier?: 'all' | 'beginner' | 'intermediate' | 'hard';
+      revisionOnly?: boolean;
+      excludeAttempted?: boolean;
     }
   ): T[] {
     const progress = this.getAllProgress();
@@ -95,18 +97,27 @@ export class SpacedRepetitionService {
       }
 
       const userProg = progress[q.id];
+      const isAttempted = Boolean(userProg && userProg.attemptsCount > 0);
 
-      // If never answered, always include!
-      if (!userProg || userProg.attemptsCount === 0) {
-        return true;
+      // Revision mode: ONLY previously attempted HIGH importance questions are included.
+      // LOW importance questions are NEVER repeated!
+      if (options?.revisionOnly) {
+        return q.importance === 'HIGH' && isAttempted;
       }
 
-      // STRICT RULE: If importance is LOW, NEVER REPEAT!
-      if (q.importance === 'LOW') {
-        return false; // Permanently excluded once answered!
+      // Normal practice mode:
+      // STRICT RULE 1: If answered and LOW importance, NEVER REPEAT (permanently excluded).
+      if (isAttempted && q.importance === 'LOW') {
+        return false;
       }
 
-      // If importance is HIGH, it CAN repeat!
+      // STRICT RULE 2: If answered and HIGH importance, do not repeat in normal new flow;
+      // reserve them strictly for Revision Mode ("only important ones should revise").
+      if (isAttempted) {
+        return false;
+      }
+
+      // Unattempted questions are always included!
       return true;
     });
   }
@@ -122,15 +133,11 @@ export class SpacedRepetitionService {
   ): McqQuestion {
     const filtered = this.filterQuestions(existingList, { subjectId, chapterId });
     if (filtered.length > 0) {
-      // Prioritize unattempted, then high yield
+      // Prioritize unattempted questions
       const progress = this.getAllProgress();
       const unattempted = filtered.filter(q => !progress[q.id] || progress[q.id].attemptsCount === 0);
       if (unattempted.length > 0) {
         return shuffleMcqOptions(unattempted[Math.floor(Math.random() * unattempted.length)]);
-      }
-      // If all filtered are attempted high yield, return one of them or generate a fresh variant
-      if (Math.random() > 0.4) {
-        return shuffleMcqOptions(filtered[Math.floor(Math.random() * filtered.length)]);
       }
     }
     // Generate fresh algorithmic question!
@@ -151,9 +158,6 @@ export class SpacedRepetitionService {
       const unattempted = filtered.filter(q => !progress[q.id] || progress[q.id].attemptsCount === 0);
       if (unattempted.length > 0) {
         return unattempted[Math.floor(Math.random() * unattempted.length)];
-      }
-      if (Math.random() > 0.5) {
-        return filtered[Math.floor(Math.random() * filtered.length)];
       }
     }
     // Generate fresh algorithmic descriptive problem!

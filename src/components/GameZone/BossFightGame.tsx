@@ -24,27 +24,24 @@ export const BossFightGame: React.FC<BossFightGameProps> = ({ onAddXp, onBossDef
   const [showHint, setShowHint] = React.useState<boolean>(false);
   const [gameResult, setGameResult] = React.useState<'win' | 'lose' | null>(null);
 
-  // Dynamic & randomized high-importance questions for boss fight with shuffled options
-  const [bossQuestions, setBossQuestions] = React.useState<McqQuestion[]>(() => {
+  const generateBattleBatch = (): McqQuestion[] => {
     const highYield = MCQS_DATABASE.filter(q => q.importance === 'HIGH');
-    const shuffled = [...highYield].sort(() => Math.random() - 0.5);
-    const questions = shuffled.slice(0, 8).map(q => shuffleMcqOptions(q));
-    while (questions.length < 6) {
+    const shuffled = [...highYield].sort(() => Math.random() - 0.5).slice(0, 4);
+    const questions = shuffled.map(q => shuffleMcqOptions(q));
+    // Guarantee 6 fresh dynamic questions
+    for (let i = 0; i < 6; i++) {
       questions.push(shuffleMcqOptions(QuestionGeneratorService.generateDynamicMcq('all')));
     }
-    return questions;
-  });
+    return questions.sort(() => Math.random() - 0.5);
+  };
+
+  // Dynamic & randomized high-importance questions for boss fight with shuffled options
+  const [bossQuestions, setBossQuestions] = React.useState<McqQuestion[]>(generateBattleBatch);
 
   const currentQuestion: McqQuestion = bossQuestions[currentQIndex] || bossQuestions[0];
 
   const startBattle = () => {
-    const highYield = MCQS_DATABASE.filter(q => q.importance === 'HIGH');
-    const shuffled = [...highYield].sort(() => Math.random() - 0.5);
-    const questions = shuffled.slice(0, 8).map(q => shuffleMcqOptions(q));
-    while (questions.length < 6) {
-      questions.push(shuffleMcqOptions(QuestionGeneratorService.generateDynamicMcq('all')));
-    }
-    setBossQuestions(questions);
+    setBossQuestions(generateBattleBatch());
     setIsPlaying(true);
     setBossHp(1000);
     setPlayerHearts(3);

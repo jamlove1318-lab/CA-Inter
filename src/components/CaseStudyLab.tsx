@@ -15,16 +15,18 @@ import { CASE_STUDIES_DATABASE } from '../data/caseStudiesData';
 import { CaseStudyQuestion, McqQuestion, DescriptiveQuestion } from '../types/question';
 import { EvaluatorService } from '../services/evaluatorService';
 import { AudioService } from '../services/audioService';
+import { QuestionGeneratorService } from '../services/questionGeneratorService';
 import { shuffleMcqOptions } from '../utils/mcqUtils';
 
 export const CaseStudyLab: React.FC = () => {
+  const [casesList, setCasesList] = React.useState<CaseStudyQuestion[]>(CASE_STUDIES_DATABASE);
   const [selectedCaseIndex, setSelectedCaseIndex] = React.useState<number>(0);
   const [selectedSubTab, setSelectedSubTab] = React.useState<'mcqs' | 'descriptive'>('mcqs');
   const [userMcqAnswers, setUserMcqAnswers] = React.useState<Record<string, string>>({});
   const [userDescAnswers, setUserDescAnswers] = React.useState<Record<string, string>>({});
   const [descEvaluation, setDescEvaluation] = React.useState<Record<string, ReturnType<typeof EvaluatorService.evaluateAnswer>>>({});
 
-  const currentCase: CaseStudyQuestion = CASE_STUDIES_DATABASE[selectedCaseIndex] || CASE_STUDIES_DATABASE[0];
+  const currentCase: CaseStudyQuestion = casesList[selectedCaseIndex] || casesList[0];
   const caseMcqs = React.useMemo(() => {
     return currentCase.mcqs.map(q => shuffleMcqOptions(q));
   }, [currentCase]);
@@ -51,6 +53,15 @@ export const CaseStudyLab: React.FC = () => {
     }
   };
 
+  const handleGenerateNewCase = () => {
+    const newCase = QuestionGeneratorService.generateDynamicCaseStudy();
+    setCasesList(prev => [...prev, newCase]);
+    setSelectedCaseIndex(casesList.length);
+    setUserMcqAnswers({});
+    setUserDescAnswers({});
+    setDescEvaluation({});
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 space-y-6">
       
@@ -67,9 +78,9 @@ export const CaseStudyLab: React.FC = () => {
           <span className="text-xs text-slate-400 font-medium">Source: {currentCase.source}</span>
         </div>
 
-        {/* Case Switcher Buttons */}
-        <div className="flex items-center gap-2">
-          {CASE_STUDIES_DATABASE.map((cs, idx) => (
+        {/* Case Switcher Buttons & New Case Generator */}
+        <div className="flex flex-wrap items-center gap-2">
+          {casesList.map((cs, idx) => (
             <button
               key={cs.id}
               onClick={() => {
@@ -86,6 +97,15 @@ export const CaseStudyLab: React.FC = () => {
               Case #{idx + 1}
             </button>
           ))}
+
+          <button
+            onClick={handleGenerateNewCase}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white shadow-md shadow-amber-950/40 transition-all active:scale-95"
+            title="Generate Brand New Dynamic Case Study"
+          >
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>+ Brand New Case</span>
+          </button>
         </div>
       </div>
 

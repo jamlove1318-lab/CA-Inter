@@ -1,4 +1,4 @@
-import { DescriptiveQuestion, McqQuestion } from '../types/question';
+import { DescriptiveQuestion, McqQuestion, CaseStudyQuestion } from '../types/question';
 import { shuffleMcqOptions } from '../utils/mcqUtils';
 
 export class QuestionGeneratorService {
@@ -1853,29 +1853,116 @@ Is the company required to constitute a Corporate Social Responsibility (CSR) Co
   }
 
   // =========================================================================
-  // DYNAMIC DESCRIPTIVE QUESTIONS GENERATOR (WHOLE SYLLABUS)
+  // DYNAMIC DESCRIPTIVE QUESTIONS GENERATOR (WHOLE SYLLABUS - 24+ TEMPLATES)
   // =========================================================================
   public static generateDynamicDescriptiveQuestion(topicKey?: string): DescriptiveQuestion {
-    const generatorMap: Record<string, () => DescriptiveQuestion> = {
-      costing: this.generateCostingVarianceQuestion,
-      p4_costing: this.generateCostingVarianceQuestion,
-      tax: this.generateIncomeTax115BACQuestion,
-      p3_tax: this.generateIncomeTax115BACQuestion,
-      law: this.generateLawCSRQuestion,
-      p2_law: this.generateLawCSRQuestion,
-      audit: this.generateAuditingSA705Question,
-      p5_audit: this.generateAuditingSA705Question,
-      fm: this.generateFmCapitalBudgetingQuestion,
-      p6_fm_sm: this.generateFmCapitalBudgetingQuestion,
-      accounts: this.generateAs16BorrowingCostQuestion,
-      p1_adv_acc: this.generateAs16BorrowingCostQuestion
+    const generatorMap: Record<string, (() => DescriptiveQuestion)[]> = {
+      accounts: [
+        this.generateAs16BorrowingCostQuestion,
+        this.generateAccountsAs10PPEQuestion,
+        this.generateAccountsBuybackQuestion,
+        this.generateAccountsAs20EpsQuestion
+      ],
+      p1_adv_acc: [
+        this.generateAs16BorrowingCostQuestion,
+        this.generateAccountsAs10PPEQuestion,
+        this.generateAccountsBuybackQuestion,
+        this.generateAccountsAs20EpsQuestion
+      ],
+      law: [
+        this.generateLawCSRQuestion,
+        this.generateLawQuorumQuestion,
+        this.generateLawAuditorDisqualificationQuestion,
+        this.generateLawPrivatePlacementQuestion
+      ],
+      p2_law: [
+        this.generateLawCSRQuestion,
+        this.generateLawQuorumQuestion,
+        this.generateLawAuditorDisqualificationQuestion,
+        this.generateLawPrivatePlacementQuestion
+      ],
+      tax: [
+        this.generateIncomeTax115BACQuestion,
+        this.generateTaxSection50CQuestion,
+        this.generateTaxGstBlockedItcQuestion,
+        this.generateTaxTdsDisallowanceQuestion
+      ],
+      p3_tax: [
+        this.generateIncomeTax115BACQuestion,
+        this.generateTaxSection50CQuestion,
+        this.generateTaxGstBlockedItcQuestion,
+        this.generateTaxTdsDisallowanceQuestion
+      ],
+      costing: [
+        this.generateCostingVarianceQuestion,
+        this.generateCostingMarginalCostingQuestion,
+        this.generateCostingProcessQuestion,
+        this.generateCostingAbcQuestion
+      ],
+      p4_costing: [
+        this.generateCostingVarianceQuestion,
+        this.generateCostingMarginalCostingQuestion,
+        this.generateCostingProcessQuestion,
+        this.generateCostingAbcQuestion
+      ],
+      audit: [
+        this.generateAuditingSA705Question,
+        this.generateAuditExternalConfirmationQuestion,
+        this.generateAuditPhysicalInventoryQuestion,
+        this.generateAuditFraudRiskQuestion
+      ],
+      p5_audit: [
+        this.generateAuditingSA705Question,
+        this.generateAuditExternalConfirmationQuestion,
+        this.generateAuditPhysicalInventoryQuestion,
+        this.generateAuditFraudRiskQuestion
+      ],
+      fm: [
+        this.generateFmCapitalBudgetingQuestion,
+        this.generateFmLeverageEbitEpsQuestion,
+        this.generateFmWorkingCapitalQuestion,
+        this.generateSmStrategicModelQuestion
+      ],
+      p6_fm_sm: [
+        this.generateFmCapitalBudgetingQuestion,
+        this.generateFmLeverageEbitEpsQuestion,
+        this.generateFmWorkingCapitalQuestion,
+        this.generateSmStrategicModelQuestion
+      ]
     };
 
-    if (topicKey && generatorMap[topicKey]) {
-      return generatorMap[topicKey]();
+    if (topicKey && generatorMap[topicKey] && generatorMap[topicKey].length > 0) {
+      const list = generatorMap[topicKey];
+      return list[Math.floor(Math.random() * list.length)]();
     }
 
-    const allGenerators = Object.values(generatorMap);
+    // Pick from whole syllabus across all generators
+    const allGenerators = [
+      this.generateAs16BorrowingCostQuestion,
+      this.generateAccountsAs10PPEQuestion,
+      this.generateAccountsBuybackQuestion,
+      this.generateAccountsAs20EpsQuestion,
+      this.generateLawCSRQuestion,
+      this.generateLawQuorumQuestion,
+      this.generateLawAuditorDisqualificationQuestion,
+      this.generateLawPrivatePlacementQuestion,
+      this.generateIncomeTax115BACQuestion,
+      this.generateTaxSection50CQuestion,
+      this.generateTaxGstBlockedItcQuestion,
+      this.generateTaxTdsDisallowanceQuestion,
+      this.generateCostingVarianceQuestion,
+      this.generateCostingMarginalCostingQuestion,
+      this.generateCostingProcessQuestion,
+      this.generateCostingAbcQuestion,
+      this.generateAuditingSA705Question,
+      this.generateAuditExternalConfirmationQuestion,
+      this.generateAuditPhysicalInventoryQuestion,
+      this.generateAuditFraudRiskQuestion,
+      this.generateFmCapitalBudgetingQuestion,
+      this.generateFmLeverageEbitEpsQuestion,
+      this.generateFmWorkingCapitalQuestion,
+      this.generateSmStrategicModelQuestion
+    ];
     const randomIndex = Math.floor(Math.random() * allGenerators.length);
     return allGenerators[randomIndex]();
   }
@@ -2270,6 +2357,1680 @@ Under AS 16, borrowing costs eligible for capitalization on a specific borrowing
 - Gross Interest for ${activeMonths} months = ₹ ${interestTotal.toLocaleString('en-IN')}
 - Less: Temporary investment income = ₹ ${interestIncome.toLocaleString('en-IN')}
 - Net Borrowing Cost to be Capitalized = ₹ ${netCapitalized.toLocaleString('en-IN')}.`
+    };
+  }
+
+  // Accounts AS 10 Revaluation & Impairment
+  private static generateAccountsAs10PPEQuestion(): DescriptiveQuestion {
+    const cost = 3000000;
+    const life = 10;
+    const depYear1 = cost / life;
+    const depYear2 = cost / life;
+    const wdvEndYear2 = cost - depYear1 - depYear2;
+    const revaluedAmt = 2800000;
+    const revalReserve = revaluedAmt - wdvEndYear2;
+    const remLife = 8;
+    const revDepYear3 = revaluedAmt / remLife;
+    const wdvEndYear3 = revaluedAmt - revDepYear3;
+    const recoverableAmt = 2100000;
+    const impairmentLoss = wdvEndYear3 - recoverableAmt;
+    const adjustedRevalReserve = Math.min(impairmentLoss, revalReserve);
+    const chargedToPL = impairmentLoss - adjustedRevalReserve;
+
+    return {
+      id: `dyn_desc_as10_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+      subjectId: 'p1_adv_acc',
+      chapterId: 'as_ppe_dep',
+      type: 'descriptive',
+      importance: 'HIGH',
+      source: 'ICAI Exam Style: AS 10 (PPE) Revaluation & Impairment',
+      marks: 8,
+      difficulty: 'Examiner Favorite',
+      icaiReference: 'AS 10 (Revised) Property, Plant and Equipment - Paras 34 to 42',
+      questionText: `Zenith Heavy Industries Ltd purchased a plant on 1st April 2021 for ₹ ${cost.toLocaleString('en-IN')}. The expected useful life is ${life} years with NIL residual value under SLM.
+On 31st March 2023 (after 2 years), the company revalued the plant upwards to ₹ ${revaluedAmt.toLocaleString('en-IN')}.
+On 31st March 2024 (end of Year 3), an impairment test indicated the plant's recoverable amount is ₹ ${recoverableAmt.toLocaleString('en-IN')}.
+Required:
+(i) Calculate the Revaluation Surplus credited to Revaluation Reserve on 31st March 2023.
+(ii) Compute revised depreciation for the year ended 31st March 2024.
+(iii) Compute the impairment loss and state its accounting treatment in Revaluation Reserve and Profit & Loss Account.`,
+      rubrics: [
+        {
+          step: 'Revaluation Surplus Calculation (31st March 2023)',
+          marks: 2,
+          expectedKeywords: [`WDV before revaluation: ₹ ${wdvEndYear2.toLocaleString('en-IN')}`, `Revaluation Reserve = ₹ ${revalReserve.toLocaleString('en-IN')}`],
+          mandatoryCitations: ['AS 10'],
+          description: `WDV = ₹ ${cost} - ₹ ${depYear1 + depYear2} = ₹ ${wdvEndYear2}. Surplus = ₹ ${revaluedAmt} - ₹ ${wdvEndYear2} = ₹ ${revalReserve}.`
+        },
+        {
+          step: 'Revised Depreciation for Year 3',
+          marks: 3,
+          expectedKeywords: [`Remaining useful life = ${remLife} years`, `Depreciation = ₹ ${revDepYear3.toLocaleString('en-IN')}`, `Carrying amount before impairment = ₹ ${wdvEndYear3.toLocaleString('en-IN')}`],
+          description: `Revised depreciation = ₹ ${revaluedAmt} / ${remLife} = ₹ ${revDepYear3}. Carrying Amount = ₹ ${wdvEndYear3}.`
+        },
+        {
+          step: 'Accounting for Impairment under AS 10 & AS 28',
+          marks: 3,
+          expectedKeywords: [`Total Impairment Loss = ₹ ${impairmentLoss.toLocaleString('en-IN')}`, `Debited to Revaluation Reserve = ₹ ${adjustedRevalReserve.toLocaleString('en-IN')}`, `Charged to P&L = ₹ ${chargedToPL.toLocaleString('en-IN')}`],
+          description: `Impairment loss of ₹ ${impairmentLoss} first offsets Revaluation Reserve of ₹ ${adjustedRevalReserve}, balance ₹ ${chargedToPL} charged to P&L.`
+        }
+      ],
+      suggestedAnswer: `1. Revaluation on 31st March 2023:
+- Initial Cost (1st April 2021) = ₹ ${cost.toLocaleString('en-IN')}
+- Accumulated SLM Depreciation for 2 Years = 2 × ₹ ${depYear1.toLocaleString('en-IN')} = ₹ ${(depYear1 + depYear2).toLocaleString('en-IN')}
+- Carrying Amount (WDV) = ₹ ${wdvEndYear2.toLocaleString('en-IN')}
+- Upward Revalued Amount = ₹ ${revaluedAmt.toLocaleString('en-IN')}
+- Upward Revaluation Surplus credited to Revaluation Reserve = ₹ ${revalReserve.toLocaleString('en-IN')}.
+
+2. Revised Depreciation for FY 2023-24:
+- Remaining Useful Life = ${life} - 2 = ${remLife} years
+- Revised Annual Depreciation = ₹ ${revaluedAmt.toLocaleString('en-IN')} / ${remLife} = ₹ ${revDepYear3.toLocaleString('en-IN')}
+- Carrying Amount as on 31st March 2024 before Impairment = ₹ ${wdvEndYear3.toLocaleString('en-IN')}.
+
+3. Impairment Loss & Accounting Treatment:
+- Recoverable Amount = ₹ ${recoverableAmt.toLocaleString('en-IN')}
+- Impairment Loss = Carrying Amount (₹ ${wdvEndYear3.toLocaleString('en-IN')}) - Recoverable Amount (₹ ${recoverableAmt.toLocaleString('en-IN')}) = ₹ ${impairmentLoss.toLocaleString('en-IN')}
+- As per AS 10 (Revised), any downward revaluation/impairment must first be debited to Revaluation Reserve to the extent of credit balance existing for that asset (₹ ${adjustedRevalReserve.toLocaleString('en-IN')}).
+- The excess impairment loss of ₹ ${chargedToPL.toLocaleString('en-IN')} must be charged to the Statement of Profit and Loss.`
+    };
+  }
+
+  // Accounts Section 68 Buy-Back 3-Tier Limits
+  private static generateAccountsBuybackQuestion(): DescriptiveQuestion {
+    return {
+      id: `dyn_desc_buyback_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+      subjectId: 'p1_adv_acc',
+      chapterId: 'company_accounts_buyback',
+      type: 'descriptive',
+      importance: 'HIGH',
+      source: 'ICAI Exam Style: Section 68 Buy-Back of Shares Tests',
+      marks: 10,
+      difficulty: 'Examiner Favorite',
+      icaiReference: 'Section 68, Companies Act, 2013 & Rule 17 of Companies (Share Capital & Debentures) Rules',
+      questionText: `The Balance Sheet of Pragati Ltd as on 31st March shows:
+- Paid-up Equity Share Capital (10,00,000 shares of ₹ 10 each): ₹ 1,00,00,000
+- Securities Premium: ₹ 40,00,000
+- General Reserve: ₹ 60,00,000
+- Profit and Loss Account (Credit): ₹ 20,00,000
+- 12% Secured Debentures (Long-term debt): ₹ 2,00,00,000
+- Current Liabilities: ₹ 50,00,000
+
+The company decides to buy back maximum possible equity shares at ₹ 30 per share (including ₹ 20 premium per share).
+Required:
+(i) Compute the maximum number of equity shares that can be bought back applying the three statutory tests under Section 68:
+    1. Share Limit Test (25% rule)
+    2. Resource Test (25% rule)
+    3. Debt-Equity Ratio Test (Post-buyback debt <= 2 * equity)
+(ii) State the statutory journal entry for creation of Capital Redemption Reserve (CRR).`,
+      rubrics: [
+        {
+          step: 'Share Limit Test (25% of Total Shares)',
+          marks: 2,
+          expectedKeywords: ['25% of 10,00,000 shares = 2,50,000 shares'],
+          mandatoryCitations: ['Section 68(2)(c)'],
+          description: 'Share limit is 25% of existing equity shares = 2,50,000 shares.'
+        },
+        {
+          step: 'Resource Test (25% of Paid-up Capital + Free Reserves)',
+          marks: 3,
+          expectedKeywords: ['Total Owned Funds = ₹ 2,20,00,000', '25% limit = ₹ 55,00,000', 'Shares = 55,00,000 / 30 = 1,83,333 shares'],
+          mandatoryCitations: ['Section 68(2)(b)'],
+          description: 'Resource limit = 25% of (100L + 40L + 60L + 20L) = ₹ 55 Lakhs. Max shares at ₹ 30 = 1,83,333 shares.'
+        },
+        {
+          step: 'Debt-Equity Ratio Test (2:1 Post Buy-Back)',
+          marks: 3,
+          expectedKeywords: ['Minimum Equity Required = Debt / 2', 'Debt = ₹ 2,00,00,000', 'Minimum Equity = ₹ 1,00,00,000', 'Maximum Buy-Back Permitted'],
+          mandatoryCitations: ['Section 68(2)(d)'],
+          description: 'Post-buyback debt/equity cannot exceed 2:1. Maximum shares permissible under Debt-Equity test.'
+        },
+        {
+          step: 'Capital Redemption Reserve (CRR) Principle',
+          marks: 2,
+          expectedKeywords: ['Section 69', 'Capital Redemption Reserve', 'Nominal value of shares bought back out of free reserves'],
+          mandatoryCitations: ['Section 69'],
+          description: 'Transfer sum equal to nominal value of shares bought back out of free reserves to CRR.'
+        }
+      ],
+      suggestedAnswer: `1. Three Statutory Tests under Section 68 of the Companies Act, 2013:
+
+(a) Share Limit Test [Section 68(2)(c)]:
+- 25% of total paid-up equity shares = 25% of 10,00,000 shares = 2,50,000 Shares.
+
+(b) Resource Test [Section 68(2)(b)]:
+- Paid-up Equity Capital = ₹ 1,00,00,000
+- Free Reserves (Securities Premium ₹ 40L + General Reserve ₹ 60L + P&L ₹ 20L) = ₹ 1,20,00,000
+- Total Owned Funds = ₹ 2,20,00,000
+- Maximum allowable outlay = 25% of ₹ 2,20,00,000 = ₹ 55,00,000
+- Maximum shares at ₹ 30 offer price = ₹ 55,00,000 / ₹ 30 = 1,83,333 Shares.
+
+(c) Debt-Equity Ratio Test [Section 68(2)(d)]:
+- Post-buyback Debt / Equity must not exceed 2:1.
+- Total Debt (Secured Debentures) = ₹ 2,00,00,000.
+- Minimum Equity required post buy-back = ₹ 2,00,00,000 / 2 = ₹ 1,00,00,000.
+- Present Equity Funds = ₹ 2,20,00,000.
+- Maximum permissible reduction in equity = ₹ 2,20,00,000 - ₹ 1,00,00,000 = ₹ 1,20,00,000.
+- Let N be number of shares. Total reduction = N × (Offer Price + Nominal Value for CRR if out of free reserves).
+- Max shares = ₹ 1,20,00,000 / (₹ 30 + ₹ 10) = 3,00,000 shares.
+
+(d) Conclusion:
+The least of the three tests is the Resource Test = 1,83,333 Equity Shares.
+
+2. Capital Redemption Reserve under Section 69:
+Nominal value of 1,83,333 shares @ ₹ 10 = ₹ 18,33,330 must be transferred to CRR Account from General Reserve/P&L Account.`
+    };
+  }
+
+  // Accounts AS 20 Basic & Diluted EPS
+  private static generateAccountsAs20EpsQuestion(): DescriptiveQuestion {
+    return {
+      id: `dyn_desc_as20_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+      subjectId: 'p1_adv_acc',
+      chapterId: 'as_revenue_eps',
+      type: 'descriptive',
+      importance: 'HIGH',
+      source: 'ICAI Exam Style: AS 20 Basic & Diluted EPS with Bonus Issue',
+      marks: 8,
+      difficulty: 'Examiner Favorite',
+      icaiReference: 'AS 20 Earnings Per Share - Paras 15, 26, 31',
+      questionText: `Supreme Biotech Ltd reports Net Profit attributable to equity shareholders of ₹ 60,00,000 for the year ended 31st March 2024.
+Information regarding shares and debentures:
+- Opening equity shares on 1st April 2023: 10,00,000 shares of ₹ 10 each.
+- Bonus issue of 1 share for every 5 shares held was made on 1st November 2023.
+- The company had issued 20,000 10% Convertible Debentures of ₹ 100 each on 1st April 2023, each convertible into 4 equity shares.
+- Applicable Corporate Tax rate is 25%.
+
+Required:
+(i) Calculate Basic EPS for the year ended 31st March 2024 as per AS 20.
+(ii) Calculate Diluted EPS for the year ended 31st March 2024.`,
+      rubrics: [
+        {
+          step: 'Weighted Average Number of Shares for Basic EPS',
+          marks: 3,
+          expectedKeywords: ['Bonus shares treated retrospectively from beginning', '12,00,000 shares', 'WANES = 12,00,000'],
+          mandatoryCitations: ['AS 20'],
+          description: 'Bonus shares (2,00,000) are included as if issued on 1st April 2023. WANES = 12,00,000 shares.'
+        },
+        {
+          step: 'Basic EPS Computation',
+          marks: 2,
+          expectedKeywords: ['Basic EPS = ₹ 5.00 per share', '₹ 60,00,000 / 12,00,000'],
+          description: 'Basic EPS = 60,00,000 / 12,00,000 = ₹ 5.00 per share.'
+        },
+        {
+          step: 'Diluted EPS Adjustment & Computation',
+          marks: 3,
+          expectedKeywords: ['Interest saved on conversion: ₹ 2,00,000', 'After-tax interest saving: ₹ 1,50,000', 'Adjusted Net Profit: ₹ 61,50,000', 'Incremental shares = 80,000', 'Diluted EPS = ₹ 4.80 per share'],
+          description: 'Add after-tax interest saved (₹ 1.5L) to numerator, add 80,000 potential equity shares to denominator. Diluted EPS = ₹ 4.80.'
+        }
+      ],
+      suggestedAnswer: `1. Computation of Basic EPS as per AS 20:
+- Opening Equity Shares = 10,00,000
+- Bonus Issue (1 for 5) = 10,00,000 / 5 = 2,00,000 shares.
+- Principle: As per AS 20, bonus shares do not bring any inflow of cash resources, hence they are treated as if they were in issue from the earliest reporting period (i.e. retrospectively from 1st April 2023).
+- Weighted Average Number of Equity Shares (WANES) = 10,00,000 + 2,00,000 = 12,00,000 Shares.
+- Basic EPS = Net Profit attributable to Equity Shareholders / WANES
+  Basic EPS = ₹ 60,00,000 / 12,00,000 = ₹ 5.00 per share.
+
+2. Computation of Diluted EPS:
+- Potential Equity Shares from Debentures = 20,000 Debentures × 4 = 80,000 shares.
+- Total Diluted WANES = 12,00,000 + 80,000 = 12,80,000 shares.
+- Debenture Interest saved if converted = 20,000 × ₹ 100 × 10% = ₹ 2,00,000.
+- Net of Tax Interest Saved = ₹ 2,00,000 × (1 - 0.25) = ₹ 1,50,000.
+- Adjusted Earnings attributable to Equity Shareholders = ₹ 60,00,000 + ₹ 1,50,000 = ₹ 61,50,000.
+- Diluted EPS = ₹ 61,50,000 / 12,80,000 shares = ₹ 4.80 per share.
+Since Diluted EPS (₹ 4.80) is less than Basic EPS (₹ 5.00), the debentures are dilutive.`
+    };
+  }
+
+  // Law Section 103 Quorum for General Meetings
+  private static generateLawQuorumQuestion(): DescriptiveQuestion {
+    return {
+      id: `dyn_desc_quorum_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+      subjectId: 'p2_law',
+      chapterId: 'mgmt_admin',
+      type: 'descriptive',
+      importance: 'HIGH',
+      source: 'ICAI Exam Style: Section 103 Quorum & Consequences of Absence',
+      marks: 6,
+      difficulty: 'Examiner Favorite',
+      icaiReference: 'Section 103, Companies Act, 2013',
+      questionText: `Royal Lifestyle Ltd is a public limited company having 3,200 members as of the date of the meeting. The Annual General Meeting was called at 11:00 AM on 25th September.
+At 11:30 AM, only 11 members were personally present.
+Required:
+(i) State the quorum required for a general meeting of a public company under Section 103.
+(ii) What is the consequence if the required quorum is not present within half an hour from the appointed time?
+(iii) State what happens if the meeting was called upon the requisition of members under Section 100 instead of by the Board.
+(iv) What is the legal quorum rule at the adjourned meeting if quorum is still not present within half an hour?`,
+      rubrics: [
+        {
+          step: 'Statutory Quorum Thresholds for Public Company',
+          marks: 2,
+          expectedKeywords: ['Section 103', '5 members if <= 1000', '15 members if 1001 to 5000', '30 members if > 5000', 'Quorum required = 15 members'],
+          mandatoryCitations: ['Section 103(1)(a)'],
+          description: 'For 3,200 members, the required quorum is 15 members personally present.'
+        },
+        {
+          step: 'Consequences of Quorum Absence within 30 Minutes',
+          marks: 2,
+          expectedKeywords: ['Adjourned to same day in next week', 'Same time and place', 'Board may determine other day/time'],
+          mandatoryCitations: ['Section 103(2)(a)'],
+          description: 'Meeting stands adjourned to the same day in next week at same time and place.'
+        },
+        {
+          step: 'Requisitioned Meeting vs Board Called Meeting',
+          marks: 1,
+          expectedKeywords: ['Meeting called by requisitionists shall stand cancelled / dissolved'],
+          mandatoryCitations: ['Section 103(2)(b)'],
+          description: 'If called upon requisition, the meeting stands cancelled.'
+        },
+        {
+          step: 'Quorum Rule at Adjourned Meeting',
+          marks: 1,
+          expectedKeywords: ['Members present shall be the quorum', 'Section 103(3)'],
+          mandatoryCitations: ['Section 103(3)'],
+          description: 'At adjourned meeting, members present personally shall be the quorum.'
+        }
+      ],
+      suggestedAnswer: `1. Statutory Quorum for Public Company [Section 103(1)(a)]:
+Under Section 103 of the Companies Act, 2013, the quorum personally present for a public company is:
+- 5 members if total members <= 1,000;
+- 15 members if total members exceed 1,000 but up to 5,000;
+- 30 members if total members exceed 5,000.
+Since Royal Lifestyle Ltd has 3,200 members, the mandatory quorum is 15 members personally present. With only 11 members present, quorum is not formed.
+
+2. Consequence of Absence of Quorum [Section 103(2)]:
+If quorum is not present within half an hour from the appointed time:
+- The meeting shall stand adjourned to the same day in the next week at the same time and place, or to such other date, time, and place as the Board may determine.
+
+3. Exception for Requisitioned Meeting [Section 103(2)(b)]:
+If the meeting was called upon the requisition of members under Section 100, the meeting shall stand cancelled/dissolved and cannot be adjourned.
+
+4. Quorum at Adjourned Meeting [Section 103(3)]:
+If at the adjourned meeting also, a quorum is not present within half an hour from the appointed time, the members present shall be the quorum.`
+    };
+  }
+
+  // Law Section 141 Auditor Disqualification
+  private static generateLawAuditorDisqualificationQuestion(): DescriptiveQuestion {
+    return {
+      id: `dyn_desc_sec141_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+      subjectId: 'p2_law',
+      chapterId: 'audit_auditors',
+      type: 'descriptive',
+      importance: 'HIGH',
+      source: 'ICAI Exam Style: Section 141(3)(d) Auditor Disqualification & Grace Period',
+      marks: 6,
+      difficulty: 'Examiner Favorite',
+      icaiReference: 'Section 141(3)(d), Companies Act, 2013',
+      questionText: `CA Alok is proposed to be appointed as the statutory auditor of Surya Metals Ltd at its AGM. Examine his eligibility/disqualification under Section 141(3)(d) of the Companies Act, 2013 in the following independent situations:
+Case 1: CA Alok's brother holds equity shares of face value ₹ 80,000 in Surya Metals Ltd (Current Market Value: ₹ 4,50,000).
+Case 2: CA Alok's father is indebted to Surya Metals Ltd for an amount of ₹ 6,20,000 for raw materials purchased on credit.
+Case 3: If in Case 1, the brother held shares of face value ₹ 1,20,000, state whether any corrective grace period is available to save the appointment.`,
+      rubrics: [
+        {
+          step: 'Evaluation of Case 1 (Relative Holding Securities)',
+          marks: 2,
+          expectedKeywords: ['Face value does not exceed ₹ 1,00,000', 'Relative may hold securities up to ₹ 1,00,000 face value', 'Market value is irrelevant', 'CA Alok is eligible'],
+          mandatoryCitations: ['Section 141(3)(d)(i)'],
+          description: 'Relative may hold shares up to face value of ₹ 1 Lakh. Market value is irrelevant. Eligible.'
+        },
+        {
+          step: 'Evaluation of Case 2 (Indebtedness of Relative)',
+          marks: 2,
+          expectedKeywords: ['Indebtedness exceeds ₹ 5,00,000', 'Father is a relative', 'CA Alok is DISQUALIFIED'],
+          mandatoryCitations: ['Section 141(3)(d)(ii)'],
+          description: 'Indebtedness > ₹ 5 Lakhs disqualifies the auditor. CA Alok is disqualified.'
+        },
+        {
+          step: 'Evaluation of Case 3 (60-Day Grace Period Proviso)',
+          marks: 2,
+          expectedKeywords: ['Proviso to Section 141(3)(d)(i)', '60 days corrective action', 'Trim holding below ₹ 1,00,000 face value within 60 days'],
+          mandatoryCitations: ['Section 141(3)(d)(i) Proviso'],
+          description: 'A relative may acquire shares exceeding ₹ 1 Lakh face value subject to 60 days corrective window.'
+        }
+      ],
+      suggestedAnswer: `1. Case 1 - Brother holding shares of Face Value ₹ 80,000:
+- Provision: Under Section 141(3)(d)(i) read with Rule 10 of Companies (Audit and Auditors) Rules, 2014, a person is disqualified if he, his partner, or his relative holds any security in the company.
+- Proviso: A relative may hold security in the company of FACE VALUE not exceeding ₹ 1,00,000.
+- Analysis: The threshold applies strictly to FACE VALUE, not market value. Since the brother (a relative under Section 2(77)) holds shares of face value ₹ 80,000 (which is within ₹ 1,00,000), CA Alok is ELIGIBLE and NOT DISQUALIFIED.
+
+2. Case 2 - Father indebted for ₹ 6,20,000:
+- Provision: Under Section 141(3)(d)(ii), a person is disqualified if he, his partner, or his relative is indebted to the company in excess of ₹ 5,00,000.
+- Analysis: Father is a relative, and indebtedness of ₹ 6,20,000 exceeds the statutory limit of ₹ 5,00,000. Hence, CA Alok is DISQUALIFIED.
+
+3. Case 3 - 60-Day Grace Period [Proviso to Section 141(3)(d)(i)]:
+- If a relative acquires shares of face value exceeding ₹ 1,00,000, the auditor shall not be disqualified if the relative takes corrective action to bring the face value within ₹ 1,00,000 within 60 DAYS from the date of such acquisition.`
+    };
+  }
+
+  // Law Section 42 Private Placement
+  private static generateLawPrivatePlacementQuestion(): DescriptiveQuestion {
+    return {
+      id: `dyn_desc_sec42_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+      subjectId: 'p2_law',
+      chapterId: 'prospectus_allotment',
+      type: 'descriptive',
+      importance: 'HIGH',
+      source: 'ICAI Exam Style: Section 42 Private Placement Norms',
+      marks: 6,
+      difficulty: 'Standard ICAI',
+      icaiReference: 'Section 42, Companies Act, 2013 & Rule 14 of PAS Rules',
+      questionText: `Epsilon Tech Ltd proposes to issue convertible preference shares on a private placement basis.
+Explain the following statutory requirements under Section 42 of the Companies Act, 2013:
+(i) Maximum number of persons to whom an offer or invitation can be made in a financial year, and which persons are excluded from this limit.
+(ii) Time limit for allotment of securities from the date of receipt of application money.
+(iii) Consequences if the company fails to allot securities within the prescribed time limit.
+(iv) Requirement of maintaining application money in a separate bank account and filing of Return of Allotment (Form PAS-3).`,
+      rubrics: [
+        {
+          step: 'Maximum Persons Limit & Exclusions',
+          marks: 2,
+          expectedKeywords: ['Not more than 200 persons in a financial year', 'Excluding Qualified Institutional Buyers (QIBs)', 'Excluding employees under ESOP'],
+          mandatoryCitations: ['Section 42(2)'],
+          description: 'Limit is 200 persons in aggregate in a financial year excluding QIBs and ESOP employees.'
+        },
+        {
+          step: 'Allotment Period (60 Days Rule)',
+          marks: 1,
+          expectedKeywords: ['Allot securities within 60 days', 'From receipt of application money'],
+          mandatoryCitations: ['Section 42(6)'],
+          description: 'Allotment must be completed within 60 days from date of receipt of application money.'
+        },
+        {
+          step: 'Consequences of Default in Allotment',
+          marks: 2,
+          expectedKeywords: ['Repay application money within 15 days', 'From expiry of 60 days', 'Interest @ 12% per annum from 60th day'],
+          mandatoryCitations: ['Section 42(6)'],
+          description: 'Repay within 15 days, otherwise 12% p.a. interest from the expiry of the 60th day.'
+        },
+        {
+          step: 'Separate Bank Account & Form PAS-3',
+          marks: 1,
+          expectedKeywords: ['Separate bank account in a Scheduled Bank', 'Return of allotment in Form PAS-3 within 15 days'],
+          mandatoryCitations: ['Section 42(8)'],
+          description: 'Keep funds in separate scheduled bank account. File PAS-3 within 15 days of allotment.'
+        }
+      ],
+      suggestedAnswer: `1. Maximum Persons Limit [Section 42(2)]:
+- An offer or invitation to subscribe securities shall not be made to more than 200 persons in the aggregate in a financial year.
+- Exclusions: Qualified Institutional Buyers (QIBs) and employees offered securities under employee stock option (ESOP) are excluded from calculating this 200-person ceiling.
+
+2. Allotment Timeline [Section 42(6)]:
+- A company making an offer under Section 42 shall allot its securities within 60 DAYS from the date of receipt of the application money.
+
+3. Failure to Allot within 60 Days:
+- If the company is unable to allot the securities within 60 days, it shall repay the application money to the subscribers within 15 DAYS from the expiry of the 60 days.
+- If failed to repay within 15 days, the company and every officer in default shall be liable to repay that money with interest @ 12% per annum from the expiry of the 60th day.
+
+4. Bank Account & Return of Allotment [Section 42(6) & 42(8)]:
+- Monies received must be kept in a separate bank account in a Scheduled Bank and shall not be utilised for any purpose other than for adjustment against allotment or repayment.
+- The company must file a Return of Allotment in Form PAS-3 with the Registrar within 15 DAYS of allotment.`
+    };
+  }
+
+  // Tax Section 50C Capital Gains Immovable Property
+  private static generateTaxSection50CQuestion(): DescriptiveQuestion {
+    return {
+      id: `dyn_desc_sec50c_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+      subjectId: 'p3_tax',
+      chapterId: 'cap_gains',
+      type: 'descriptive',
+      importance: 'HIGH',
+      source: 'ICAI Exam Style: Section 50C Full Value of Consideration & 110% Tolerance Limit',
+      marks: 6,
+      difficulty: 'Examiner Favorite',
+      icaiReference: 'Section 50C, Income-tax Act, 1961',
+      questionText: `Mr. Rajesh entered into an agreement to sell a commercial plot on 12th August 2023 for a total consideration of ₹ 80,00,000. He received an advance token of ₹ 8,00,000 by an account payee cheque on the date of agreement.
+The sale deed was executed and registered on 15th February 2024.
+The Stamp Duty Values (SDV) assessed by the state stamp authority were:
+- SDV as on date of agreement (12th August 2023): ₹ 87,00,000
+- SDV as on date of registration (15th February 2024): ₹ 95,00,000
+
+Required:
+(i) Which date's Stamp Duty Value should be adopted for the purpose of Section 50C, and why?
+(ii) Determine the Full Value of Consideration (FVOC) for calculating capital gains under Section 50C, explaining the 110% safe harbour tolerance limit.
+(iii) How would your answer change if the advance token of ₹ 8,00,000 was received in cash?`,
+      rubrics: [
+        {
+          step: 'Relevant Date for Stamp Duty Value (Agreement Date vs Registration Date)',
+          marks: 2,
+          expectedKeywords: ['Section 50C First Proviso', 'Token money received by account payee cheque', 'SDV on date of agreement is adopted (₹ 87,00,000)'],
+          mandatoryCitations: ['Section 50C'],
+          description: 'Agreement date SDV applies since advance received by account payee cheque on or before agreement date.'
+        },
+        {
+          step: 'Application of 110% Safe Harbour Tolerance Limit',
+          marks: 3,
+          expectedKeywords: ['110% of Consideration = ₹ 88,00,000', 'SDV ₹ 87,00,000 does not exceed 110%', 'FVOC = Actual Consideration = ₹ 80,00,000'],
+          mandatoryCitations: ['Section 50C(1) Proviso 3'],
+          description: '110% of ₹ 80L = ₹ 88L. Since SDV (₹ 87L) <= ₹ 88L, actual consideration (₹ 80L) is adopted as FVOC.'
+        },
+        {
+          step: 'Scenario if Advance was in Cash',
+          marks: 1,
+          expectedKeywords: ['Cash advance invalidates agreement date SDV', 'SDV on date of registration (₹ 95,00,000) applies', 'FVOC = ₹ 95,00,000'],
+          description: 'If cash advance, registration date SDV (₹ 95L) applies, exceeding 110% (₹ 88L), so FVOC = ₹ 95 Lakhs.'
+        }
+      ],
+      suggestedAnswer: `1. Relevant Date for Stamp Duty Value [First Proviso to Section 50C(1)]:
+- Principle: Where the date of agreement fixing the amount of consideration and the date of registration are not the same, the Stamp Duty Value on the DATE OF AGREEMENT may be taken, provided the consideration or part thereof has been received by way of an account payee cheque/draft or ECS on or before the date of agreement.
+- Application: Since Mr. Rajesh received ₹ 8,00,000 by account payee cheque on the agreement date, the SDV on the date of agreement (₹ 87,00,000) shall be taken instead of registration date SDV (₹ 95,00,000).
+
+2. 110% Safe Harbour Tolerance Limit [Third Proviso to Section 50C(1)]:
+- Principle: If the Stamp Duty Value does not exceed 110% of the actual consideration received, the actual consideration shall be deemed to be the Full Value of Consideration (FVOC).
+- 110% of Actual Consideration = 110% × ₹ 80,00,000 = ₹ 88,00,000.
+- Since Agreement Date SDV (₹ 87,00,000) does NOT exceed ₹ 88,00,000, the safe harbour applies.
+- Deemed Full Value of Consideration (FVOC) = ₹ 80,00,000 (Actual Consideration).
+
+3. Variation if Advance was Received in Cash:
+- If the advance of ₹ 8,00,000 was received in cash, the benefit of adopting agreement date SDV is NOT available.
+- SDV on date of registration (₹ 95,00,000) must be compared with 110% of consideration (₹ 88,00,000).
+- Since ₹ 95,00,000 exceeds ₹ 88,00,000, the Full Value of Consideration (FVOC) would be ₹ 95,00,000.`
+    };
+  }
+
+  // Tax Section 17(5) Blocked ITC
+  private static generateTaxGstBlockedItcQuestion(): DescriptiveQuestion {
+    return {
+      id: `dyn_desc_blocked_itc_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+      subjectId: 'p3_tax',
+      chapterId: 'gst_itc',
+      type: 'descriptive',
+      importance: 'HIGH',
+      source: 'ICAI Exam Style: Section 17(5) Blocked Input Tax Credit',
+      marks: 6,
+      difficulty: 'Examiner Favorite',
+      icaiReference: 'Section 17(5), CGST Act, 2017',
+      questionText: `Shakti Cements Ltd (a registered manufacturer under GST) incurred the following input taxes during the month:
+1. Purchase of a 7-seater passenger motor car (GST ₹ 3,60,000) used exclusively by the Managing Director for visiting factory units.
+2. Premium paid for group health insurance for all factory workers (GST ₹ 72,000) under mandatory statutory obligation under the Factories Act, 1948.
+3. Raw materials purchased for ₹ 5,00,000 (GST ₹ 90,000) which were totally destroyed due to accidental fire in the raw material yard.
+4. Finished cement bags given away as free commercial gifts to retail dealers achieving annual sales targets (GST ₹ 45,000).
+
+Determine the admissibility or inadmissibility of Input Tax Credit (ITC) for each of the above transactions with statutory reasoning under Section 17(5).`,
+      rubrics: [
+        {
+          step: 'Motor Vehicle for Managing Director',
+          marks: 1.5,
+          expectedKeywords: ['Section 17(5)(a)', 'Seating capacity <= 13 persons', 'Blocked / Inadmissible'],
+          mandatoryCitations: ['Section 17(5)(a)'],
+          description: 'Motor vehicles for transportation of persons having approved seating capacity <= 13 are blocked.'
+        },
+        {
+          step: 'Mandatory Health Insurance for Workers',
+          marks: 1.5,
+          expectedKeywords: ['Section 17(5)(b) Proviso', 'Mandatory under law / Factories Act', 'Eligible / Admissible'],
+          mandatoryCitations: ['Section 17(5)(b) Proviso'],
+          description: 'ITC on health insurance is eligible where obligatorily provided by employer under any law.'
+        },
+        {
+          step: 'Raw Materials Destroyed by Fire',
+          marks: 1.5,
+          expectedKeywords: ['Section 17(5)(h)', 'Goods lost, stolen, destroyed', 'Blocked / Inadmissible'],
+          mandatoryCitations: ['Section 17(5)(h)'],
+          description: 'ITC is blocked on goods lost, stolen, destroyed, written off or disposed of by way of gift.'
+        },
+        {
+          step: 'Free Gifts to Dealers',
+          marks: 1.5,
+          expectedKeywords: ['Section 17(5)(h)', 'Disposed of by way of gift or free samples', 'Blocked / Inadmissible'],
+          mandatoryCitations: ['Section 17(5)(h)'],
+          description: 'ITC is blocked on goods given as gifts or free samples under Section 17(5)(h).'
+        }
+      ],
+      suggestedAnswer: `1. Motor Car for Managing Director (GST ₹ 3,60,000):
+- Provision: Under Section 17(5)(a) of the CGST Act, ITC is blocked on motor vehicles for transportation of persons having approved seating capacity up to 13 persons (including driver), unless used for further taxable supply of such vehicles, transportation of passengers, or imparting driving training.
+- Conclusion: INADMISSIBLE / BLOCKED. Official usage does not lift the block.
+
+2. Group Health Insurance under Factories Act (GST ₹ 72,000):
+- Provision: Under the Proviso to Section 17(5)(b), ITC in respect of life and health insurance is ADMISSIBLE where it is obligatory for an employer to provide the same to its employees under any law for the time being in force.
+- Conclusion: ADMISSIBLE / ELIGIBLE (₹ 72,000).
+
+3. Raw Materials Destroyed by Fire (GST ₹ 90,000):
+- Provision: Under Section 17(5)(h), input tax credit is blocked in respect of goods lost, stolen, destroyed, written off, or disposed of by way of gift or free samples.
+- Conclusion: INADMISSIBLE / BLOCKED. If already availed, it must be reversed.
+
+4. Free Gifts to Retail Dealers (GST ₹ 45,000):
+- Provision: Under Section 17(5)(h), goods disposed of by way of gift or free samples are blocked from ITC.
+- Conclusion: INADMISSIBLE / BLOCKED.`
+    };
+  }
+
+  // Tax Section 40(a)(ia) & TDS Disallowance
+  private static generateTaxTdsDisallowanceQuestion(): DescriptiveQuestion {
+    return {
+      id: `dyn_desc_sec40a_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+      subjectId: 'p3_tax',
+      chapterId: 'pgbp_deductions',
+      type: 'descriptive',
+      importance: 'HIGH',
+      source: 'ICAI Exam Style: Section 40(a)(ia) 30% Disallowance for TDS Default',
+      marks: 6,
+      difficulty: 'Standard ICAI',
+      icaiReference: 'Section 40(a)(ia), Section 194C, Section 194J',
+      questionText: `Kaveri Associates (a partnership firm) debited the following expenses to its Profit and Loss Account for the financial year 2023-24:
+1. Contractor charges paid to Mr. Raman (resident individual) of ₹ 8,00,000 without deducting TDS under Section 194C.
+2. Technical consultancy fee of ₹ 5,00,000 paid to a resident software engineer on which TDS under Section 194J was deducted on 15th March 2024, but deposited with the Central Government only on 15th November 2024 (Due date of filing ITR u/s 139(1) was 31st October 2024).
+
+Required:
+(i) Compute the amount of disallowance to be made under Section 40(a)(ia) in computing profits and gains of business for Assessment Year 2024-25.
+(ii) In which assessment year(s) can the disallowed expenditure be claimed as a deduction?`,
+      rubrics: [
+        {
+          step: 'Disallowance on Contractor Payments (Section 194C)',
+          marks: 2.5,
+          expectedKeywords: ['30% disallowance under Section 40(a)(ia)', '30% of ₹ 8,00,000 = ₹ 2,40,000 disallowed'],
+          mandatoryCitations: ['Section 40(a)(ia)', 'Section 194C'],
+          description: '30% of sum payable to resident is disallowed for non-deduction of TDS.'
+        },
+        {
+          step: 'Disallowance on Late Deposit of TDS (Section 194J)',
+          marks: 2.5,
+          expectedKeywords: ['Deposited after due date of filing ITR (31st October)', '30% of ₹ 5,00,000 = ₹ 1,50,000 disallowed'],
+          mandatoryCitations: ['Section 40(a)(ia)', 'Section 139(1)'],
+          description: 'TDS deposited after ITR due date triggers 30% disallowance in current AY.'
+        },
+        {
+          step: 'Year of Subsequent Claim',
+          marks: 1,
+          expectedKeywords: ['Deductible in the previous year in which TDS is paid', 'Claimable in AY 2025-26'],
+          description: 'Disallowed 30% is allowed in the year in which such tax has been paid.'
+        }
+      ],
+      suggestedAnswer: `1. Principle under Section 40(a)(ia):
+Under Section 40(a)(ia) of the Income-tax Act, 1961, 30% of any sum payable to a resident on which tax is deductible at source shall be disallowed in computing business income if:
+(a) tax has not been deducted, or
+(b) after deduction, tax has not been paid on or before the due date specified in Section 139(1).
+
+2. Computation of Disallowance for AY 2024-25:
+(i) Contractor Charges to Mr. Raman (₹ 8,00,000):
+- Tax was not deducted at all.
+- Disallowance u/s 40(a)(ia) = 30% of ₹ 8,00,000 = ₹ 2,40,000.
+
+(ii) Technical Consultancy Fee (₹ 5,00,000):
+- Tax was deducted in FY 2023-24, but deposited on 15th November 2024, which is AFTER the ITR filing due date of 31st October 2024.
+- Disallowance u/s 40(a)(ia) = 30% of ₹ 5,00,000 = ₹ 1,50,000.
+
+Total Business Expense Disallowed in AY 2024-25 = ₹ 2,40,000 + ₹ 1,50,000 = ₹ 3,90,000.
+
+3. Subsequent Deduction:
+Under the Proviso to Section 40(a)(ia), where tax has been deducted in any subsequent year or paid after the due date under Section 139(1), the 30% disallowed sum shall be allowed as a deduction in the previous year in which such tax has been paid (i.e. in AY 2025-26 for the consultancy fee).`
+    };
+  }
+
+  // Costing Marginal Costing Special Order
+  private static generateCostingMarginalCostingQuestion(): DescriptiveQuestion {
+    return {
+      id: `dyn_desc_marginal_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+      subjectId: 'p4_costing',
+      chapterId: 'marginal_costing',
+      type: 'descriptive',
+      importance: 'HIGH',
+      source: 'ICAI Exam Style: Marginal Costing Special Export Order Evaluation',
+      marks: 8,
+      difficulty: 'Examiner Favorite',
+      icaiReference: 'Marginal Costing Principles & Decision Making',
+      questionText: `Falcon Plastics Ltd operates at 70% capacity producing 14,000 industrial containers per month. Present financial data:
+- Selling Price: ₹ 250 per container
+- Direct Materials: ₹ 110 per container
+- Direct Labour: ₹ 40 per container
+- Variable Overheads: ₹ 20 per container
+- Fixed Overheads: ₹ 7,00,000 per month (absorbed at ₹ 50 per container on 14,000 units)
+- Total Cost per unit: ₹ 220; Profit per unit: ₹ 30.
+
+An overseas buyer offers to purchase 4,000 containers per month at an export price of ₹ 190 per container.
+To fulfill the export order, special export packing costing ₹ 5 per container and freight charges of ₹ 3 per container will be incurred.
+Existing domestic sales and prices will remain unaffected.
+Required:
+(i) Compute the present P/V Ratio, Break-Even Point (in units and value), and Margin of Safety.
+(ii) Advise whether Falcon Plastics Ltd should accept or reject the special export order, supporting your recommendation with a differential cost-benefit statement.`,
+      rubrics: [
+        {
+          step: 'P/V Ratio and Break-Even Point Calculation',
+          marks: 3,
+          expectedKeywords: ['Marginal Cost = ₹ 170', 'Contribution = ₹ 80 per unit', 'P/V Ratio = 32%', 'BEP = 8,750 units', 'BEP Value = ₹ 21,87,500'],
+          description: 'Variable cost = 110 + 40 + 20 = ₹ 170. Contribution = ₹ 80. BEP = 7,00,000 / 80 = 8,750 units.'
+        },
+        {
+          step: 'Differential Cost Analysis for Export Order',
+          marks: 3,
+          expectedKeywords: ['Export Marginal Cost = ₹ 178', 'Export Contribution = ₹ 12 per unit', 'Total Differential Profit = ₹ 48,000'],
+          description: 'Export variable cost = 170 + 5 + 3 = ₹ 178. Export contribution = 190 - 178 = ₹ 12. Profit = 4,000 * 12 = ₹ 48,000.'
+        },
+        {
+          step: 'Strategic Decision & Recommendation',
+          marks: 2,
+          expectedKeywords: ['Accept the order', 'Idle capacity available', 'Fixed costs are already recovered'],
+          description: 'Recommend acceptance as spare capacity exists (up to 20,000 units) and export generates positive contribution.'
+        }
+      ],
+      suggestedAnswer: `1. Present Operational Analysis:
+- Selling Price (SP) = ₹ 250 per container
+- Variable Cost (VC) = Direct Materials (₹ 110) + Direct Labour (₹ 40) + Variable Overheads (₹ 20) = ₹ 170 per container
+- Unit Contribution = SP (₹ 250) - VC (₹ 170) = ₹ 80 per container
+- P/V Ratio = (₹ 80 / ₹ 250) × 100 = 32%
+- Break-Even Point (units) = Fixed Cost / Unit Contribution = ₹ 7,00,000 / ₹ 80 = 8,750 Containers
+- Break-Even Value = 8,750 × ₹ 250 = ₹ 21,87,500
+- Margin of Safety (units) = Actual Sales (14,000) - BEP (8,750) = 5,250 Containers (37.5%).
+
+2. Evaluation of Special Export Order (4,000 units):
+- Total Capacity at 100% = 14,000 / 0.70 = 20,000 containers per month.
+- Spare Capacity Available = 20,000 - 14,000 = 6,000 containers.
+- The order of 4,000 units can be produced entirely utilizing idle capacity without reducing domestic sales.
+
+Export Order Cost Statement per unit:
+- Export Selling Price: ₹ 190
+- Variable Manufacturing Cost: ₹ 170
+- Additional Export Packing: ₹ 5
+- Additional Freight: ₹ 3
+- Total Relevant Marginal Cost: ₹ 178 per container
+- Net Contribution per export container: ₹ 190 - ₹ 178 = ₹ 12 per container.
+
+3. Recommendation:
+Total Additional Net Profit = 4,000 containers × ₹ 12 = ₹ 48,000 per month.
+Falcon Plastics Ltd SHOULD ACCEPT the special export order because it generates an additional positive contribution of ₹ 48,000 per month, utilizing spare capacity, without incurring any additional fixed cost.`
+    };
+  }
+
+  // Costing Process Costing FIFO Equivalent Units
+  private static generateCostingProcessQuestion(): DescriptiveQuestion {
+    return {
+      id: `dyn_desc_process_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+      subjectId: 'p4_costing',
+      chapterId: 'process_costing',
+      type: 'descriptive',
+      importance: 'HIGH',
+      source: 'ICAI Exam Style: Process Costing Equivalent Units (FIFO Method)',
+      marks: 8,
+      difficulty: 'Examiner Favorite',
+      icaiReference: 'Process Costing Statement of Equivalent Production',
+      questionText: `The following information relates to Process II of Radiant Chemicals Ltd for the month of January:
+- Opening Work-in-Progress: 1,500 units (Degree of completion: Material 100%, Labour 60%, Overheads 60%) valued at ₹ 45,000.
+- Units introduced from Process I: 18,500 units @ ₹ 10 per unit (Total ₹ 1,85,000).
+- Direct Materials added in Process II: ₹ 90,000.
+- Direct Labour incurred: ₹ 61,600.
+- Production Overheads incurred: ₹ 92,400.
+- Units completed and transferred to Process III: 17,000 units.
+- Closing Work-in-Progress: 3,000 units (Degree of completion: Material 100%, Labour 40%, Overheads 40%).
+- Normal loss is NIL.
+
+Required:
+Prepare the Statement of Equivalent Production under the FIFO Method, showing equivalent units for Material and Conversion costs (Labour & Overheads).`,
+      rubrics: [
+        {
+          step: 'Physical Flow Reconciliation',
+          marks: 2,
+          expectedKeywords: ['Input = 1,500 + 18,500 = 20,000 units', 'Output = 17,000 completed + 3,000 closing WIP = 20,000 units'],
+          description: 'Input (20,000) matches Output (20,000).'
+        },
+        {
+          step: 'Material Equivalent Units under FIFO',
+          marks: 3,
+          expectedKeywords: ['Opening WIP completed: 0%', 'Fresh units started & completed: 15,500 units', 'Closing WIP (100%): 3,000 units', 'Total Material Equivalent Units = 18,500 units'],
+          description: 'FIFO Material units = 0 (Op WIP) + 15,500 (Started & completed) + 3,000 (Closing WIP) = 18,500 units.'
+        },
+        {
+          step: 'Conversion Cost Equivalent Units under FIFO',
+          marks: 3,
+          expectedKeywords: ['Opening WIP work needed: 40% of 1,500 = 600 units', 'Started & completed: 15,500 units', 'Closing WIP: 40% of 3,000 = 1,200 units', 'Total Conversion Equivalent Units = 17,300 units'],
+          description: 'Conversion units = 600 + 15,500 + 1,200 = 17,300 units.'
+        }
+      ],
+      suggestedAnswer: `STATEMENT OF EQUIVALENT PRODUCTION (FIFO METHOD)
+
+1. Input / Output Reconciliation:
+- Total Input = Opening WIP (1,500) + Units Introduced (18,500) = 20,000 Units.
+- Total Output = Completed (17,000) + Closing WIP (3,000) = 20,000 Units.
+
+2. FIFO Equivalent Production Breakdown:
+
+(a) Units Completed (17,000 Units):
+- From Opening WIP (1,500 units):
+  * Material: Already 100% in previous month ➔ 0% needed = 0 Equivalent Units.
+  * Conversion: 60% done previously ➔ (100% - 60%) = 40% needed = 600 Equivalent Units.
+- Fresh Units Started & Finished during month (17,000 - 1,500 = 15,500 units):
+  * Material: 100% = 15,500 Equivalent Units.
+  * Conversion: 100% = 15,500 Equivalent Units.
+
+(b) Closing Work-in-Progress (3,000 Units):
+- Material: 100% complete = 3,000 Equivalent Units.
+- Conversion: 40% complete = 3,000 × 40% = 1,200 Equivalent Units.
+
+3. Total Equivalent Units:
+- Material Equivalent Units = 0 + 15,500 + 3,000 = 18,500 Units.
+- Conversion Equivalent Units = 600 + 15,500 + 1,200 = 17,300 Units.`
+    };
+  }
+
+  // Costing Activity Based Costing vs Absorption
+  private static generateCostingAbcQuestion(): DescriptiveQuestion {
+    return {
+      id: `dyn_desc_abc_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+      subjectId: 'p4_costing',
+      chapterId: 'activity_based_costing',
+      type: 'descriptive',
+      importance: 'HIGH',
+      source: 'ICAI Exam Style: Activity-Based Costing vs Traditional Costing',
+      marks: 8,
+      difficulty: 'Examiner Favorite',
+      icaiReference: 'Activity Based Costing System Cost Pools & Drivers',
+      questionText: `Pioneer Electronics manufactures two models of audio components: Model Standard (high volume) and Model Deluxe (low volume).
+Annual production and cost data:
+- Model Standard: 20,000 units; Machine hours per unit = 2 hrs; Direct material = ₹ 150; Direct labour = ₹ 50.
+- Model Deluxe: 5,000 units; Machine hours per unit = 4 hrs; Direct material = ₹ 280; Direct labour = ₹ 90.
+
+Overhead Cost Pools:
+1. Machine setups: ₹ 6,00,000 (Total setups: 60; Standard: 15 setups, Deluxe: 45 setups).
+2. Quality Inspections: ₹ 4,80,000 (Total inspections: 120; Standard: 30, Deluxe: 90).
+3. Machine Running Overheads: ₹ 9,00,000 (Total machine hours: 60,000 hrs).
+Total Overheads = ₹ 19,80,000.
+
+Required:
+(i) Calculate the traditional overhead rate per machine hour and unit cost for both models under traditional absorption costing.
+(ii) Compute the activity cost driver rates for each pool and unit cost under Activity-Based Costing (ABC).
+(iii) Explain why traditional costing causes cross-subsidization (under-costing/over-costing).`,
+      rubrics: [
+        {
+          step: 'Traditional Overhead Absorption & Unit Cost',
+          marks: 3,
+          expectedKeywords: ['Overhead Rate = ₹ 33 per machine hour', 'Standard Cost = ₹ 266', 'Deluxe Cost = ₹ 502'],
+          description: 'Rate = 19,80,000 / 60,000 = ₹ 33/hr. Standard = 200 + 66 = ₹ 266. Deluxe = 370 + 132 = ₹ 502.'
+        },
+        {
+          step: 'ABC Cost Driver Rates & Unit Cost',
+          marks: 3,
+          expectedKeywords: ['Setup rate = ₹ 10,000 per setup', 'Inspection rate = ₹ 4,000 per inspection', 'Machine rate = ₹ 15 per hr', 'Standard ABC Cost = ₹ 243.50', 'Deluxe ABC Cost = ₹ 592.00'],
+          description: 'Compute driver rates. Standard cost = ₹ 243.50, Deluxe cost = ₹ 592.00.'
+        },
+        {
+          step: 'Cross-Subsidization Analysis',
+          marks: 2,
+          expectedKeywords: ['Standard is over-costed', 'Deluxe is under-costed', 'Volume-based distortion'],
+          description: 'High volume standard subsidizes low volume deluxe which consumes disproportionate setups/inspections.'
+        }
+      ],
+      suggestedAnswer: `1. Traditional Absorption Costing:
+- Total Machine Hours = (20,000 × 2) + (5,000 × 4) = 40,000 + 20,000 = 60,000 hours.
+- Blanket Overhead Rate = ₹ 19,80,000 / 60,000 hrs = ₹ 33 per machine hour.
+- Model Standard Unit Cost:
+  Prime Cost (150 + 50) = ₹ 200 + Overheads (2 hrs × ₹ 33 = ₹ 66) = ₹ 266.00.
+- Model Deluxe Unit Cost:
+  Prime Cost (280 + 90) = ₹ 370 + Overheads (4 hrs × ₹ 33 = ₹ 132) = ₹ 502.00.
+
+2. Activity Based Costing (ABC):
+- Setup Cost Driver Rate = ₹ 6,00,000 / 60 setups = ₹ 10,000 per setup.
+- Inspection Cost Driver Rate = ₹ 4,80,000 / 120 inspections = ₹ 4,00,000 per inspection = ₹ 4,000 per inspection.
+- Machine Running Rate = ₹ 9,00,000 / 60,000 hrs = ₹ 15 per machine hour.
+
+Overhead Allocation under ABC:
+- Model Standard:
+  * Setups (15 × ₹ 10,000) = ₹ 1,50,000
+  * Inspections (30 × ₹ 4,000) = ₹ 1,20,000
+  * Running (40,000 hrs × ₹ 15) = ₹ 6,00,000
+  Total Overheads = ₹ 8,70,000 / 20,000 units = ₹ 43.50 per unit.
+  Total Unit Cost = Prime Cost (₹ 200) + ₹ 43.50 = ₹ 243.50.
+
+- Model Deluxe:
+  * Setups (45 × ₹ 10,000) = ₹ 4,50,000
+  * Inspections (90 × ₹ 4,000) = ₹ 3,60,000
+  * Running (20,000 hrs × ₹ 15) = ₹ 3,00,000
+  Total Overheads = ₹ 11,10,000 / 5,00,0 units = ₹ 222.00 per unit.
+  Total Unit Cost = Prime Cost (₹ 370) + ₹ 222 = ₹ 592.00.
+
+3. Cross-Subsidization Analysis:
+Traditional costing severely over-costs Model Standard (₹ 266 vs ₹ 243.50) and under-costs Model Deluxe (₹ 502 vs ₹ 592). The low-volume Deluxe model consumes 75% of setups and inspections despite having only 20% of unit production.`
+    };
+  }
+
+  // Audit SA 505 External Confirmations
+  private static generateAuditExternalConfirmationQuestion(): DescriptiveQuestion {
+    return {
+      id: `dyn_desc_sa505_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+      subjectId: 'p5_audit',
+      chapterId: 'audit_evidence',
+      type: 'descriptive',
+      importance: 'HIGH',
+      source: 'ICAI Exam Style: SA 505 Management Refusal of Confirmation',
+      marks: 5,
+      difficulty: 'Examiner Favorite',
+      icaiReference: 'SA 505 External Confirmations - Para 8 & 9',
+      questionText: `During the statutory audit of Prime Logistics Ltd, the engagement team selected 5 major trade receivables for external direct confirmation under SA 505.
+Management requested the auditor not to send the confirmation request to "Fast Cargo Ltd" (balance ₹ 65 Lakhs, representing 28% of total debtors), contending that a commercial dispute regarding transit damages is currently under private mediation and an audit letter would disrupt amicable settlement.
+
+Required:
+Explain the procedures the auditor must perform under SA 505 when management refuses to allow the auditor to send a confirmation request, and state the reporting implications if the refusal is found to be unreasonable.`,
+      rubrics: [
+        {
+          step: 'Inquiry and Evaluation of Management Grounds',
+          marks: 2,
+          expectedKeywords: ['Inquire as to management reasons', 'Seek audit evidence for validity and reasonableness', 'Professional skepticism'],
+          mandatoryCitations: ['SA 505'],
+          description: 'Inquire reasons, evaluate reasonableness, and maintain skepticism.'
+        },
+        {
+          step: 'Risk Assessment & Alternative Audit Procedures',
+          marks: 2,
+          expectedKeywords: ['Evaluate implications on assessed RMM', 'Perform alternative audit procedures', 'Subsequent cash receipts', 'Shipping docs / invoices'],
+          mandatoryCitations: ['SA 505'],
+          description: 'Assess RMM of fraud, perform alternative procedures (vouching cash receipts, delivery challans).'
+        },
+        {
+          step: 'Reporting Implications under SA 705',
+          marks: 1,
+          expectedKeywords: ['Communicate with TCWG', 'Modify opinion under SA 705 (Qualified or Disclaimer)'],
+          mandatoryCitations: ['SA 705'],
+          description: 'If unreasonable or evidence not obtained, modify opinion for scope limitation.'
+        }
+      ],
+      suggestedAnswer: `1. Auditor's Action under SA 505 upon Management Refusal:
+If management refuses to allow the auditor to send a confirmation request, the auditor shall:
+(a) Inquire as to management's reasons for the refusal, and seek audit evidence as to their validity and reasonableness.
+(b) Evaluate the implications of management's refusal on the auditor's assessment of the relevant risks of material misstatement, including the risk of fraud, and on the nature, timing, and extent of other audit procedures.
+(c) Perform alternative audit procedures designed to obtain relevant and reliable audit evidence (e.g., examining subsequent cash collections, verifiable dispatch documents, signed delivery notes, and sales agreements).
+
+2. Reporting Implications:
+- If the auditor concludes that management's refusal is UNREASONABLE, or the auditor is UNABLE TO OBTAIN sufficient appropriate audit evidence from alternative procedures, the auditor shall communicate with Those Charged with Governance (TCWG).
+- The auditor shall determine the implications for the audit and the auditor's opinion in accordance with SA 705 (Revised), issuing either a QUALIFIED OPINION or a DISCLAIMER OF OPINION due to a management-imposed limitation on the scope of the audit.`
+    };
+  }
+
+  // Audit SA 501 Physical Inventory Attendance Impracticable
+  private static generateAuditPhysicalInventoryQuestion(): DescriptiveQuestion {
+    return {
+      id: `dyn_desc_sa501_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+      subjectId: 'p5_audit',
+      chapterId: 'audit_evidence',
+      type: 'descriptive',
+      importance: 'HIGH',
+      source: 'ICAI Exam Style: SA 501 Inventory Count Attendance Impracticable',
+      marks: 5,
+      difficulty: 'Standard ICAI',
+      icaiReference: 'SA 501 Audit Evidence - Specific Considerations for Selected Items',
+      questionText: `The statutory auditor of National Agrochem Ltd was unable to attend the year-end physical inventory count at the company's regional godown at Siliguri on 31st March due to sudden railway blockades and flash flooding. Inventory at this location represents ₹ 1.2 Crores out of total company inventory of ₹ 8 Crores.
+Examine the duties of the auditor under SA 501 and state whether the auditor can directly modify the audit report without performing alternative procedures.`,
+      rubrics: [
+        {
+          step: 'General Rule & Alternative Date Count',
+          marks: 2,
+          expectedKeywords: ['Impracticable due to unforeseen circumstances', 'Perform count on an alternative date', 'Test intervening transactions'],
+          mandatoryCitations: ['SA 501'],
+          description: 'Auditor must perform physical counts on an alternative date and audit intervening transactions.'
+        },
+        {
+          step: 'Alternative Audit Procedures',
+          marks: 2,
+          expectedKeywords: ['Perform alternative audit procedures', 'Inspection of documentation of subsequent sale of inventory', 'Purchase invoices & GRNs'],
+          mandatoryCitations: ['SA 501'],
+          description: 'Cannot modify report immediately; must try alternative procedures like subsequent sales verification.'
+        },
+        {
+          step: 'Audit Report Modification Principle',
+          marks: 1,
+          expectedKeywords: ['Modify opinion only if alternative procedures not feasible', 'SA 705', 'Qualified opinion'],
+          mandatoryCitations: ['SA 705'],
+          description: 'Modify opinion under SA 705 only if impossible to obtain sufficient evidence through alternatives.'
+        }
+      ],
+      suggestedAnswer: `1. Guidance under SA 501:
+Under SA 501 "Audit Evidence - Specific Considerations for Selected Items":
+- If attendance at physical inventory counting is IMPRACTICABLE due to unforeseen factors (such as natural disaster or civil unrest), the auditor CANNOT directly modify the audit report without attempting alternative procedures.
+- The auditor shall perform physical inventory counts on an ALTERNATIVE DATE (once access is restored), and perform audit procedures on intervening transactions between the count date and year-end balance sheet date.
+
+2. Performing Alternative Audit Procedures:
+If it is not possible to perform counts on an alternative date, the auditor shall perform alternative procedures, such as:
+- Inspecting documentation of subsequent sales of specific inventory items acquired or purchased prior to the physical inventory counting.
+- Verifying Goods Received Notes (GRNs), gate entry passes, and warehouse inspection registers.
+
+3. Modification of Opinion:
+Only if it is not possible to obtain sufficient appropriate audit evidence by performing alternative procedures, the auditor shall modify the opinion in the auditor's report in accordance with SA 705 (Revised) on account of limitation on scope (Qualified or Disclaimer).`
+    };
+  }
+
+  // Audit SA 240 Fraud Responsibilities & Management Override
+  private static generateAuditFraudRiskQuestion(): DescriptiveQuestion {
+    return {
+      id: `dyn_desc_sa240_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+      subjectId: 'p5_audit',
+      chapterId: 'fraud_responsibilities',
+      type: 'descriptive',
+      importance: 'HIGH',
+      source: "ICAI Exam Style: SA 240 Fraud Triangle & Management Override of Controls",
+      marks: 6,
+      difficulty: 'Examiner Favorite',
+      icaiReference: "SA 240 The Auditor's Responsibilities Relating to Fraud in an Audit of Financial Statements",
+      questionText: `Under SA 240, management is in a unique position to perpetrate fraud because of management's ability to manipulate accounting records and prepare fraudulent financial statements by overriding controls that otherwise appear to be operating effectively.
+Required:
+(i) Name and briefly explain the three conditions present when fraud occurs (The Fraud Triangle).
+(ii) State the mandatory audit procedures an auditor must perform to address the risk of management override of controls regardless of the auditor's assessment of the risks.`,
+      rubrics: [
+        {
+          step: 'The Fraud Triangle Components',
+          marks: 3,
+          expectedKeywords: ['Incentive or Pressure', 'Opportunity', 'Attitude or Rationalization'],
+          mandatoryCitations: ['SA 240'],
+          description: 'Explain Incentive/Pressure, Opportunity, and Attitude/Rationalization with brief examples.'
+        },
+        {
+          step: 'Mandatory Procedures for Management Override',
+          marks: 3,
+          expectedKeywords: ['Test the appropriateness of journal entries', 'Review accounting estimates for bias', 'Evaluate business rationale for significant unusual transactions'],
+          mandatoryCitations: ['SA 240 Para 32'],
+          description: 'Test JEs recorded in general ledger, review management estimates, and evaluate unusual transactions.'
+        }
+      ],
+      suggestedAnswer: `1. The Fraud Triangle [SA 240]:
+Fraudulent financial reporting or misappropriation of assets typically involves three conditions:
+(a) Incentive or Pressure: Management or employees have an incentive or are under pressure (e.g. meeting ambitious analyst earnings targets, debt covenants, or bonus benchmarks).
+(b) Opportunity: Circumstances exist that provide an opportunity to commit fraud (e.g. ineffective internal controls, complex transactions, lack of segregation of duties).
+(c) Attitude or Rationalization: Individuals possess an attitude, character, or set of ethical values that allow them to consciously and knowingly rationalize committing a dishonest act.
+
+2. Mandatory Procedures to Address Management Override of Controls [SA 240 Para 32]:
+Irrespective of the auditor's assessment of risks, the auditor must design and perform:
+(a) Journal Entry Testing: Test the appropriateness of journal entries recorded in the general ledger and other adjustments made in the preparation of the financial statements (especially year-end post-closing adjustments).
+(b) Review of Accounting Estimates: Review accounting estimates (e.g. provisions, impairment, depreciation) for biases and evaluate whether circumstances producing the bias represent a risk of material misstatement due to fraud.
+(c) Significant Unusual Transactions: Evaluate the business rationale (or lack thereof) for significant transactions that are outside the normal course of business for the entity.`
+    };
+  }
+
+  // FM Leverages & EBIT-EPS Indifference Point
+  private static generateFmLeverageEbitEpsQuestion(): DescriptiveQuestion {
+    return {
+      id: `dyn_desc_fm_lev_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+      subjectId: 'p6_fm_sm',
+      chapterId: 'fm_leverages',
+      type: 'descriptive',
+      importance: 'HIGH',
+      source: 'ICAI Exam Style: EBIT-EPS Indifference Point & Leverage Analysis',
+      marks: 8,
+      difficulty: 'Examiner Favorite',
+      icaiReference: 'Capital Structure & Indifference Point Analysis',
+      questionText: `Kavya Ltd requires ₹ 50,00,000 to finance a new plant expansion project. The company is evaluating two financing alternatives:
+Plan 1 (All Equity): Issue 5,00,000 Equity Shares of ₹ 10 each.
+Plan 2 (Debt-Equity Mix): Issue 2,50,000 Equity Shares of ₹ 10 each and raise ₹ 25,00,000 through 12% Debentures.
+
+The applicable corporate income tax rate is 25%.
+Required:
+(i) Calculate the EBIT-EPS Indifference Point between Plan 1 and Plan 2.
+(ii) Verify your answer by computing the EPS under both plans at the indifference EBIT level.
+(iii) If expected future EBIT is ₹ 8,00,000, which plan should the financial manager recommend to maximize shareholder wealth?`,
+      rubrics: [
+        {
+          step: 'Indifference Point Equation Formulation',
+          marks: 3,
+          expectedKeywords: ['(EBIT * (1 - t)) / N1 = ((EBIT - I) * (1 - t)) / N2', 'Interest = ₹ 3,00,000', 'EBIT = ₹ 6,00,000'],
+          description: 'EBIT * 0.75 / 5,00,000 = (EBIT - 3,00,000) * 0.75 / 2,50,000. Indifference EBIT = ₹ 6,00,000.'
+        },
+        {
+          step: 'Verification of EPS at Indifference Level',
+          marks: 3,
+          expectedKeywords: ['EPS under Plan 1 = ₹ 0.90', 'EPS under Plan 2 = ₹ 0.90', 'Verified identical EPS'],
+          description: 'At EBIT ₹ 6,00,000: Plan 1 EPS = 4.5L / 5L = ₹ 0.90; Plan 2 EPS = 2.25L / 2.5L = ₹ 0.90.'
+        },
+        {
+          step: 'Recommendation at ₹ 8,00,000 EBIT',
+          marks: 2,
+          expectedKeywords: ['EBIT ₹ 8,00,000 > Indifference EBIT ₹ 6,00,000', 'Plan 2 generates higher EPS', 'Recommend Plan 2 (Debt Financing)'],
+          description: 'Since expected EBIT > Indifference level, Plan 2 (financial leverage) yields higher EPS.'
+        }
+      ],
+      suggestedAnswer: `1. Computation of EBIT-EPS Indifference Point:
+- Plan 1: N1 = 5,00,000 Equity Shares; Interest (I1) = 0.
+- Plan 2: N2 = 2,50,000 Equity Shares; Interest (I2) = 12% of ₹ 25,00,000 = ₹ 3,00,000.
+- Tax rate (t) = 0.25; (1 - t) = 0.75.
+
+Indifference Point Formula:
+[(EBIT - I1) × (1 - t)] / N1 = [(EBIT - I2) × (1 - t)] / N2
+[EBIT × 0.75] / 5,00,000 = [(EBIT - ₹ 3,00,000) × 0.75] / 2,50,000
+EBIT / 2 = EBIT - ₹ 3,00,000
+EBIT = 2 × EBIT - ₹ 6,00,000
+➔ EBIT = ₹ 6,00,000.
+The EBIT-EPS Indifference Point is ₹ 6,00,000.
+
+2. Verification at EBIT = ₹ 6,00,000:
+- Plan 1:
+  EBIT = ₹ 6,00,000; Tax (25%) = ₹ 1,50,000; EAT = ₹ 4,50,000.
+  EPS = ₹ 4,50,000 / 5,00,000 shares = ₹ 0.90.
+- Plan 2:
+  EBIT = ₹ 6,00,000; Less Interest = ₹ 3,00,000 ➔ EBT = ₹ 3,00,000.
+  Tax (25%) = ₹ 75,000 ➔ EAT = ₹ 2,25,000.
+  EPS = ₹ 2,25,000 / 2,50,000 shares = ₹ 0.90.
+  (Verified identical EPS of ₹ 0.90).
+
+3. Recommendation for Expected EBIT of ₹ 8,00,000:
+- When operating EBIT (₹ 8,00,000) EXCEEDS the indifference level (₹ 6,00,000), the leveraged plan (Plan 2) produces a higher EPS due to positive financial leverage.
+- At ₹ 8,00,000 EBIT:
+  * Plan 1 EPS = (₹ 8,00,000 × 0.75) / 5,00,000 = ₹ 1.20 per share.
+  * Plan 2 EPS = [(₹ 8,00,000 - ₹ 3,00,000) × 0.75] / 2,50,000 = ₹ 1.50 per share.
+- Recommendation: Recommend PLAN 2 (Debt-Equity Mix) as it maximizes EPS for shareholders.`
+    };
+  }
+
+  // FM Working Capital Operating Cycle Method
+  private static generateFmWorkingCapitalQuestion(): DescriptiveQuestion {
+    return {
+      id: `dyn_desc_fm_wc_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+      subjectId: 'p6_fm_sm',
+      chapterId: 'fm_working_capital',
+      type: 'descriptive',
+      importance: 'HIGH',
+      source: 'ICAI Exam Style: Working Capital Requirement (Cash Cost Approach)',
+      marks: 8,
+      difficulty: 'Standard ICAI',
+      icaiReference: 'Working Capital Management Estimation',
+      questionText: `Trident Engineering Ltd manufactures auto parts. Projected annual production and sales is 24,000 units. Cost structure per unit:
+- Raw Materials: ₹ 100
+- Direct Labour: ₹ 40
+- Manufacturing Overheads (including depreciation ₹ 10): ₹ 50
+- Total Cost per unit: ₹ 190
+- Selling Price: ₹ 240 per unit
+
+Holding periods and trade terms:
+- Raw material stock in stores: 1 month
+- Work-in-Progress (100% material, 50% labour & overheads): 0.5 month
+- Finished Goods in godown: 1 month
+- Credit allowed to debtors: 2 months
+- Credit allowed by suppliers: 1 month
+- Cash and bank balance required to be maintained: ₹ 1,00,000.
+
+Required:
+Calculate the Net Working Capital requirement on a CASH COST BASIS (excluding non-cash depreciation). Assume 12 months in a year.`,
+      rubrics: [
+        {
+          step: 'Cash Cost per unit computation',
+          marks: 2,
+          expectedKeywords: ['Excluding depreciation ₹ 10', 'Cash Overhead = ₹ 40', 'Cash Cost = ₹ 180 per unit'],
+          description: 'Cash cost per unit = 100 + 40 + (50 - 10) = ₹ 180.'
+        },
+        {
+          step: 'Current Assets Valuation on Cash Cost Basis',
+          marks: 4,
+          expectedKeywords: ['Raw Material Stock = ₹ 2,00,000', 'WIP Cash Cost = ₹ 1,40,000', 'Finished Goods = ₹ 3,60,000', 'Debtors on Cash Cost = ₹ 7,20,000', 'Cash Balance = ₹ 1,00,000'],
+          description: 'Calculate Raw material, WIP, FG, Debtors at cash cost, and Cash balance.'
+        },
+        {
+          step: 'Current Liabilities and Net Working Capital',
+          marks: 2,
+          expectedKeywords: ['Creditors = ₹ 2,00,000', 'Net Working Capital = ₹ 13,20,000'],
+          description: 'Creditors = 24,000 * 100 / 12 = ₹ 2,00,000. Net WC = Total CA - CL = ₹ 13,20,000.'
+        }
+      ],
+      suggestedAnswer: `WORKING NOTES:
+1. Cash Cost Structure per unit:
+- Raw Material = ₹ 100
+- Direct Labour = ₹ 40
+- Cash Overheads (₹ 50 - ₹ 10 depreciation) = ₹ 40
+Total Cash Cost per unit = ₹ 180.
+Annual Output = 24,000 units.
+
+2. Estimation of Current Assets:
+(a) Raw Material Stock (1 month):
+    = (24,000 × ₹ 100) × (1 / 12) = ₹ 2,00,000.
+
+(b) Work-in-Progress (0.5 month):
+    - Raw Material (100%): 24,000 × ₹ 100 × (0.5 / 12) = ₹ 1,00,000
+    - Direct Labour (50%): 24,000 × (50% of ₹ 40) × (0.5 / 12) = ₹ 20,000
+    - Cash Overheads (50%): 24,000 × (50% of ₹ 40) × (0.5 / 12) = ₹ 20,000
+    Total WIP = ₹ 1,40,000.
+
+(c) Finished Goods Stock (1 month at cash cost of ₹ 180):
+    = (24,000 × ₹ 180) × (1 / 12) = ₹ 3,60,000.
+
+(d) Debtors (2 months at Cash Cost):
+    = (24,000 × ₹ 180) × (2 / 12) = ₹ 7,20,000.
+
+(e) Minimum Cash Balance = ₹ 1,00,000.
+Total Current Assets (A) = ₹ 2,00,000 + ₹ 1,40,000 + ₹ 3,60,000 + ₹ 7,20,000 + ₹ 1,00,000 = ₹ 15,20,000.
+
+3. Estimation of Current Liabilities:
+(a) Creditors for Raw Materials (1 month):
+    = (24,000 × ₹ 100) × (1 / 12) = ₹ 2,00,000.
+Total Current Liabilities (B) = ₹ 2,00,000.
+
+4. Net Working Capital Requirement:
+Net Working Capital = Total Current Assets (A) - Total Current Liabilities (B)
+= ₹ 15,20,000 - ₹ 2,00,000 = ₹ 13,20,000.`
+    };
+  }
+
+  // SM Strategic Management Ansoff Matrix
+  private static generateSmStrategicModelQuestion(): DescriptiveQuestion {
+    return {
+      id: `dyn_desc_sm_ansoff_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+      subjectId: 'p6_fm_sm',
+      chapterId: 'sm_strategic_mgmt',
+      type: 'descriptive',
+      importance: 'HIGH',
+      source: "ICAI Exam Style: Ansoff's Product-Market Growth Matrix",
+      marks: 6,
+      difficulty: 'Examiner Favorite',
+      icaiReference: "Ansoff's Product-Market Growth Matrix Framework",
+      questionText: `Nourish Dairy Ltd is an established brand in packaged milk and curd with an extensive distribution network across northern India.
+The Board is evaluating three strategic growth proposals:
+Proposal A: Launching aggressive promotional campaigns, loyalty discounts, and bundle pricing for its existing milk and curd to increase market share in its current geographic territories.
+Proposal B: Expanding into southern and eastern Indian states with its existing milk and curd product lines.
+Proposal C: Venturing into packaged plant-based vegan almond milk and ready-to-eat dairy snacks.
+
+Required:
+(i) Identify and explain the specific strategic growth quadrants under Ansoff's Product-Market Matrix for each of the three proposals.
+(ii) State which proposal carries the highest business risk and explain why.`,
+      rubrics: [
+        {
+          step: 'Identification of Ansoff Matrix Quadrants',
+          marks: 4,
+          expectedKeywords: ['Proposal A: Market Penetration (Existing Product, Existing Market)', 'Proposal B: Market Development (Existing Product, New Market)', 'Proposal C: Diversification / Product Development'],
+          description: 'Identify Market Penetration for A, Market Development for B, and Product Development/Diversification for C.'
+        },
+        {
+          step: 'Risk Assessment of Growth Strategies',
+          marks: 2,
+          expectedKeywords: ['Proposal C (Diversification) has highest risk', 'Unfamiliar product technology and customer preferences'],
+          description: 'Explain that Diversification carries the highest risk due to departures from current competencies.'
+        }
+      ],
+      suggestedAnswer: `1. Identification under Ansoff's Product-Market Growth Matrix:
+
+(a) Proposal A (Aggressive promotion of existing milk/curd in existing markets):
+- Quadrant: MARKET PENETRATION.
+- Concept: The firm seeks to sell more of its current products to existing customers. It focuses on gaining market share from competitors, increasing frequency of purchase, and loyalty programs without altering the product or entering new regions.
+
+(b) Proposal B (Existing milk/curd into southern and eastern India):
+- Quadrant: MARKET DEVELOPMENT.
+- Concept: The firm targets new geographical markets or customer segments with its existing proven products.
+
+(c) Proposal C (Plant-based vegan almond milk and dairy snacks):
+- Quadrant: PRODUCT DEVELOPMENT / DIVERSIFICATION.
+- Concept: Introducing new product lines (vegan milk/snacks) to existing/adjacent health-conscious markets is Product Development; if sold to completely new customer categories, it represents Related Diversification.
+
+2. Risk Analysis:
+- Proposal C carries the HIGHEST BUSINESS RISK.
+- Reason: As per Igor Ansoff, Market Penetration has the lowest risk because the firm knows both the product and the market. Diversification/New Product lines carry the highest risk because the company departs from its established core competencies, requiring new supply chains, unknown consumer taste acceptance, and competition against established vegan brand incumbents.`
+    };
+  }
+
+  // =========================================================================
+  // DYNAMIC CASE STUDY GENERATOR (WHOLE SYLLABUS - 15 MARKS INTEGRATED)
+  // =========================================================================
+
+  public static generateDynamicCaseStudy(subjectId?: string): CaseStudyQuestion {
+    const caseTemplates = [
+      this.generateCaseStudyCorporateTaxLaw,
+      this.generateCaseStudyAccountsAudit,
+      this.generateCaseStudyCostingFm
+    ];
+    const pick = caseTemplates[Math.floor(Math.random() * caseTemplates.length)];
+    return pick();
+  }
+
+  // Case Study 1: Corporate Governance, Tax TDS & GST
+  private static generateCaseStudyCorporateTaxLaw(): CaseStudyQuestion {
+    const turnover = 1200 + Math.floor(Math.random() * 5) * 100;
+    const profit = 12 + Math.floor(Math.random() * 4) * 2;
+    const csrObligation = Math.round((profit * 0.02) * 100) / 100;
+    const sittingFees = 15;
+    const landPrice = 4.0;
+    const sdvPrice = 4.8;
+
+    const mcq1 = QuestionGeneratorService.buildShuffledMcq(
+      {
+        id: `cs_dyn_mcq1_${Date.now()}`,
+        subjectId: 'p2_law',
+        chapterId: 'mgmt_admin',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'Case Scenario Q1',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'Section 101(1) Companies Act, 2013',
+        questionText: 'The company issued AGM notice 18 clear days prior to the meeting. Written consent was obtained from 93% of members entitled to vote. Is the shorter notice legally valid?',
+      },
+      'No, because for an AGM, consent of not less than 95% of members entitled to vote is mandatory',
+      [
+        'Yes, because consent of more than 90% is legally sufficient',
+        'Yes, because unlisted companies need only 14 days notice',
+        'No, an AGM cannot be held at shorter notice under any circumstances'
+      ]
+    );
+
+    const mcq2 = QuestionGeneratorService.buildShuffledMcq(
+      {
+        id: `cs_dyn_mcq2_${Date.now()}`,
+        subjectId: 'p3_tax',
+        chapterId: 'gst_supply_charge',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'Case Scenario Q2',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'Notification No. 13/2017 - Central Tax (Rate)',
+        questionText: `Regarding sitting fees of ₹ ${sittingFees} Lakhs paid to independent directors, what is the GST mechanism?`,
+      },
+      'The company is liable to discharge GST under Reverse Charge Mechanism (RCM)',
+      [
+        'Exempt from GST as it is an employer-employee transaction under Schedule III',
+        'Independent directors must collect and pay GST under forward charge',
+        'No GST if directors total annual income is below ₹ 20 Lakhs'
+      ]
+    );
+
+    return {
+      id: `case_dyn_corp_tax_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+      subjectId: 'p2_law',
+      chapterId: 'accounts_csr',
+      title: `Integrated Case Scenario: Bharat Agro-Tech Ltd (Turnover ₹ ${turnover} Cr)`,
+      source: 'ICAI Integrated Case Study (15 Marks New Scheme Pattern)',
+      importance: 'HIGH',
+      totalMarks: 15,
+      scenarioText: `Bharat Agro-Tech Ltd is an unlisted public company with registered office in Indore, Madhya Pradesh. The company manufactures micro-irrigation systems.
+For the financial year 2023-24, the following transactions and corporate events took place:
+
+1. Financial Parameters:
+   - Turnover for the year: ₹ ${turnover} Crores.
+   - Preceding 3-year average Net Profit under Section 198: ₹ ${profit} Crores.
+   - Net Worth: ₹ 650 Crores.
+
+2. Corporate Meetings & CSR:
+   - The company scheduled its AGM on 26th September. Notice was emailed on 7th September (18 clear days). Consent for shorter notice was received from 93% of members entitled to vote.
+   - Statutory CSR spend computed at 2% is ₹ ${csrObligation} Crores. The company disbursed ₹ 10 Lakhs towards an ongoing 3-year rural water conservation project, leaving ₹ ${((csrObligation * 100) - 10).toFixed(2)} Lakhs unspent as of 31st March 2024.
+
+3. Taxation & GST:
+   - Sitting fees and commission of ₹ ${sittingFees} Lakhs was paid to independent directors.
+   - An industrial shed was purchased for ₹ ${landPrice} Crores, whereas the stamp duty circle rate valuation was ₹ ${sdvPrice} Crores. Advance of ₹ 40 Lakhs was paid by NEFT on the agreement date when circle rate was ₹ 4.2 Crores.`,
+      mcqs: [mcq1, mcq2],
+      descriptiveQuestions: [
+        {
+          id: `cs_dyn_desc1_${Date.now()}`,
+          subjectId: 'p2_law',
+          chapterId: 'accounts_csr',
+          type: 'descriptive',
+          importance: 'HIGH',
+          source: 'Case Scenario Q3 (6 Marks Descriptive)',
+          marks: 6,
+          difficulty: 'Examiner Favorite',
+          icaiReference: 'Section 135(5) & 135(6), Companies Act, 2013',
+          questionText: `With reference to the ongoing rural water conservation project:
+(i) Compute the exact CSR liability under Section 135(5).
+(ii) State the statutory procedure and timeline under Section 135(6) for transferring the unspent amount to a special bank account.
+(iii) What are the legal penalties if the company fails to comply with Section 135(6)?`,
+          rubrics: [
+            {
+              step: 'Computation of CSR Obligation',
+              marks: 2,
+              expectedKeywords: [`2% of ₹ ${profit} Crores = ₹ ${csrObligation} Crores`],
+              description: `CSR liability = 2% of ₹ ${profit} Cr = ₹ ${csrObligation} Cr.`
+            },
+            {
+              step: 'Section 135(6) Unspent Account Compliance',
+              marks: 2,
+              expectedKeywords: ['Transfer within 30 days of FY end', 'Unspent CSR Account', 'Spend within 3 financial years'],
+              mandatoryCitations: ['Section 135(6)'],
+              description: 'Transfer unspent balance to Unspent CSR Account in a scheduled bank within 30 days.'
+            },
+            {
+              step: 'Penalties under Section 135(7)',
+              marks: 2,
+              expectedKeywords: ['Company penalty: twice the unspent amount or ₹ 1 Crore', 'Officer in default: 1/10th or ₹ 2 Lakhs'],
+              mandatoryCitations: ['Section 135(7)'],
+              description: 'Explain monetary penalties on company and officers in default.'
+            }
+          ],
+          suggestedAnswer: `1. CSR Obligation:
+- Statutory liability = 2% of ₹ ${profit} Crores = ₹ ${csrObligation} Crores (₹ ${(csrObligation * 100).toFixed(2)} Lakhs).
+
+2. Procedure under Section 135(6) for Ongoing Project:
+- The unspent CSR amount relating to an ongoing project must be transferred within 30 DAYS from the end of the financial year (i.e. on or before 30th April 2024) to a special account opened in a scheduled bank called "Unspent Corporate Social Responsibility Account".
+- Such funds must be spent within a period of 3 financial years from the date of transfer. If still unspent, it must be transferred to a Schedule VII Fund within 30 days from completion of the third financial year.
+
+3. Penalty under Section 135(7):
+- Company: Liable to a penalty of twice the amount required to be transferred to the Fund or Unspent CSR Account, or ₹ 1 Crore, whichever is less.
+- Every Officer in Default: Liable to a penalty of 1/10th of the amount required to be transferred, or ₹ 2 Lakhs, whichever is less.`
+        },
+        {
+          id: `cs_dyn_desc2_${Date.now()}`,
+          subjectId: 'p3_tax',
+          chapterId: 'cap_gains',
+          type: 'descriptive',
+          importance: 'HIGH',
+          source: 'Case Scenario Q4 (5 Marks Descriptive)',
+          marks: 5,
+          difficulty: 'Examiner Favorite',
+          icaiReference: 'Section 50C & Section 56(2)(x)',
+          questionText: `Examine the tax consequences in the hands of Bharat Agro-Tech Ltd (buyer) and the seller regarding the purchase of the industrial shed for ₹ ${landPrice} Crores against the circle rate of ₹ 4.2 Crores (agreement date) and ₹ ${sdvPrice} Crores (registration date).`,
+          rubrics: [
+            {
+              step: 'Seller Tax Impact under Section 50C',
+              marks: 2.5,
+              expectedKeywords: ['Agreement date SDV applies (₹ 4.2 Cr)', '110% of ₹ 4.0 Cr = ₹ 4.4 Cr', 'FVOC = ₹ 4.0 Cr'],
+              mandatoryCitations: ['Section 50C'],
+              description: 'Agreement SDV applies. Since ₹ 4.2 Cr <= 110% of ₹ 4.0 Cr (₹ 4.4 Cr), FVOC is actual ₹ 4.0 Cr.'
+            },
+            {
+              step: 'Buyer Tax Impact under Section 56(2)(x)',
+              marks: 2.5,
+              expectedKeywords: ['Section 56(2)(x)', 'Difference does not exceed 10%', 'NIL taxable under IFOS'],
+              mandatoryCitations: ['Section 56(2)(x)'],
+              description: 'Difference of ₹ 0.2 Cr does not exceed 10% tolerance limit; NIL taxable under Section 56(2)(x).'
+            }
+          ],
+          suggestedAnswer: `1. In the Hands of Seller [Section 50C]:
+- Since part of the consideration (₹ 40 Lakhs) was paid by NEFT on or before the agreement date, the Stamp Duty Value on the agreement date (₹ 4.2 Crores) is adopted.
+- 110% of Actual Consideration = 110% of ₹ 4.0 Crores = ₹ 4.4 Crores.
+- Since Agreement SDV (₹ 4.2 Cr) does not exceed 110% of actual consideration (₹ 4.4 Cr), the actual consideration of ₹ 4.0 Crores will be deemed to be Full Value of Consideration.
+
+2. In the Hands of Bharat Agro-Tech Ltd (Buyer) [Section 56(2)(x)]:
+- Under Section 56(2)(x), where immovable property is received for inadequate consideration, the excess of SDV over consideration is taxable if it exceeds higher of ₹ 50,000 or 10% of consideration.
+- 10% of Consideration = ₹ 40 Lakhs. The difference is ₹ 4.2 Cr - ₹ 4.0 Cr = ₹ 20 Lakhs.
+- Since ₹ 20 Lakhs does not exceed ₹ 40 Lakhs, NIL is taxable under Section 56(2)(x).`
+        }
+      ]
+    };
+  }
+
+  // Case Study 2: Accounts AS 10 & Audit SA 705
+  private static generateCaseStudyAccountsAudit(): CaseStudyQuestion {
+    const loan = 100;
+    const interest = 11;
+    const unrecordedLiability = 85;
+
+    const mcq1 = QuestionGeneratorService.buildShuffledMcq(
+      {
+        id: `cs_dyn2_mcq1_${Date.now()}`,
+        subjectId: 'p1_adv_acc',
+        chapterId: 'as_ppe_dep',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'Case Scenario Q1',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'AS 16 Para 10',
+        questionText: 'Under AS 16, how should interest earned on temporary investment of specific borrowing during construction be treated?',
+      },
+      'Deducted from borrowing costs eligible for capitalization to the asset',
+      [
+        'Credited directly to Statement of Profit and Loss as other income',
+        'Transferred to Capital Reserve Account',
+        'Added to cost of borrowing to increase asset value'
+      ]
+    );
+
+    const mcq2 = QuestionGeneratorService.buildShuffledMcq(
+      {
+        id: `cs_dyn2_mcq2_${Date.now()}`,
+        subjectId: 'p5_audit',
+        chapterId: 'audit_report',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'Case Scenario Q2',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'SA 705 (Revised)',
+        questionText: `An unrecorded liability of ₹ ${unrecordedLiability} Lakhs turns an entity profit of ₹ 60 Lakhs into a net loss. Management refuses adjustment. What audit opinion must be expressed?`,
+      },
+      'Adverse Opinion (misstatement is both material and pervasive)',
+      [
+        'Qualified Opinion (material but not pervasive)',
+        'Disclaimer of Opinion',
+        'Unmodified Opinion with Emphasis of Matter paragraph'
+      ]
+    );
+
+    return {
+      id: `case_dyn_acc_audit_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+      subjectId: 'p1_adv_acc',
+      chapterId: 'as_ppe_dep',
+      title: 'Integrated Case Scenario: Apex Infra Projects Ltd (AS 10, AS 16 & Audit SA 705)',
+      source: 'ICAI Integrated Case Study (15 Marks New Scheme Pattern)',
+      importance: 'HIGH',
+      totalMarks: 15,
+      scenarioText: `Apex Infra Projects Ltd is a road and highway construction company.
+During FY 2023-24, the following issues arose:
+
+1. Bridge Construction & Borrowing Costs:
+   - The company raised a specific bank loan of ₹ ${loan} Lakhs @ ${interest}% p.a. on 1st June for building a dedicated toll flyover (qualifying asset).
+   - Construction was suspended for 2 months during monsoon floods (an abnormal stoppage).
+   - Temporary surplus funds earned ₹ 1.2 Lakhs in short term bank deposits.
+
+2. Audit Findings:
+   - The statutory auditor discovered an unrecorded arbitration liability of ₹ ${unrecordedLiability} Lakhs arising from a subcontractor dispute.
+   - Company reported Profit Before Tax of ₹ 60 Lakhs. The planning materiality is ₹ 12 Lakhs.
+   - Management argues that the dispute is subject to appeal and refuses to create a provision or adjust the books.`,
+      mcqs: [mcq1, mcq2],
+      descriptiveQuestions: [
+        {
+          id: `cs_dyn2_desc1_${Date.now()}`,
+          subjectId: 'p1_adv_acc',
+          chapterId: 'as_ppe_dep',
+          type: 'descriptive',
+          importance: 'HIGH',
+          source: 'Case Scenario Q3 (6 Marks Descriptive)',
+          marks: 6,
+          difficulty: 'Examiner Favorite',
+          icaiReference: 'AS 16 Borrowing Costs - Suspension & Capitalization',
+          questionText: `Compute the borrowing cost to be capitalized to the toll flyover under AS 16, explaining the treatment of:
+(i) Active construction months vs 2 months suspension during flood.
+(ii) Temporary deposit income of ₹ 1.2 Lakhs.`,
+          rubrics: [
+            {
+              step: 'Suspension Rule under AS 16',
+              marks: 3,
+              expectedKeywords: ['Capitalization suspended during extended periods', 'Interest during 2 months charged to P&L', 'Active months only'],
+              mandatoryCitations: ['AS 16 Para 17'],
+              description: 'Borrowing costs incurred during abnormal suspension must be expensed to P&L.'
+            },
+            {
+              step: 'Capitalization Computation',
+              marks: 3,
+              expectedKeywords: ['Interest for active months', 'Less temporary deposit income ₹ 1.2 Lakhs', 'Net borrowing cost capitalized'],
+              description: 'Compute gross interest for active period less temporary income.'
+            }
+          ],
+          suggestedAnswer: `1. Principle under AS 16:
+- Under AS 16 Para 17, capitalization of borrowing costs should be suspended during extended periods in which active development is interrupted. However, capitalization is not normally suspended during a period when substantial technical and administrative work is being carried out or when a temporary delay is a necessary part of the process.
+- Stoppage due to abnormal monsoon flood is an abnormal interruption, so borrowing cost for the 2 months must be CHARGED TO PROFIT AND LOSS.
+
+2. Calculation:
+- Active construction period = 10 months total - 2 months suspended = 8 months.
+- Gross interest for 8 active months = (₹ ${loan} Lakhs × ${interest}% × 8 / 12) = ₹ ${(loan * (interest / 100) * 8 / 12).toFixed(2)} Lakhs.
+- Less: Temporary investment income = ₹ 1.20 Lakhs.
+- Net Borrowing Cost to be Capitalized = ₹ ${(loan * (interest / 100) * 8 / 12 - 1.2).toFixed(2)} Lakhs.`
+        },
+        {
+          id: `cs_dyn2_desc2_${Date.now()}`,
+          subjectId: 'p5_audit',
+          chapterId: 'audit_report',
+          type: 'descriptive',
+          importance: 'HIGH',
+          source: 'Case Scenario Q4 (5 Marks Descriptive)',
+          marks: 5,
+          difficulty: 'Examiner Favorite',
+          icaiReference: 'SA 705 (Revised) Modifications to the Opinion',
+          questionText: `Draft the "Basis for Adverse Opinion" section for the auditor's report of Apex Infra Projects Ltd under SA 705 (Revised).`,
+          rubrics: [
+            {
+              step: 'Drafting Header and Reason',
+              marks: 2.5,
+              expectedKeywords: ['Basis for Adverse Opinion heading', 'Unrecorded arbitration liability of ₹ 85 Lakhs', 'Quantification of impact'],
+              mandatoryCitations: ['SA 705'],
+              description: 'Clear heading and quantification of ₹ 85 Lakhs liability.'
+            },
+            {
+              step: 'True and Fair Distortion Explanation',
+              marks: 2.5,
+              expectedKeywords: ['Profit converted into net loss', 'Pervasive misstatement', 'Financial statements do not give true and fair view'],
+              description: 'Explain that the omission converts profit into net loss, making it pervasive.'
+            }
+          ],
+          suggestedAnswer: `DRAFT AUDIT REPORT SECTION:
+
+Basis for Adverse Opinion:
+"As discussed in Note X to the financial statements, the company has not recognized a provision for an arbitration award liability amounting to ₹ ${unrecordedLiability} Lakhs awarded against the company in favour of a subcontractor, which in our opinion should be recognized in accordance with AS 29 'Provisions, Contingent Liabilities and Contingent Assets'.
+
+The company's records indicate that had this provision been recognized, liabilities would have been increased by ₹ ${unrecordedLiability} Lakhs, Profit Before Tax of ₹ 60 Lakhs would have turned into a Net Loss Before Tax of ₹ ${unrecordedLiability - 60} Lakhs, and shareholders' funds would have been reduced by ₹ ${unrecordedLiability} Lakhs.
+
+We conducted our audit in accordance with Standards on Auditing (SAs) specified under Section 143(10) of the Act. We believe that the audit evidence we have obtained is sufficient and appropriate to provide a basis for our adverse opinion."`
+        }
+      ]
+    };
+  }
+
+  // Case Study 3: Costing & Financial Management
+  private static generateCaseStudyCostingFm(): CaseStudyQuestion {
+    const mcq1 = QuestionGeneratorService.buildShuffledMcq(
+      {
+        id: `cs_dyn3_mcq1_${Date.now()}`,
+        subjectId: 'p4_costing',
+        chapterId: 'marginal_costing',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'Case Scenario Q1',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'Marginal Costing Decision Rule',
+        questionText: 'When surplus plant capacity exists, what is the minimum acceptable price for a special export order that does not increase fixed overheads?',
+      },
+      'Any price that exceeds the marginal (variable) cost of producing the export units',
+      [
+        'Total cost of production including standard fixed overhead absorption',
+        'Normal domestic selling price plus foreign shipping costs',
+        'Direct material cost only'
+      ]
+    );
+
+    const mcq2 = QuestionGeneratorService.buildShuffledMcq(
+      {
+        id: `cs_dyn3_mcq2_${Date.now()}`,
+        subjectId: 'p6_fm_sm',
+        chapterId: 'fm_leverages',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'Case Scenario Q2',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'Combined Leverage Rule',
+        questionText: 'If Degree of Operating Leverage (DOL) is 2.5 and Degree of Financial Leverage (DFL) is 1.6, what is the Degree of Combined Leverage (DCL)?',
+      },
+      '4.0 (DCL = DOL × DFL)',
+      [
+        '4.1 (DCL = DOL + DFL)',
+        '1.56 (DCL = DOL / DFL)',
+        '0.9 (DCL = DOL - DFL)'
+      ]
+    );
+
+    return {
+      id: `case_dyn_cost_fm_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+      subjectId: 'p4_costing',
+      chapterId: 'marginal_costing',
+      title: 'Integrated Case Scenario: Solis Solar Power Ltd (Marginal Costing & Capital Budgeting)',
+      source: 'ICAI Integrated Case Study (15 Marks New Scheme Pattern)',
+      importance: 'HIGH',
+      totalMarks: 15,
+      scenarioText: `Solis Solar Power Ltd manufactures commercial solar inverters.
+The company is evaluating plant expansion and cost structure optimization:
+
+1. Operational Metrics:
+   - Installed capacity: 10,000 inverters per year; Current production & sales: 7,000 units.
+   - Domestic Selling Price: ₹ 40,000 per inverter.
+   - Variable Cost: ₹ 26,000 per unit (Materials ₹ 18,000, Labour ₹ 5,000, Variable Overheads ₹ 3,000).
+   - Fixed Overheads: ₹ 5,60,00,000 per annum.
+
+2. Special Export Inquiry:
+   - A German distributor offers to buy 2,500 inverters at ₹ 31,000 per unit.
+   - Special EU certification and shockproof packaging costs ₹ 1,500 per unit.
+
+3. Capital Investment Proposal:
+   - The company plans to acquire robotic assembly machinery costing ₹ 1,20,00,000 to automate wiring.
+   - Estimated life is 4 years with NIL salvage value. Corporate tax rate is 25%.
+   - Annual labor cost savings (before depreciation and tax) will be ₹ 45,00,000.`,
+      mcqs: [mcq1, mcq2],
+      descriptiveQuestions: [
+        {
+          id: `cs_dyn3_desc1_${Date.now()}`,
+          subjectId: 'p4_costing',
+          chapterId: 'marginal_costing',
+          type: 'descriptive',
+          importance: 'HIGH',
+          source: 'Case Scenario Q3 (6 Marks Descriptive)',
+          marks: 6,
+          difficulty: 'Examiner Favorite',
+          icaiReference: 'Marginal Costing Differential Decision Statement',
+          questionText: `(i) Compute the existing Break-Even Point (in units and value) and Margin of Safety.
+(ii) Prepare a differential statement and advise whether Solis Solar Power Ltd should accept the German export order for 2,500 inverters.`,
+          rubrics: [
+            {
+              step: 'Break-Even & Margin of Safety Computation',
+              marks: 3,
+              expectedKeywords: ['Contribution = ₹ 14,000 per unit', 'BEP = 4,000 units', 'BEP Value = ₹ 16 Crores', 'Margin of Safety = 3,000 units (42.86%)'],
+              description: 'Contribution = 40,000 - 26,000 = ₹ 14,000. BEP = 5,60,00,000 / 14,000 = 4,000 units.'
+            },
+            {
+              step: 'Export Order Differential Analysis & Advice',
+              marks: 3,
+              expectedKeywords: ['Export Variable Cost = ₹ 27,500', 'Unit Contribution = ₹ 3,500', 'Total Profit Increase = ₹ 87,50,000', 'Accept the order'],
+              description: 'Export VC = 26,000 + 1,500 = ₹ 27,500. Contribution = ₹ 3,500 * 2,500 = ₹ 87.5 Lakhs.'
+            }
+          ],
+          suggestedAnswer: `1. Domestic Operational Analysis:
+- Unit Contribution = SP (₹ 40,000) - VC (₹ 26,000) = ₹ 14,000 per inverter.
+- Break-Even Point (Units) = Fixed Costs (₹ 5,60,00,000) / Unit Contribution (₹ 14,000) = 4,000 Inverters.
+- Break-Even Sales Value = 4,000 × ₹ 40,000 = ₹ 16,00,00,000 (₹ 16 Crores).
+- Margin of Safety (Units) = Actual Sales (7,000) - BEP (4,000) = 3,000 Inverters (42.86%).
+
+2. Evaluation of German Export Order:
+- Spare Capacity = 10,000 - 7,000 = 3,000 inverters. The 2,500 order can be fully produced within spare capacity.
+- Export Price = ₹ 31,000
+- Less: Standard Variable Cost = ₹ 26,000
+- Less: EU Certification & Packaging = ₹ 1,500
+- Total Relevant Cost = ₹ 27,500 per unit
+- Net Contribution per inverter = ₹ 31,000 - ₹ 27,500 = ₹ 3,500 per inverter.
+- Total Additional Operating Profit = 2,500 × ₹ 3,500 = ₹ 87,50,000.
+
+Recommendation:
+The company should ACCEPT the export order as it generates an incremental profit of ₹ 87.50 Lakhs without affecting domestic sales or fixed costs.`
+        },
+        {
+          id: `cs_dyn3_desc2_${Date.now()}`,
+          subjectId: 'p6_fm_sm',
+          chapterId: 'fm_cap_budgeting',
+          type: 'descriptive',
+          importance: 'HIGH',
+          source: 'Case Scenario Q4 (5 Marks Descriptive)',
+          marks: 5,
+          difficulty: 'Examiner Favorite',
+          icaiReference: 'Capital Budgeting Cash Flow After Tax & Payback Period',
+          questionText: `For the robotic assembly investment of ₹ 1,20,00,000:
+(i) Compute the annual Cash Flow After Tax (CFAT).
+(ii) Compute the simple Payback Period of the investment.`,
+          rubrics: [
+            {
+              step: 'Annual SLM Depreciation & CFAT',
+              marks: 3,
+              expectedKeywords: ['Annual Depreciation = ₹ 30,00,000', 'PBT = ₹ 15,00,000', 'Tax @ 25% = ₹ 3,75,000', 'CFAT = ₹ 41,25,000'],
+              description: 'Dep = 1.2 Cr / 4 = ₹ 30L. PBT = 45L - 30L = 15L. PAT = 11.25L. CFAT = 11.25 + 30 = ₹ 41.25 Lakhs.'
+            },
+            {
+              step: 'Payback Period',
+              marks: 2,
+              expectedKeywords: ['Payback Period = Initial Cost / Annual CFAT', '1,20,00,000 / 41,25,000 = 2.91 Years'],
+              description: 'Payback Period = 1.20 Cr / 41.25 Lakhs = 2.91 Years.'
+            }
+          ],
+          suggestedAnswer: `1. Computation of Annual Operating CFAT:
+- Initial Capital Outlay = ₹ 1,20,00,000; Useful Life = 4 years; Salvage = NIL.
+- Annual Straight Line Depreciation = ₹ 1,20,00,000 / 4 = ₹ 30,00,000 p.a.
+- Annual Pre-tax Savings = ₹ 45,00,000
+- Less: Depreciation = ₹ 30,00,000
+- Profit Before Tax (PBT) = ₹ 15,00,000
+- Less: Tax @ 25% = ₹ 3,75,000
+- Profit After Tax (PAT) = ₹ 11,25,000
+- Add: Non-Cash Depreciation = ₹ 30,00,000
+Annual Operating Cash Flow After Tax (CFAT) = ₹ 41,25,000.
+
+2. Simple Payback Period:
+Payback Period = Initial Outlay / Annual CFAT
+= ₹ 1,20,00,000 / ₹ 41,25,000 = 2.909 Years (approx. 2 Years and 11 Months).`
+        }
+      ]
     };
   }
 

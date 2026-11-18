@@ -7,6 +7,7 @@ import {
   AlertCircle, 
   Sparkles, 
   RefreshCw, 
+  RotateCcw,
   BookOpen, 
   Award,
   Flame,
@@ -24,14 +25,12 @@ import { shuffleMcqOptions } from '../utils/mcqUtils';
 interface McqPracticeProps {
   initialSubjectId?: string;
   initialMasteryTier?: 'all' | 'beginner' | 'intermediate' | 'hard';
-  onOpenGenerator: () => void;
   onOpenBeginnerGuide?: (subjectId?: string) => void;
 }
 
 export const McqPractice: React.FC<McqPracticeProps> = ({
   initialSubjectId,
   initialMasteryTier,
-  onOpenGenerator,
   onOpenBeginnerGuide
 }) => {
   const [selectedSubjectId, setSelectedSubjectId] = React.useState<string>(
@@ -39,6 +38,7 @@ export const McqPractice: React.FC<McqPracticeProps> = ({
   );
   const [selectedChapterId, setSelectedChapterId] = React.useState<string>('all');
   const [onlyHighYield, setOnlyHighYield] = React.useState<boolean>(false);
+  const [revisionMode, setRevisionMode] = React.useState<boolean>(false);
   const [masteryTier, setMasteryTier] = React.useState<'all' | 'beginner' | 'intermediate' | 'hard'>(
     initialMasteryTier || 'all'
   );
@@ -70,31 +70,40 @@ export const McqPractice: React.FC<McqPracticeProps> = ({
   const [sessionTotal, setSessionTotal] = React.useState<number>(0);
   const [currentStreak, setCurrentStreak] = React.useState<number>(0);
 
-  // Initialize or re-populate queue when subject/filter/tier changes
+  // Initialize or re-populate queue when subject/filter/tier/revision changes
   React.useEffect(() => {
     const curated = SpacedRepetitionService.filterQuestions(MCQS_DATABASE, {
       subjectId: selectedSubjectId,
       chapterId: selectedChapterId,
       onlyHighYield,
-      masteryTier
+      masteryTier,
+      revisionOnly: revisionMode
     });
 
-    // Populate with curated questions (options shuffled) + guaranteed dynamic questions matching tier
+    // Populate with curated questions (options shuffled)
     const initialList: McqQuestion[] = curated.map(q => shuffleMcqOptions(q));
     
-    // Always add fresh dynamic questions matching tier
-    for (let i = 0; i < 8; i++) {
-      initialList.push(QuestionGeneratorService.generateDynamicMcq(
-        selectedSubjectId,
-        masteryTier === 'all' ? undefined : masteryTier
-      ));
+    // In practice mode, add fresh dynamic questions matching tier
+    if (!revisionMode) {
+      for (let i = 0; i < 10; i++) {
+        initialList.push(QuestionGeneratorService.generateDynamicMcq(
+          selectedSubjectId,
+          masteryTier === 'all' ? undefined : masteryTier
+        ));
+      }
+    }
+
+    // Fisher-Yates shuffle initial list so questions never follow a predictable sequence
+    for (let i = initialList.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [initialList[i], initialList[j]] = [initialList[j], initialList[i]];
     }
 
     setQuestionQueue(initialList);
     setCurrentIndex(0);
     setSelectedOptionId(null);
     setShowExplanation(false);
-  }, [selectedSubjectId, selectedChapterId, onlyHighYield, masteryTier]);
+  }, [selectedSubjectId, selectedChapterId, onlyHighYield, masteryTier, revisionMode]);
 
   const currentQuestion: McqQuestion = questionQueue[currentIndex] || QuestionGeneratorService.generateDynamicMcq(
     selectedSubjectId,
@@ -211,7 +220,20 @@ export const McqPractice: React.FC<McqPracticeProps> = ({
         </div>
 
         {/* Live Session Counter & Streak */}
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+          {/* Revision Mode Switch */}
+          <button
+            onClick={() => setRevisionMode(prev => !prev)}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+              revisionMode
+                ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20'
+                : 'bg-slate-900 text-slate-300 hover:text-white border border-slate-700'
+            }`}
+          >
+            <RotateCcw className={`w-3.5 h-3.5 ${revisionMode ? 'animate-spin' : ''}`} />
+            <span>{revisionMode ? 'Revision (Important Only)' : 'Practice (Fresh Qs)'}</span>
+          </button>
+
           <div className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 text-xs font-bold font-mono">
             <span className="text-slate-400">Score:</span>
             <span className="text-emerald-400">{sessionCorrect}</span>
@@ -222,11 +244,6 @@ export const McqPractice: React.FC<McqPracticeProps> = ({
           <div className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-amber-950/60 border border-amber-700/60 text-amber-400 text-xs font-bold font-mono">
             <Flame className="w-3.5 h-3.5 fill-current" />
             <span>{currentStreak} Streak</span>
-          </div>
-
-          <div className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-950/60 border border-blue-700/60 text-blue-300 text-xs font-semibold">
-            <Zap className="w-3.5 h-3.5 text-blue-400" />
-            <span>Unlimited Mode Active</span>
           </div>
         </div>
 
@@ -266,8 +283,29 @@ export const McqPractice: React.FC<McqPracticeProps> = ({
         </div>
       </div>
 
+      {/* Empty State for Revision Mode */}
+      {questionQueue.length === 0 && (
+        <div className="bg-slate-800 rounded-3xl border border-slate-700/90 p-8 sm:p-12 text-center space-y-4 shadow-xl">
+          <div className="w-16 h-16 mx-auto rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-3xl">
+            🏆
+          </div>
+          <h3 className="text-xl font-bold text-white">All Caught Up in Revision!</h3>
+          <p className="text-sm text-slate-300 max-w-md mx-auto leading-relaxed">
+            {revisionMode 
+              ? "You have no attempted high-importance questions pending revision for this selection. High-importance questions you attempt will automatically appear here for spaced revision. Low-importance questions are permanently retired once attempted."
+              : "No questions match your current filter. Try selecting 'All Levels' or another subject."}
+          </p>
+          <button
+            onClick={() => setRevisionMode(false)}
+            className="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-bold rounded-xl transition-all shadow-md shadow-blue-600/30"
+          >
+            Switch to Fresh Practice Mode
+          </button>
+        </div>
+      )}
+
       {/* Main MCQ Card (High Contrast, Tactile, Beautiful) */}
-      {currentQuestion && (
+      {questionQueue.length > 0 && currentQuestion && (
         <div className="bg-slate-800 rounded-3xl border border-slate-700/90 p-6 sm:p-8 shadow-xl space-y-6">
           
           {/* Card Top Metadata */}

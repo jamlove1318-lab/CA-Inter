@@ -51,6 +51,118 @@ const ADJUSTMENTS_DATA: AdjustmentItem[] = [
     correctAction: 'IGNORE',
     reason: 'Pure financial charges like debenture interest are strictly excluded from Cost Sheet.',
     sectionOrStandard: 'CAS-1 / Cost Sheet Principles'
+  },
+  {
+    id: 'adj_7',
+    category: 'PGBP',
+    description: 'Interest on Capital paid to working partner @ 15% p.a. (authorized by partnership deed).',
+    correctAction: 'ADD',
+    reason: 'Interest to partners is allowed up to maximum 12% p.a. under Section 40(b). Excess 3% must be added back.',
+    sectionOrStandard: 'Section 40(b)(iv)'
+  },
+  {
+    id: 'adj_8',
+    category: 'PGBP',
+    description: 'General Reserve transfer of ₹ 1,00,000 debited to Profit and Loss Account.',
+    correctAction: 'ADD',
+    reason: 'Transfer to reserves is an appropriation of profit, not an allowable business expenditure.',
+    sectionOrStandard: 'Section 28 / Section 37'
+  },
+  {
+    id: 'adj_9',
+    category: 'PGBP',
+    description: 'Income Tax refund of ₹ 18,000 (including ₹ 2,000 interest) credited to P&L account.',
+    correctAction: 'DEDUCT',
+    reason: 'Income tax refund is not business income (tax refund is non-taxable, interest on refund is taxable under IFOS).',
+    sectionOrStandard: 'Section 56(2)'
+  },
+  {
+    id: 'adj_10',
+    category: 'Cash Flow',
+    description: 'Loss on sale of old motor car ₹ 25,000 debited to Profit and Loss statement.',
+    correctAction: 'ADD',
+    reason: 'Non-operating loss must be added back to Net Profit to determine Operating Cash Flow before working capital changes.',
+    sectionOrStandard: 'AS 3 Cash Flow Statements'
+  },
+  {
+    id: 'adj_11',
+    category: 'Cash Flow',
+    description: 'Increase in Trade Debtors during the year by ₹ 75,000.',
+    correctAction: 'DEDUCT',
+    reason: 'Increase in current assets indicates cash tied up in working capital and must be deducted from operating cash flow.',
+    sectionOrStandard: 'AS 3 Indirect Method'
+  },
+  {
+    id: 'adj_12',
+    category: 'Cost Sheet',
+    description: 'Primary packing cost of ₹ 8 per unit necessary to preserve the pharmaceutical product.',
+    correctAction: 'ADD',
+    reason: 'Primary packing is an integral part of Prime Cost and direct production cost.',
+    sectionOrStandard: 'CAS-9 / Cost Accounting Standards'
+  },
+  {
+    id: 'adj_13',
+    category: 'PGBP',
+    description: 'Donation of ₹ 50,000 paid to National Children Fund debited to Profit & Loss.',
+    correctAction: 'ADD',
+    reason: 'Charitable donations are not incurred wholly and exclusively for business; disallowed under Section 37(1).',
+    sectionOrStandard: 'Section 37(1)'
+  },
+  {
+    id: 'adj_14',
+    category: 'PGBP',
+    description: 'Under-valuation of closing stock in financial accounts by ₹ 40,000.',
+    correctAction: 'ADD',
+    reason: 'Under-valuation of closing stock artificially depresses Gross Profit and must be added back.',
+    sectionOrStandard: 'Section 145A'
+  },
+  {
+    id: 'adj_15',
+    category: 'PGBP',
+    description: 'Over-valuation of opening stock in financial accounts by ₹ 25,000.',
+    correctAction: 'ADD',
+    reason: 'Over-valuation of opening stock inflates debit side of P&L, understating profit. Must be added back.',
+    sectionOrStandard: 'Section 145A'
+  },
+  {
+    id: 'adj_16',
+    category: 'Cash Flow',
+    description: 'Depreciation on Plant and Machinery ₹ 1,20,000 charged to Profit and Loss.',
+    correctAction: 'ADD',
+    reason: 'Depreciation is a non-cash expense and must be added back to Net Profit under indirect method.',
+    sectionOrStandard: 'AS 3 Cash Flow Statements'
+  },
+  {
+    id: 'adj_17',
+    category: 'PGBP',
+    description: 'Municipal taxes of ₹ 12,000 on let-out commercial property debited to P&L account.',
+    correctAction: 'ADD',
+    reason: 'Expenses on let-out house property are deductible under Income from House Property, not PGBP.',
+    sectionOrStandard: 'Section 24(a)'
+  },
+  {
+    id: 'adj_18',
+    category: 'Cost Sheet',
+    description: 'Donation to political party of ₹ 20,000.',
+    correctAction: 'IGNORE',
+    reason: 'Purely political and non-manufacturing financial appropriations are strictly excluded from Cost Sheet.',
+    sectionOrStandard: 'CAS-1 Cost Sheet'
+  },
+  {
+    id: 'adj_19',
+    category: 'PGBP',
+    description: 'Provision for doubtful debts of ₹ 35,000 created during the year.',
+    correctAction: 'ADD',
+    reason: 'Only actual bad debts written off as irrecoverable u/s 36(1)(vii) are allowed. General provisions are disallowed.',
+    sectionOrStandard: 'Section 36(1)(vii)'
+  },
+  {
+    id: 'adj_20',
+    category: 'Cash Flow',
+    description: 'Decrease in Trade Creditors during the year by ₹ 30,000.',
+    correctAction: 'DEDUCT',
+    reason: 'Decrease in current liabilities represents cash outflow to pay suppliers.',
+    sectionOrStandard: 'AS 3 Cash Flow Statements'
   }
 ];
 
