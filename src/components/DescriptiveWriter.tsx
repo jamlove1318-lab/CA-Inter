@@ -36,7 +36,7 @@ export const DescriptiveWriter: React.FC<DescriptiveWriterProps> = ({
   initialQuestion
 }) => {
   const [selectedSubjectId, setSelectedSubjectId] = React.useState<string>(
-    initialSubjectId || 'p2_law'
+    initialSubjectId || 'all'
   );
 
   // History stack for infinite questions navigation

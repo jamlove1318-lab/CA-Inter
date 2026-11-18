@@ -25,16 +25,43 @@ export class QuestionGeneratorService {
     return shuffleMcqOptions(unshuffledQuestion);
   }
 
+  // Sampling-without-replacement queues to guarantee ZERO TOPIC REPETITION across the syllabus
+  private static subjectCycle: string[] = [];
+  private static accountsCycle: (() => McqQuestion)[] = [];
+  private static lawCycle: (() => McqQuestion)[] = [];
+  private static taxCycle: (() => McqQuestion)[] = [];
+  private static costingCycle: (() => McqQuestion)[] = [];
+  private static auditCycle: (() => McqQuestion)[] = [];
+  private static fmSmCycle: (() => McqQuestion)[] = [];
+
+  private static shuffleArray<T>(arr: T[]): T[] {
+    const copy = [...arr];
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  }
+
+  private static drawFromCycle<T>(cycle: T[], refillSource: T[]): T {
+    if (cycle.length === 0) {
+      cycle.push(...this.shuffleArray(refillSource));
+    }
+    return cycle.pop()!;
+  }
+
   /**
    * Generates an infinite stream of brand-new, high-quality ICAI MCQs across the ENTIRE syllabus.
-   * Supports 'beginner' (foundation/scratch concepts), 'intermediate' (standard ICAI), and 'hard' (examiner favorites/traps).
+   * Enforces sampling without replacement so topics and subjects never repeat back-to-back.
    */
   public static generateDynamicMcq(
     subjectId?: string,
     tier?: 'beginner' | 'intermediate' | 'hard'
   ): McqQuestion {
-    const subjects = ['p1_adv_acc', 'p2_law', 'p3_tax', 'p4_costing', 'p5_audit', 'p6_fm_sm'];
-    const chosenSubject = subjectId && subjectId !== 'all' ? subjectId : subjects[Math.floor(Math.random() * subjects.length)];
+    const allSubjects = ['p1_adv_acc', 'p2_law', 'p3_tax', 'p4_costing', 'p5_audit', 'p6_fm_sm'];
+    const chosenSubject = subjectId && subjectId !== 'all' 
+      ? subjectId 
+      : this.drawFromCycle(this.subjectCycle, allSubjects);
 
     if (tier === 'beginner') {
       switch (chosenSubject) {
@@ -87,8 +114,7 @@ export class QuestionGeneratorService {
       this.generateAccountsPieceMealDistribution,
       this.generateAccountsAs10SpareParts
     ];
-    const pick = generators[Math.floor(Math.random() * generators.length)];
-    return pick();
+    return QuestionGeneratorService.drawFromCycle(this.accountsCycle, generators)();
   }
 
   // AS 16 Borrowing Costs
@@ -574,8 +600,7 @@ At year end, the Recoverable Amount of the CGU is assessed at ₹ ${recAmt} Lakh
       this.generateLawSec90Sbo,
       this.generateLawHeydonMischief
     ];
-    const pick = generators[Math.floor(Math.random() * generators.length)];
-    return pick();
+    return QuestionGeneratorService.drawFromCycle(this.lawCycle, generators)();
   }
 
   private static generateLawCsr(): McqQuestion {
@@ -1036,8 +1061,7 @@ Up to what aggregate limit can the Board of Directors advance loans or make inve
       this.generateTaxGstTimeOfSupplyContinuous,
       this.generateTaxGstPlaceOfSupply
     ];
-    const pick = generators[Math.floor(Math.random() * generators.length)];
-    return pick();
+    return QuestionGeneratorService.drawFromCycle(this.taxCycle, generators)();
   }
 
   private static generateTax115Bac(): McqQuestion {
@@ -1502,8 +1526,7 @@ Is he eligible for Section 44AD, and what is the minimum statutory presumptive p
       this.generateCostingAbcHierarchy,
       this.generateCostingShutDownPoint
     ];
-    const pick = generators[Math.floor(Math.random() * generators.length)];
-    return pick();
+    return QuestionGeneratorService.drawFromCycle(this.costingCycle, generators)();
   }
 
   private static generateCostingEoq(): McqQuestion {
@@ -2007,8 +2030,7 @@ Selling price is ₹ 60 and variable cost is ₹ 35 per unit. What is the Shut-D
       this.generateAuditSection140Resignation,
       this.generateAuditSection144ProhibitedServices
     ];
-    const pick = generators[Math.floor(Math.random() * generators.length)];
-    return pick();
+    return QuestionGeneratorService.drawFromCycle(this.auditCycle, generators)();
   }
 
   private static generateAuditSa705(): McqQuestion {
@@ -2439,8 +2461,7 @@ Selling price is ₹ 60 and variable cost is ₹ 35 per unit. What is the Shut-D
       this.generateSmPorterValueChain,
       this.generateSmAnsoffQuadrants
     ];
-    const pick = generators[Math.floor(Math.random() * generators.length)];
-    return pick();
+    return QuestionGeneratorService.drawFromCycle(this.fmSmCycle, generators)();
   }
 
   private static generateFmLeverages(): McqQuestion {
@@ -5121,6 +5142,14 @@ Payback Period = Initial Outlay / Annual CFAT
   // ZERO TO HERO: BEGINNER / FOUNDATION GENERATORS (WHOLE SYLLABUS)
   // =========================================================================
 
+  // Beginner cycle queues
+  private static begAccountsCycle: number[] = [];
+  private static begLawCycle: number[] = [];
+  private static begTaxCycle: number[] = [];
+  private static begCostingCycle: number[] = [];
+  private static begAuditCycle: number[] = [];
+  private static begFmSmCycle: number[] = [];
+
   public static generateAccountsBeginnerMcq(): McqQuestion {
     const variants = [
       {
@@ -5137,9 +5166,45 @@ Payback Period = Initial Outlay / Annual CFAT
         q: 'In the vertical format of a Company Balance Sheet prescribed under Schedule III of the Companies Act 2013, under which major head is "Securities Premium" presented?',
         correct: 'Shareholders’ Funds ➔ Reserves & Surplus',
         wrong: ['Non-Current Liabilities ➔ Long Term Borrowings', 'Current Liabilities ➔ Other Financial Liabilities', 'Current Assets ➔ Cash & Cash Equivalents']
+      },
+      {
+        q: 'Under AS 10 (Property, Plant and Equipment), how is depreciation formally defined?',
+        correct: 'Systematic allocation of the depreciable amount of an asset over its useful life',
+        wrong: ['A fund set aside in cash to buy replacement assets', 'The annual reduction in the resale market value of an asset', 'An arbitrary tax allowance determined by government']
+      },
+      {
+        q: 'Under AS 3 (Cash Flow Statements), which of the following is strictly EXCLUDED because it does not involve cash inflow or outflow?',
+        correct: 'Issue of fully paid bonus shares out of free reserves',
+        wrong: ['Payment of interim dividend to equity shareholders', 'Repayment of principal on long-term bank borrowings', 'Cash received from trade debtors']
+      },
+      {
+        q: 'Under AS 19 (Leases), when is a lease classified as a "Finance Lease" rather than an Operating Lease?',
+        correct: 'When the lease transfers substantially all the risks and rewards incident to ownership to the lessee',
+        wrong: ['When the lease agreement is for less than 12 months', 'When the lessor retains all equipment operating risks', 'Only when the government is the lessor']
+      },
+      {
+        q: 'Under AS 20 (Earnings Per Share), how is Basic EPS calculated?',
+        correct: 'Net Profit/(Loss) attributable to Equity Shareholders divided by Weighted Average number of Equity Shares outstanding',
+        wrong: ['Operating Profit divided by Total Authorized Share Capital', 'Net Profit after Tax divided by Total Face Value of Debt', 'Cash Flow from Operations divided by Closing Equity Shares']
+      },
+      {
+        q: 'In a scheme of Internal Reconstruction of a company, what is the primary purpose of creating a "Capital Reduction Account"?',
+        correct: 'To credit sacrifices made by shareholders and creditors, and write off accumulated past losses and fictitious assets',
+        wrong: ['To distribute cash bonus dividends to equity shareholders', 'To revalue fixed assets upward to show higher net worth', 'To evade statutory liabilities owed to tax authorities']
+      },
+      {
+        q: 'Under AS 11, how are "Monetary Items" (such as Cash, Debtors, Creditors, Bank Loans) denominated in foreign currency reported at the Balance Sheet date?',
+        correct: 'Reported using the closing exchange rate on the balance sheet date, with exchange differences recognized in P&L',
+        wrong: ['Reported at historical acquisition exchange rate forever', 'Reported at average rate of preceding 3 financial years', 'Ignored until actual foreign currency realization']
+      },
+      {
+        q: 'In Branch Accounting under the Debtors System, what is the treatment of unrealized profit (loading) included in opening branch stock?',
+        correct: 'Credited to Branch Account as "Stock Reserve" (or debited to Stock Reserve account) to bring it to cost',
+        wrong: ['Added to Head Office Gross Profit immediately', 'Debited directly to Cash Account', 'Ignored because unrealized profit is allowed under AS']
       }
     ];
-    const pick = variants[Math.floor(Math.random() * variants.length)];
+    const idx = QuestionGeneratorService.drawFromCycle(this.begAccountsCycle, variants.map((_, i) => i));
+    const pick = variants[idx];
     return this.buildShuffledMcq(
       {
         id: `dyn_beg_acc_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
@@ -5176,9 +5241,50 @@ Payback Period = Initial Outlay / Annual CFAT
         q: 'Under Section 103, what is the statutory quorum for an AGM of a Public Company having less than or equal to 1,000 members?',
         correct: '5 members personally present',
         wrong: ['2 members personally present', '15 members personally present', '30 members personally present']
+      },
+      {
+        q: 'Under Section 2(68) of the Companies Act 2013, what is the statutory maximum limit on the number of members in a Private Limited Company (excluding current and former employees)?',
+        correct: '200 members',
+        wrong: ['50 members', '100 members', 'Unlimited members']
+      },
+      {
+        q: 'Under Section 53 of the Companies Act 2013, can a company issue shares at a DISCOUNT to their face value?',
+        correct: 'No, issue of shares at discount is void and prohibited, EXCEPT for "Sweat Equity Shares" issued under Section 54',
+        wrong: ['Yes, any company can issue shares at a discount by passing an Ordinary Resolution', 'Yes, provided ROC gives prior written approval', 'Discount is allowed up to maximum 20% on all IPOs']
+      },
+      {
+        q: 'Under Section 68, what is the maximum percentage of Paid-up Share Capital and Free Reserves that a company can buy back in any financial year?',
+        correct: 'Maximum 25% of aggregate paid-up capital and free reserves',
+        wrong: ['Maximum 10% under all circumstances', 'Maximum 50% with special resolution', 'Unlimited as long as company has cash']
+      },
+      {
+        q: 'Under Section 135(1), what are the 3 alternative financial thresholds in the immediately preceding FY that trigger mandatory CSR compliance?',
+        correct: 'Net Worth >= ₹500 Cr, OR Turnover >= ₹1000 Cr, OR Net Profit >= ₹5 Cr',
+        wrong: ['Net Worth >= ₹100 Cr, Turnover >= ₹500 Cr, Net Profit >= ₹1 Cr', 'Turnover >= ₹100 Cr and Net Profit >= ₹10 Cr', 'CSR applies only to listed companies with 10,000+ employees']
+      },
+      {
+        q: 'Under Section 105, which of the following is TRUE regarding a "Proxy" appointed by a member for a general meeting?',
+        correct: 'A proxy has no right to speak at the meeting, and can vote only on a poll (not on a show of hands)',
+        wrong: ['A proxy can speak, debate, and propose motions at the AGM', 'A proxy can vote on a show of hands', 'A person can act as proxy for unlimited members with unlimited shares']
+      },
+      {
+        q: 'Under Section 3(26) of the General Clauses Act 1897, which of the following is classified as "Immovable Property"?',
+        correct: 'Land, benefits arising out of land, and things permanently attached to the earth',
+        wrong: ['Standing timber ready to be cut for firewood', 'Growing crops and grass', 'Moveable plant and machinery resting on wheels']
+      },
+      {
+        q: 'In the Interpretation of Statutes, which foundational rule states that words of a statute must first be given their natural, plain, ordinary, and grammatical meaning?',
+        correct: 'Rule of Literal Construction (Grammatical Interpretation)',
+        wrong: ['Mischief Rule (Heydon’s Case)', 'Golden Rule of Modification', 'Harmonious Construction Rule']
+      },
+      {
+        q: 'Under the Foreign Exchange Management Act 1999 (FEMA), which of the following remittances is strictly PROHIBITED under Schedule I?',
+        correct: 'Remittance out of lottery winnings, gambling, or income from racing/riding',
+        wrong: ['Remittance for securing medical treatment abroad', 'Remittance for payment of university tuition fees abroad', 'Remittance for hiring foreign legal counsel']
       }
     ];
-    const pick = variants[Math.floor(Math.random() * variants.length)];
+    const idx = QuestionGeneratorService.drawFromCycle(this.begLawCycle, variants.map((_, i) => i));
+    const pick = variants[idx];
     return this.buildShuffledMcq(
       {
         id: `dyn_beg_law_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
@@ -5212,12 +5318,48 @@ Payback Period = Initial Outlay / Annual CFAT
         wrong: ['3 Heads (Salaries, Business, Capital Gains)', '7 Heads (including Agriculture and Dividends)', 'Only 2 Heads (Direct Income and Indirect Income)']
       },
       {
-        q: 'When goods are supplied between two different States (e.g. from Gujarat to Karnataka), which type of GST is levied?',
+        q: 'When goods or services are supplied between two different States (e.g. from Gujarat to Karnataka), which type of GST is levied?',
         correct: 'Integrated GST (IGST) levied by the Central Government',
         wrong: ['Central GST (CGST) and State GST (SGST) equally', 'Only Gujarat SGST', 'Customs Import Duty']
+      },
+      {
+        q: 'Under Section 24(a) of the Income Tax Act, what is the statutory standard deduction allowed from the Net Annual Value (NAV) of a let-out house property?',
+        correct: 'Flat 30% of Net Annual Value (NAV) regardless of actual expenditure incurred',
+        wrong: ['Actual repair and maintenance bills submitted', 'Flat 50% of Gross Annual Value', 'Maximum ₹ 2,00,000 per annum']
+      },
+      {
+        q: 'Under Section 32 of the Income Tax Act, what is the normal statutory rate of depreciation on general Plant and Machinery (block of assets)?',
+        correct: '15% on Written Down Value (WDV)',
+        wrong: ['10% on Straight Line Method', '25% on Historical Cost', '40% on Market Value']
+      },
+      {
+        q: 'Under Section 50C/43CA, what is the statutory "Safe Harbour" percentage where actual sale consideration is accepted even if Stamp Duty Value (SDV) is slightly higher?',
+        correct: 'If Stamp Duty Value does not exceed 110% of the actual sale consideration (10% variance tolerance)',
+        wrong: ['Tolerance is allowed up to 125%', 'Tolerance is allowed only up to 105%', 'Zero tolerance (Stamp duty value always prevails)']
+      },
+      {
+        q: 'Under Section 194C, what is the rate of Tax Deducted at Source (TDS) on contractual payments made to an Individual or HUF contractor?',
+        correct: '1% if payee is Individual/HUF (2% for corporate/other contractors)',
+        wrong: ['5% across all payees', '10% flat', '0.1% under all circumstances']
+      },
+      {
+        q: 'Under GST Section 17(5), on which of the following is Input Tax Credit (ITC) strictly BLOCKED / Disallowed?',
+        correct: 'Motor vehicles for transportation of persons having approved seating capacity of not more than 13 persons (used for general staff transport)',
+        wrong: ['Raw materials purchased for factory manufacturing', 'Commercial delivery vans used exclusively for delivering goods to customers', 'Specialized machines used in the production line']
+      },
+      {
+        q: 'Under GST, what is the primary threshold of aggregate annual turnover for an existing goods supplier to be eligible for the Composition Scheme under Section 10?',
+        correct: 'Aggregate turnover in the preceding financial year did not exceed ₹ 1.5 Crores (₹ 75 Lakhs for Special Category States)',
+        wrong: ['Turnover did not exceed ₹ 20 Lakhs', 'Turnover did not exceed ₹ 50 Crores', 'Only companies with turnover below ₹ 5 Lakhs']
+      },
+      {
+        q: 'Under Section 80D of the Income Tax Act, what is the maximum health insurance premium deduction for an individual paying for senior citizen parents (age 60+)?',
+        correct: 'Up to ₹ 50,000 per financial year',
+        wrong: ['Up to ₹ 25,000 per financial year', 'Up to ₹ 1,50,000 under Section 80C', 'Unlimited actual expenditure incurred']
       }
     ];
-    const pick = variants[Math.floor(Math.random() * variants.length)];
+    const idx = QuestionGeneratorService.drawFromCycle(this.begTaxCycle, variants.map((_, i) => i));
+    const pick = variants[idx];
     return this.buildShuffledMcq(
       {
         id: `dyn_beg_tax_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
@@ -5254,9 +5396,45 @@ Payback Period = Initial Outlay / Annual CFAT
         q: 'What does the "Break-Even Point (BEP)" represent in Marginal Costing?',
         correct: 'The sales volume where Total Revenue equals Total Costs (Zero Profit and Zero Loss)',
         wrong: ['The point of maximum possible profit', 'The sales volume where Variable Costs are zero', 'The point where only income tax is paid']
+      },
+      {
+        q: 'In Inventory Management, what is the primary objective of computing Economic Order Quantity (EOQ)?',
+        correct: 'To determine the order size that minimizes the sum of total annual Ordering Costs and Carrying Costs',
+        wrong: ['To buy the maximum quantity possible to get warehouse discounts', 'To reduce the purchase price of raw materials to zero', 'To order raw materials exactly once a year']
+      },
+      {
+        q: 'Under the Halsey 50% Incentive Scheme, how is the bonus to a factory worker calculated?',
+        correct: 'Bonus = 50% × Time Saved × Standard Wage Rate per hour',
+        wrong: ['Bonus = Time Taken / Time Allowed × 100', 'Bonus = Total Output × Selling Price', 'Bonus = 100% of Time Saved × Overtime Rate']
+      },
+      {
+        q: 'In Overheads Accounting, what is "Under-Absorption of Overheads"?',
+        correct: 'When actual factory overheads incurred exceed the overheads absorbed using predetermined rates (unrecovered overhead)',
+        wrong: ['When absorbed overheads exceed actual overheads', 'When variable costs exceed fixed costs', 'When total overheads equal zero']
+      },
+      {
+        q: 'In Activity Based Costing (ABC), what is a "Cost Driver"?',
+        correct: 'A factor or measure of activity that causes a change in the cost of an activity (e.g. number of machine setups, number of purchase orders)',
+        wrong: ['The driver of the company delivery truck', 'The net profit margin on the final product', 'The total wage rate paid to factory security']
+      },
+      {
+        q: 'In Process Costing, what is the accounting treatment of "Normal Loss" that is inherent and unavoidable in the production process?',
+        correct: 'Treated as an unavoidable cost absorbed by good production units; any scrap value is credited to the Process Account',
+        wrong: ['Debited directly to Costing Profit and Loss Account as an exceptional loss', 'Ignored entirely in equivalent unit calculations', 'Charged personally to the production supervisor']
+      },
+      {
+        q: 'In Service / Operating Costing for a passenger bus company, what is the standard composite cost unit?',
+        correct: 'Passenger-Kilometre',
+        wrong: ['Litre of diesel consumed', 'Hours of bus operation', 'Number of bus tyres replaced']
+      },
+      {
+        q: 'What does "Margin of Safety (MOS)" signify in Marginal Costing decisions?',
+        correct: 'The excess of actual sales over break-even sales (Sales - BEP Sales), showing the safety cushion before incurring losses',
+        wrong: ['The difference between total assets and total liabilities', 'The maximum profit possible at 100% factory capacity', 'The cash balance kept in bank accounts']
       }
     ];
-    const pick = variants[Math.floor(Math.random() * variants.length)];
+    const idx = QuestionGeneratorService.drawFromCycle(this.begCostingCycle, variants.map((_, i) => i));
+    const pick = variants[idx];
     return this.buildShuffledMcq(
       {
         id: `dyn_beg_cost_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
@@ -5293,9 +5471,45 @@ Payback Period = Initial Outlay / Annual CFAT
         q: 'When an auditor concludes that financial statements give a true and fair view in accordance with accounting standards without any material reservation, which report is issued?',
         correct: 'Unmodified (Clean) Audit Opinion',
         wrong: ['Qualified Opinion', 'Adverse Opinion', 'Disclaimer of Opinion']
+      },
+      {
+        q: 'Under SA 230 "Audit Documentation", what is the minimum statutory retention period for audit working paper files from the date of the auditor’s report?',
+        correct: 'At least 7 years from the date of the auditor’s report',
+        wrong: ['At least 2 years', 'At least 5 years', 'Forever until company liquidation']
+      },
+      {
+        q: 'Under SA 505, what is a "Negative Confirmation Request" sent to trade debtors?',
+        correct: 'A request where the confirming debtor responds directly to the auditor ONLY if they DISAGREE with the stated balance',
+        wrong: ['A request where the debtor must reply confirming the balance in all cases', 'An informal oral phone call made by management', 'A legal court summons for recovery of debt']
+      },
+      {
+        q: 'Under SA 240, who holds the primary responsibility for the prevention and detection of fraud and error within the entity?',
+        correct: 'Those Charged with Governance (TCWG) and Management of the entity',
+        wrong: ['The independent statutory auditor', 'The Ministry of Corporate Affairs (MCA)', 'The internal audit trainee alone']
+      },
+      {
+        q: 'Under Section 141(3)(d)(i) of the Companies Act 2013, when is a Chartered Accountant disqualified from being appointed as statutory auditor?',
+        correct: 'If the auditor, their partner, or relative holds any security in the company exceeding ₹ 1,00,000 face value (relative threshold)',
+        wrong: ['If the auditor holds bank fixed deposits in any branch of a scheduled bank', 'If the auditor has audited another company in the same city', 'If the auditor is an Indian citizen']
+      },
+      {
+        q: 'Under Section 139(2), what is the mandatory rotation rule for an Audit Firm auditing an eligible company?',
+        correct: 'Maximum 2 terms of 5 consecutive years (10 consecutive years), followed by a mandatory 5-year cooling-off period',
+        wrong: ['Maximum 1 year with annual approval', 'Maximum 3 years with no cooling off', 'No rotation rule applies to audit firms']
+      },
+      {
+        q: 'Under CARO 2020, which of the following companies is EXEMPT from its reporting provisions?',
+        correct: 'One Person Company (OPC) and Small Company (as defined u/s 2(85))',
+        wrong: ['All Public Limited Companies with turnover > ₹ 10 Crores', 'Foreign subsidiaries operating in India', 'Listed technology companies']
+      },
+      {
+        q: 'Under SA 701, what are "Key Audit Matters" (KAM)?',
+        correct: 'Those matters that, in the auditor’s professional judgment, were of most significance in the audit of financial statements of the current period',
+        wrong: ['Confidential trade secrets discovered during the audit', 'All accounting entries above ₹ 1 Crore', 'Matters on which the auditor has expressed a disclaimer']
       }
     ];
-    const pick = variants[Math.floor(Math.random() * variants.length)];
+    const idx = QuestionGeneratorService.drawFromCycle(this.begAuditCycle, variants.map((_, i) => i));
+    const pick = variants[idx];
     return this.buildShuffledMcq(
       {
         id: `dyn_beg_aud_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
@@ -5332,9 +5546,45 @@ Payback Period = Initial Outlay / Annual CFAT
         q: 'In Strategic Management, which elements of the SWOT framework represent INTERNAL factors of the organization?',
         correct: 'Strengths and Weaknesses',
         wrong: ['Opportunities and Threats', 'Strengths and Opportunities', 'Weaknesses and Threats']
+      },
+      {
+        q: 'In Capital Budgeting, what is the golden decision rule under the Net Present Value (NPV) criterion?',
+        correct: 'Accept the investment project if NPV is Positive (NPV > 0)',
+        wrong: ['Accept if NPV is exactly zero', 'Accept only if Initial Cost equals Total Revenue', 'Reject any project requiring bank financing']
+      },
+      {
+        q: 'Under the Walter Dividend Model, what is the optimum dividend payout ratio for a Growth Firm where rate of return exceeds cost of capital (r > Ke)?',
+        correct: '0% dividend payout (100% earnings retention to maximize share value)',
+        wrong: ['100% full dividend payout', '50% balanced payout', 'Dividend payout has no impact on share price']
+      },
+      {
+        q: 'In Financial Analysis, what does the "Current Ratio" measure?',
+        correct: 'Short-term solvency and liquidity (Current Assets divided by Current Liabilities)',
+        wrong: ['Long-term debt repayment ability over 10 years', 'Profitability per equity share', 'Return on capital employed']
+      },
+      {
+        q: 'In Strategic Management, what are the three hierarchical levels of strategy in a diversified business organization?',
+        correct: 'Corporate Level, Business Level (SBU), and Functional Level',
+        wrong: ['National Level, State Level, and District Level', 'Board Level, Worker Level, and Trainee Level', 'Past Level, Present Level, and Future Level']
+      },
+      {
+        q: 'In the BCG Growth-Share Matrix, what represents a Strategic Business Unit (SBU) with HIGH relative market share in a LOW-growth industry?',
+        correct: 'Cash Cow (generates high cash surplus to fund other units)',
+        wrong: ['Star', 'Question Mark (Problem Child)', 'Dog']
+      },
+      {
+        q: 'Under Michael Porter’s Generic Strategies, what strategy aims to achieve competitive advantage by offering uniquely differentiated products across the entire industry?',
+        correct: 'Differentiation Strategy',
+        wrong: ['Cost Leadership Strategy', 'Focused Cost Strategy', 'Retrenchment Strategy']
+      },
+      {
+        q: 'Under Igor Ansoff’s Product-Market Matrix, what strategic growth posture is designated when a company sells NEW products to NEW customer markets?',
+        correct: 'Diversification Strategy (highest risk growth vector)',
+        wrong: ['Market Penetration', 'Market Development', 'Product Development']
       }
     ];
-    const pick = variants[Math.floor(Math.random() * variants.length)];
+    const idx = QuestionGeneratorService.drawFromCycle(this.begFmSmCycle, variants.map((_, i) => i));
+    const pick = variants[idx];
     return this.buildShuffledMcq(
       {
         id: `dyn_beg_fmsm_${Date.now()}_${Math.floor(Math.random() * 1000)}`,

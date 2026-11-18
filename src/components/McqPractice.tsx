@@ -28,6 +28,34 @@ interface McqPracticeProps {
   onOpenBeginnerGuide?: (subjectId?: string) => void;
 }
 
+/**
+ * Interleaves questions so adjacent questions NEVER share the same subject or chapter.
+ * Guarantees zero back-to-back topic repetition!
+ */
+function interleaveQuestions(questions: McqQuestion[]): McqQuestion[] {
+  if (questions.length <= 1) return questions;
+  const result: McqQuestion[] = [];
+  const pool = [...questions];
+
+  let lastSubject = '';
+  let lastChapter = '';
+
+  while (pool.length > 0) {
+    let candidateIdx = pool.findIndex(q => q.subjectId !== lastSubject && q.chapterId !== lastChapter);
+    if (candidateIdx === -1) {
+      candidateIdx = pool.findIndex(q => q.chapterId !== lastChapter);
+    }
+    if (candidateIdx === -1) {
+      candidateIdx = 0;
+    }
+    const [chosen] = pool.splice(candidateIdx, 1);
+    result.push(chosen);
+    lastSubject = chosen.subjectId;
+    lastChapter = chosen.chapterId;
+  }
+  return result;
+}
+
 export const McqPractice: React.FC<McqPracticeProps> = ({
   initialSubjectId,
   initialMasteryTier,
@@ -57,8 +85,22 @@ export const McqPractice: React.FC<McqPracticeProps> = ({
     }
   }, [initialMasteryTier]);
 
-  // Infinite Question Queue
-  const [questionQueue, setQuestionQueue] = React.useState<McqQuestion[]>([]);
+  // Infinite Question Queue (Eagerly initialized with diverse interleaved questions)
+  const [questionQueue, setQuestionQueue] = React.useState<McqQuestion[]>(() => {
+    const curated = SpacedRepetitionService.filterQuestions(MCQS_DATABASE, {
+      subjectId: initialSubjectId || 'all',
+      masteryTier: initialMasteryTier || 'all'
+    });
+    const list: McqQuestion[] = curated.map(q => shuffleMcqOptions(q));
+    for (let i = 0; i < 20; i++) {
+      list.push(QuestionGeneratorService.generateDynamicMcq(
+        initialSubjectId || 'all',
+        initialMasteryTier === 'all' ? undefined : initialMasteryTier
+      ));
+    }
+    return interleaveQuestions(list);
+  });
+
   const [currentIndex, setCurrentIndex] = React.useState<number>(0);
   const [selectedOptionId, setSelectedOptionId] = React.useState<string | null>(null);
   const [showExplanation, setShowExplanation] = React.useState<boolean>(false);
@@ -80,32 +122,26 @@ export const McqPractice: React.FC<McqPracticeProps> = ({
     });
 
     // 2. Populate with unattempted curated questions (shuffled options)
-    const initialList: McqQuestion[] = curated.map(q => shuffleMcqOptions(q));
+    const list: McqQuestion[] = curated.map(q => shuffleMcqOptions(q));
     
-    // 3. Always add 15 fresh algorithmic ICAI questions generated on the fly
-    for (let i = 0; i < 15; i++) {
-      initialList.push(QuestionGeneratorService.generateDynamicMcq(
+    // 3. Always add 20 fresh algorithmic ICAI questions generated on the fly
+    for (let i = 0; i < 20; i++) {
+      list.push(QuestionGeneratorService.generateDynamicMcq(
         selectedSubjectId,
         masteryTier === 'all' ? undefined : masteryTier
       ));
     }
 
-    // 4. Fisher-Yates shuffle the entire mix so questions never follow a predictable sequence
-    for (let i = initialList.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [initialList[i], initialList[j]] = [initialList[j], initialList[i]];
-    }
+    // 4. Interleave questions so no two adjacent questions share same subject or chapter
+    const interleaved = interleaveQuestions(list);
 
-    setQuestionQueue(initialList);
+    setQuestionQueue(interleaved);
     setCurrentIndex(0);
     setSelectedOptionId(null);
     setShowExplanation(false);
   }, [selectedSubjectId, selectedChapterId, onlyHighYield, masteryTier]);
 
-  const currentQuestion: McqQuestion = questionQueue[currentIndex] || QuestionGeneratorService.generateDynamicMcq(
-    selectedSubjectId,
-    masteryTier === 'all' ? undefined : masteryTier
-  );
+  const currentQuestion: McqQuestion | undefined = questionQueue[currentIndex] || questionQueue[0];
 
   React.useEffect(() => {
     if (currentQuestion) {
@@ -113,19 +149,20 @@ export const McqPractice: React.FC<McqPracticeProps> = ({
       setSelectedOptionId(null);
       setShowExplanation(false);
     }
-  }, [currentIndex, currentQuestion]);
+  }, [currentIndex, currentQuestion?.id]);
 
-  // Ensure queue never runs dry: auto-append 5 fresh questions as user progresses
+  // Ensure queue never runs dry: auto-append fresh questions as user progresses
   const handleNextQuestion = () => {
-    if (currentIndex >= questionQueue.length - 3) {
+    if (currentIndex >= questionQueue.length - 4) {
       const moreQuestions = [
+        QuestionGeneratorService.generateDynamicMcq(selectedSubjectId, masteryTier === 'all' ? undefined : masteryTier),
         QuestionGeneratorService.generateDynamicMcq(selectedSubjectId, masteryTier === 'all' ? undefined : masteryTier),
         QuestionGeneratorService.generateDynamicMcq(selectedSubjectId, masteryTier === 'all' ? undefined : masteryTier),
         QuestionGeneratorService.generateDynamicMcq(selectedSubjectId, masteryTier === 'all' ? undefined : masteryTier),
         QuestionGeneratorService.generateDynamicMcq(selectedSubjectId, masteryTier === 'all' ? undefined : masteryTier),
         QuestionGeneratorService.generateDynamicMcq(selectedSubjectId, masteryTier === 'all' ? undefined : masteryTier)
       ];
-      setQuestionQueue(prev => [...prev, ...moreQuestions]);
+      setQuestionQueue(prev => [...prev, ...interleaveQuestions(moreQuestions)]);
     }
 
     setCurrentIndex(prev => prev + 1);

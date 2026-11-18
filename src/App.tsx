@@ -14,7 +14,7 @@ import { Layers, HelpCircle, PenTool, FileText, Gamepad2, BookOpen, RotateCcw } 
 
 export function App() {
   const [activeTab, setActiveTab] = React.useState<ActiveTab>('dashboard');
-  const [selectedSubjectId, setSelectedSubjectId] = React.useState<string>('p2_law');
+  const [selectedSubjectId, setSelectedSubjectId] = React.useState<string>('all');
   const [activeMasteryTier, setActiveMasteryTier] = React.useState<'all' | 'beginner' | 'intermediate' | 'hard'>('all');
   const [activeDescriptiveQuestion, setActiveDescriptiveQuestion] = React.useState<DescriptiveQuestion | undefined>(undefined);
   const [isBeginnerGuideOpen, setIsBeginnerGuideOpen] = React.useState<boolean>(false);

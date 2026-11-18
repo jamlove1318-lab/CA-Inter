@@ -867,6 +867,384 @@ To maximize profitability under constrained capacity, which product should be gi
     correctOptionId: 'b',
     trapNote: 'High Growth + Low Market Share = Question Mark. High Growth + High Market Share = Star. Low Growth + High Market Share = Cash Cow. Low Growth + Low Market Share = Dog.',
     explanation: 'In the BCG matrix, SBUs in high-growth markets with low market share are called Question Marks or Problem Children. They require substantial cash infusion to maintain market share and have the potential to become Stars if nurtured, or Dogs if neglected.'
+  },
+  {
+    id: 'mcq_p1_adv_as19_leases',
+    subjectId: 'p1_adv_acc',
+    chapterId: 'as_leases_eps',
+    type: 'mcq',
+    importance: 'HIGH',
+    source: 'ICAI Exam Style: AS 19 Finance Lease Substantial Life Criterion',
+    marks: 2,
+    difficulty: 'Examiner Favorite',
+    icaiReference: 'AS 19 Leases Para 8',
+    questionText: 'Under AS 19, a lease is classified as a FINANCE LEASE if the lease term is for the major part of the economic life of the asset. What is the generally accepted benchmark percentage recognized in accounting practice?',
+    options: [
+      { id: 'a', text: '75% or more of the economic life of the asset' },
+      { id: 'b', text: '50% or more of the economic life' },
+      { id: 'c', text: '90% or more of the economic life' },
+      { id: 'd', text: '100% of the economic life' }
+    ],
+    correctOptionId: 'a',
+    trapNote: 'Trap alert: 75% applies to the economic life test. 90% applies to the Present Value of Minimum Lease Payments (PV of MLP >= 90% of Fair Value) test!',
+    explanation: 'Under AS 19, indicators of a finance lease include: (1) Lease term is for the major part of the economic life (conventionally 75% or more), and (2) At inception, PV of minimum lease payments equals or exceeds substantially all of fair value (conventionally 90% or more).'
+  },
+  {
+    id: 'mcq_p1_adv_as20_bonus',
+    subjectId: 'p1_adv_acc',
+    chapterId: 'as_leases_eps',
+    type: 'mcq',
+    importance: 'HIGH',
+    source: 'ICAI Exam Style: AS 20 Restatement of Prior Period EPS for Bonus Issue',
+    marks: 2,
+    difficulty: 'Examiner Favorite',
+    icaiReference: 'AS 20 Earnings Per Share Para 24',
+    questionText: 'A company reported Basic EPS of ₹ 12 for FY 2022-23. On 1st October 2023, the company issued 1:1 Bonus Shares (one bonus share for every one existing share). For FY 2023-24, how should the comparative EPS for FY 2022-23 be reported in the financial statements as per AS 20?',
+    options: [
+      { id: 'a', text: 'Restated to ₹ 6 per share for all prior periods presented' },
+      { id: 'b', text: 'Reported unchanged as ₹ 12 per share' },
+      { id: 'c', text: 'Reported as ₹ 9 per share (weighted average for 6 months)' },
+      { id: 'd', text: 'No comparative EPS is required to be shown' }
+    ],
+    correctOptionId: 'a',
+    trapNote: 'Bonus shares are issued without consideration. AS 20 requires that the number of equity shares outstanding before the bonus issue must be adjusted as if the bonus shares were issued at the beginning of the earliest period reported (retrospective restatement).',
+    explanation: 'As per AS 20 Para 24, bonus shares do not bring any cash or resources into the firm. Therefore, prior period Basic and Diluted EPS must be retrospectively restated for all periods presented. Doubling shares halves prior period EPS from ₹ 12 to ₹ 6.'
+  },
+  {
+    id: 'mcq_p1_adv_as14_amalgamation',
+    subjectId: 'p1_adv_acc',
+    chapterId: 'amalgamation',
+    type: 'mcq',
+    importance: 'HIGH',
+    source: 'ICAI Exam Style: AS 14 Amalgamation Liquidation Expenses Treatment',
+    marks: 2,
+    difficulty: 'Examiner Favorite',
+    icaiReference: 'AS 14 Accounting for Amalgamations',
+    questionText: 'In an Amalgamation in the Nature of PURCHASE, the transferee company agrees to reimburse the liquidation expenses of ₹ 2,50,000 incurred by the transferor company. How should this payment be recorded in the books of the transferee company?',
+    options: [
+      { id: 'a', text: 'Debited to Goodwill Account (or credited to Capital Reserve if reserve arises)' },
+      { id: 'b', text: 'Debited directly to Statement of Profit and Loss' },
+      { id: 'c', text: 'Debited to General Reserve Account' },
+      { id: 'd', text: 'Deducted from Securities Premium Account' }
+    ],
+    correctOptionId: 'a',
+    trapNote: 'In an amalgamation in the nature of PURCHASE, liquidation expenses paid/reimbursed by the transferee company form part of the cost of acquisition and are debited to Goodwill (or reduce Capital Reserve). They are NOT expensed to P&L!',
+    explanation: 'Under AS 14, in purchase method, costs directly attributable to the acquisition including liquidation expenses borne by the transferee are treated as part of purchase consideration and adjust the Goodwill / Capital Reserve balance.'
+  },
+  {
+    id: 'mcq_p2_adv_sec42_private_placement',
+    subjectId: 'p2_law',
+    chapterId: 'prospectus_allot',
+    type: 'mcq',
+    importance: 'HIGH',
+    source: 'ICAI Exam Style: Section 42 Private Placement Statutory Ceilings',
+    marks: 2,
+    difficulty: 'Examiner Favorite',
+    icaiReference: 'Section 42 & Rule 14 Companies (Prospectus and Allotment) Rules, 2014',
+    questionText: 'Under Section 42 of the Companies Act 2013, what is the maximum number of persons to whom an offer or invitation for Private Placement of securities can be made in the aggregate in a financial year (excluding QIBs and employees offered securities under ESOP)?',
+    options: [
+      { id: 'a', text: 'Not exceeding 200 persons in a financial year' },
+      { id: 'b', text: 'Not exceeding 50 persons' },
+      { id: 'c', text: 'Not exceeding 500 persons' },
+      { id: 'd', text: 'Unlimited as long as offer is private' }
+    ],
+    correctOptionId: 'a',
+    trapNote: 'If an offer is made to more than 200 persons in a FY, it is deemed to be a PUBLIC OFFER and all provisions of public issue become applicable!',
+    explanation: 'Section 42 read with Rule 14 provides that an offer of private placement shall not be made to more than 200 persons in the aggregate in a financial year, excluding Qualified Institutional Buyers (QIBs) and employees offered under ESOP.'
+  },
+  {
+    id: 'mcq_p2_adv_sec55_crr',
+    subjectId: 'p2_law',
+    chapterId: 'share_capital',
+    type: 'mcq',
+    importance: 'HIGH',
+    source: 'ICAI Exam Style: Section 55 Capital Redemption Reserve (CRR) Creation',
+    marks: 2,
+    difficulty: 'Examiner Favorite',
+    icaiReference: 'Section 55 Companies Act, 2013',
+    questionText: 'Surya Ltd. redeems 10,000 Redeemable Preference Shares of ₹ 100 each at a premium of 10% out of accumulated Free Reserves. No fresh issue of shares was made. What is the amount required to be transferred to the Capital Redemption Reserve (CRR) Account?',
+    options: [
+      { id: 'a', text: '₹ 10,00,000 (Nominal face value of preference shares redeemed)' },
+      { id: 'b', text: '₹ 11,00,000 (Total redemption amount including premium)' },
+      { id: 'c', text: '₹ 1,00,000 (Only redemption premium amount)' },
+      { id: 'd', text: 'Nil, because preference shares are not equity shares' }
+    ],
+    correctOptionId: 'a',
+    trapNote: 'CRR is created ONLY for the NOMINAL (FACE) VALUE of shares redeemed (10,000 × ₹ 100 = ₹ 10,00,000). The premium on redemption (₹ 1,00,000) is written off against Securities Premium or Free Reserves under Section 55(2)(d).',
+    explanation: 'Section 55 mandates that where preference shares are redeemed otherwise than out of the proceeds of a fresh issue, a sum equal to the nominal amount of the shares redeemed must be transferred out of profits to the Capital Redemption Reserve account.'
+  },
+  {
+    id: 'mcq_p2_adv_llp_dp',
+    subjectId: 'p2_law',
+    chapterId: 'llp_act',
+    type: 'mcq',
+    importance: 'HIGH',
+    source: 'ICAI Exam Style: LLP Act 2008 Designated Partner Residency Rule',
+    marks: 2,
+    difficulty: 'Standard ICAI',
+    icaiReference: 'Section 7 Limited Liability Partnership Act, 2008',
+    questionText: 'Under Section 7 of the Limited Liability Partnership (LLP) Act 2008, every LLP shall have at least two Designated Partners who are individuals, and:',
+    options: [
+      { id: 'a', text: 'At least one of them must be resident in India' },
+      { id: 'b', text: 'Both of them must be resident in India' },
+      { id: 'c', text: 'Both of them must be Chartered Accountants' },
+      { id: 'd', text: 'At least one of them must hold 51% capital contribution' }
+    ],
+    correctOptionId: 'a',
+    trapNote: 'Resident in India for LLP DP: A person who has stayed in India for a period of not less than 120 days during the financial year.',
+    explanation: 'Section 7(1) of the LLP Act 2008 mandates that every LLP must have at least two designated partners who are individuals and at least one of them shall be a resident in India.'
+  },
+  {
+    id: 'mcq_p2_adv_fema_remittance',
+    subjectId: 'p2_law',
+    chapterId: 'fema',
+    type: 'mcq',
+    importance: 'HIGH',
+    source: 'ICAI Exam Style: FEMA 1999 Schedule I Prohibited Remittances',
+    marks: 2,
+    difficulty: 'Examiner Favorite',
+    icaiReference: 'Foreign Exchange Management (Current Account Transactions) Rules, 2000',
+    questionText: 'Under the FEMA (Current Account Transactions) Rules 2000, which of the following transactions is STRICTLY PROHIBITED under Schedule I and cannot be approved by RBI or Central Government?',
+    options: [
+      { id: 'a', text: 'Remittance out of lottery winnings, racing/riding, or gambling' },
+      { id: 'b', text: 'Remittance of cultural tours' },
+      { id: 'c', text: 'Remittance for membership of P&I Club' },
+      { id: 'd', text: 'Remittance for hiring foreign transponders' }
+    ],
+    correctOptionId: 'a',
+    trapNote: 'Schedule I transactions (lottery winnings, income from racing, purchase of lottery tickets/sweepstakes, commission on exports under Rupee State Credit Route) are absolute prohibitions without any relaxation.',
+    explanation: 'Rule 3 read with Schedule I of the FEMA Current Account Transactions Rules strictly prohibits drawal of foreign exchange for remittance out of lottery winnings, racing, gambling, or purchase of banned football pools.'
+  },
+  {
+    id: 'mcq_p3_adv_sec24b_house_prop',
+    subjectId: 'p3_tax',
+    chapterId: 'house_prop',
+    type: 'mcq',
+    importance: 'HIGH',
+    source: 'ICAI Exam Style: Section 24(b) Housing Loan Interest Cap for Self-Occupied',
+    marks: 2,
+    difficulty: 'Examiner Favorite',
+    icaiReference: 'Section 24(b) Income-tax Act, 1961',
+    questionText: 'An individual taxpayer borrowed ₹ 30 Lakhs on 1st May 2019 for construction of a residential house property occupied solely for his own residence. Construction was completed within 3 years. During FY 2023-24, actual interest paid on the loan was ₹ 2,65,000. Under the regular tax regime, what is the maximum deduction allowable under Section 24(b)?',
+    options: [
+      { id: 'a', text: '₹ 2,00,000 maximum ceiling' },
+      { id: 'b', text: 'Full ₹ 2,65,000 without any ceiling' },
+      { id: 'c', text: '₹ 30,000 only' },
+      { id: 'd', text: '₹ 1,50,000 under Section 80C' }
+    ],
+    correctOptionId: 'a',
+    trapNote: 'For a Self-Occupied Property (SOP), interest on housing loan taken on or after 1.4.1999 for acquisition/construction completed within 5 years is capped at ₹ 2,00,000. If let-out, actual interest has no cap, but loss under House Property is capped at ₹ 2 Lakhs for set-off.',
+    explanation: 'Under Section 24(b), the deduction for interest on borrowed capital for self-occupied property is capped at ₹ 2,00,000 per annum, provided loan was taken for purchase/construction and completed within 5 years from end of FY in which capital was borrowed.'
+  },
+  {
+    id: 'mcq_p3_adv_sec54ec_bonds',
+    subjectId: 'p3_tax',
+    chapterId: 'capital_gains',
+    type: 'mcq',
+    importance: 'HIGH',
+    source: 'ICAI Exam Style: Section 54EC Capital Gains Exemption Ceiling',
+    marks: 2,
+    difficulty: 'Examiner Favorite',
+    icaiReference: 'Section 54EC Income-tax Act, 1961',
+    questionText: 'An assessee derived Long-Term Capital Gains of ₹ 80 Lakhs on sale of commercial land on 10th August 2023. To claim exemption under Section 54EC, he invested ₹ 50 Lakhs in NHAI bonds on 20th November 2023, and another ₹ 30 Lakhs in REC bonds on 15th January 2024 (both within 6 months). What is the total exemption permissible under Section 54EC?',
+    options: [
+      { id: 'a', text: '₹ 50,00,000 (Maximum statutory cap across all eligible bonds in a FY)' },
+      { id: 'b', text: '₹ 80,00,000 (Full amount because both were invested within 6 months)' },
+      { id: 'c', text: '₹ 30,00,000 (Only the second investment)' },
+      { id: 'd', text: 'Nil, because commercial land is not eligible for Section 54EC' }
+    ],
+    correctOptionId: 'a',
+    trapNote: 'Section 54EC strictly limits investment in specified long-term bonds to a maximum of ₹ 50 Lakhs in the aggregate for the financial year in which the original asset is transferred and in the subsequent financial year.',
+    explanation: 'The proviso to Section 54EC(1) caps the exemption at ₹ 50 Lakhs. Even if the assessee invests in multiple bonds (NHAI, REC, PFC, IRFC), the total deduction cannot exceed ₹ 50 Lakhs.'
+  },
+  {
+    id: 'mcq_p3_adv_gst_rcm_gta',
+    subjectId: 'p3_tax',
+    chapterId: 'gst_supply_charge',
+    type: 'mcq',
+    importance: 'HIGH',
+    source: 'ICAI Exam Style: GST Reverse Charge Mechanism on GTA Services',
+    marks: 2,
+    difficulty: 'Examiner Favorite',
+    icaiReference: 'Notification No. 13/2017-Central Tax (Rate) Section 9(3)',
+    questionText: 'M/s FastTrans, a Goods Transport Agency (GTA), provides transport services to Alpha Chemicals Ltd. (a registered manufacturing company). The GTA has NOT opted to pay GST under forward charge @ 12%. Who is liable to pay GST, and at what rate under Reverse Charge Mechanism (RCM)?',
+    options: [
+      { id: 'a', text: 'Alpha Chemicals Ltd. (recipient) is liable to pay 5% GST under RCM' },
+      { id: 'b', text: 'The GTA is liable to pay 18% GST under forward charge' },
+      { id: 'c', text: 'Both GTA and recipient pay 2.5% GST each' },
+      { id: 'd', text: 'The transaction is 100% exempt from GST' }
+    ],
+    correctOptionId: 'a',
+    trapNote: 'Under RCM, when GTA services are provided to specified persons (including any registered entity, factory, company, body corporate), the recipient is liable to pay GST @ 5% and can claim full ITC on it.',
+    explanation: 'As per Notification 13/2017-CT(R), supply of services by a GTA in respect of transportation of goods by road to any factory, registered society, cooperative society, body corporate, or registered person is taxed under Reverse Charge Mechanism (RCM) @ 5% payable by the recipient.'
+  },
+  {
+    id: 'mcq_p4_adv_eoq_doubling',
+    subjectId: 'p4_costing',
+    chapterId: 'material_cost',
+    type: 'mcq',
+    importance: 'HIGH',
+    source: 'ICAI Exam Style: EOQ Sensitivity to Parameter Variations',
+    marks: 2,
+    difficulty: 'Examiner Favorite',
+    icaiReference: 'EOQ Formula Mechanics',
+    questionText: 'In a manufacturing unit, if annual demand (A) is quadrupled (multiplied by 4) while ordering cost per order and carrying cost per unit per annum remain unchanged, what happens to the Economic Order Quantity (EOQ)?',
+    options: [
+      { id: 'a', text: 'EOQ is DOUBLED (multiplied by 2)' },
+      { id: 'b', text: 'EOQ is quadrupled (multiplied by 4)' },
+      { id: 'c', text: 'EOQ remains unchanged' },
+      { id: 'd', text: 'EOQ is halved' }
+    ],
+    correctOptionId: 'a',
+    trapNote: 'EOQ = √(2AO / C). When A is multiplied by 4, EOQ_new = √(2 × 4A × O / C) = √4 × √(2AO / C) = 2 × EOQ. The square root dampens the change!',
+    explanation: 'Since annual consumption appears under the square root sign in the Wilson formula EOQ = √(2AO/C), multiplying A by 4 multiplies EOQ by √4 = 2. Hence, EOQ doubles.'
+  },
+  {
+    id: 'mcq_p4_adv_rowan_scheme',
+    subjectId: 'p4_costing',
+    chapterId: 'employee_cost',
+    type: 'mcq',
+    importance: 'HIGH',
+    source: 'ICAI Exam Style: Rowan Incentive Premium Wage Calculation',
+    marks: 2,
+    difficulty: 'Examiner Favorite',
+    icaiReference: 'Rowan Premium Scheme Earnings Formula',
+    questionText: 'Standard time allowed for a manufacturing operation is 10 hours. The standard hourly wage rate is ₹ 60. A skilled worker completes the job in 8 hours. What are the worker’s TOTAL EARNINGS under the Rowan Premium Scheme?',
+    options: [
+      { id: 'a', text: '₹ 576 (Basic ₹ 480 + Rowan Bonus ₹ 96)' },
+      { id: 'b', text: '₹ 540 (Basic ₹ 480 + Halsey 50% Bonus ₹ 60)' },
+      { id: 'c', text: '₹ 600 (Standard 10 hours pay)' },
+      { id: 'd', text: '₹ 480 (Basic hourly pay only)' }
+    ],
+    correctOptionId: 'a',
+    trapNote: 'Rowan Bonus = (Time Taken / Time Allowed) × Time Saved × Rate = (8 / 10) × 2 × ₹ 60 = 0.8 × 120 = ₹ 96. Total = (8 × 60) + 96 = 480 + 96 = ₹ 576. (Under Halsey 50%, bonus would be 50% × 2 × 60 = ₹ 60, total ₹ 540).',
+    explanation: 'Rowan Total Earnings = (Time Taken × Hourly Rate) + [(Time Taken / Time Allowed) × Time Saved × Hourly Rate] = (8 × ₹ 60) + [(8/10) × 2 × ₹ 60] = ₹ 480 + ₹ 96 = ₹ 576.'
+  },
+  {
+    id: 'mcq_p5_adv_sa230_documentation',
+    subjectId: 'p5_audit',
+    chapterId: 'audit_strategy',
+    type: 'mcq',
+    importance: 'HIGH',
+    source: 'ICAI Exam Style: SA 230 Audit File Assembly Timeline',
+    marks: 2,
+    difficulty: 'Examiner Favorite',
+    icaiReference: 'SA 230 Audit Documentation Para A21',
+    questionText: 'Under SA 230 (Audit Documentation) and SQC 1, what is the maximum time limit within which the auditor must assemble the final audit file after the date of the auditor’s report?',
+    options: [
+      { id: 'a', text: 'Ordinarily not more than 60 days after the date of the auditor’s report' },
+      { id: 'b', text: 'Within 30 days of the Annual General Meeting (AGM)' },
+      { id: 'c', text: 'Within 7 days of signing the report' },
+      { id: 'd', text: 'By the end of the subsequent financial year' }
+    ],
+    correctOptionId: 'a',
+    trapNote: 'Do not confuse file assembly (60 days) with retention period (7 years)! Assembly of audit documentation is an administrative process that does not involve the performance of new audit procedures.',
+    explanation: 'SA 230 Para A21 provides that an appropriate time limit within which to complete the assembly of the final audit file is ordinarily not more than 60 days after the date of the auditor’s report.'
+  },
+  {
+    id: 'mcq_p5_adv_sa505_negative_confirm',
+    subjectId: 'p5_audit',
+    chapterId: 'audit_evidence',
+    type: 'mcq',
+    importance: 'HIGH',
+    source: 'ICAI Exam Style: SA 505 Negative External Confirmation Conditions',
+    marks: 2,
+    difficulty: 'Examiner Favorite',
+    icaiReference: 'SA 505 External Confirmations Para 15',
+    questionText: 'Under SA 505, why does a "Negative External Confirmation Request" provide substantially less persuasive audit evidence than a positive confirmation request?',
+    options: [
+      { id: 'a', text: 'Because the failure to receive a response does not explicitly verify that the third party received the request or verified the balance' },
+      { id: 'b', text: 'Because negative confirmations are strictly illegal under the Companies Act' },
+      { id: 'c', text: 'Because negative confirmations can be sent only via postal telegraph' },
+      { id: 'd', text: 'Because management is legally forbidden from approving negative requests' }
+    ],
+    correctOptionId: 'a',
+    trapNote: 'In a negative confirmation, the recipient replies ONLY if they disagree. Thus, no response could mean they agree, or it could mean the letter was lost in post or discarded in the waste bin!',
+    explanation: 'SA 505 Para A23 states that negative confirmations provide less persuasive evidence because unreturned requests could mean the confirming party did not receive the request, overlooked it, or did not verify the figures.'
+  },
+  {
+    id: 'mcq_p5_adv_sa560_subsequent_events',
+    subjectId: 'p5_audit',
+    chapterId: 'audit_evidence',
+    type: 'mcq',
+    importance: 'HIGH',
+    source: 'ICAI Exam Style: SA 560 Adjusting vs Non-Adjusting Subsequent Events',
+    marks: 2,
+    difficulty: 'Examiner Favorite',
+    icaiReference: 'SA 560 Subsequent Events & AS 4',
+    questionText: 'A key trade debtor owing ₹ 18 Lakhs at the Balance Sheet date (31st March) went bankrupt on 18th April due to prolonged deteriorating solvency existing prior to year-end. How should this event occurring before approval of financial statements be treated under SA 560 and AS 4?',
+    options: [
+      { id: 'a', text: 'Adjusting Event: Requires adjustment to the carrying amount of trade receivables at 31st March' },
+      { id: 'b', text: 'Non-Adjusting Event: Requires only a disclosure in the Board’s Report' },
+      { id: 'c', text: 'Ignored completely because bankruptcy occurred after 31st March' },
+      { id: 'd', text: 'Requires immediate restatement of tax returns filed 2 years ago' }
+    ],
+    correctOptionId: 'a',
+    trapNote: 'Under AS 4 and SA 560, events that provide additional evidence of conditions that EXISTED at the balance sheet date are Adjusting Events. The bankruptcy of a customer whose financial health was already deteriorating before 31st March is a classic Adjusting Event.',
+    explanation: 'Subsequent events providing evidence of conditions that existed on the reporting date require financial adjustments (AS 4 / SA 560). Since debtor solvency had been deteriorating prior to 31st March, provision for doubtful debts must be adjusted.'
+  },
+  {
+    id: 'mcq_p6_adv_operating_cycle',
+    subjectId: 'p6_fm_sm',
+    chapterId: 'fm_working_capital',
+    type: 'mcq',
+    importance: 'HIGH',
+    source: 'ICAI Exam Style: Working Capital Net Operating Cycle Computation',
+    marks: 2,
+    difficulty: 'Examiner Favorite',
+    icaiReference: 'Working Capital Cycle Mechanics',
+    questionText: 'A manufacturing firm has Raw Material Holding Period = 45 days, Work-in-Progress Conversion Period = 18 days, Finished Goods Storage Period = 22 days, Debtors Collection Period = 35 days, and Creditors Payment Period = 40 days. What is the Net Operating Cycle of the firm?',
+    options: [
+      { id: 'a', text: '80 days (Gross Operating Cycle 120 days - Creditors 40 days)' },
+      { id: 'b', text: '120 days (Gross Operating Cycle without deducting creditors)' },
+      { id: 'c', text: '160 days (Sum of all periods including creditors)' },
+      { id: 'd', text: '62 days' }
+    ],
+    correctOptionId: 'a',
+    trapNote: 'Net Operating Cycle = Gross Operating Cycle (RM + WIP + FG + Debtors) - Creditors Payment Period = (45 + 18 + 22 + 35) - 40 = 120 - 40 = 80 days.',
+    explanation: 'Gross Operating Cycle = 45 + 18 + 22 + 35 = 120 days. Net Operating Cycle (Cash Conversion Cycle) = Gross Operating Cycle - Creditors Deferral Period = 120 - 40 = 80 days.'
+  },
+  {
+    id: 'mcq_p6_adv_financial_bep',
+    subjectId: 'p6_fm_sm',
+    chapterId: 'fm_leverages',
+    type: 'mcq',
+    importance: 'HIGH',
+    source: 'ICAI Exam Style: Financial Break-Even Point with Preference Dividend',
+    marks: 2,
+    difficulty: 'Examiner Favorite',
+    icaiReference: 'Financial Break-Even Point Formula',
+    questionText: 'Delta Ltd. has Annual Interest on Debt of ₹ 12 Lakhs and 10% Preference Share Capital of ₹ 40 Lakhs (Annual Preference Dividend = ₹ 4 Lakhs). Corporate tax rate is 25%. What is the Financial Break-Even Point (EBIT level where EPS = 0)?',
+    options: [
+      { id: 'a', text: '₹ 17.33 Lakhs [Interest ₹ 12L + Pref Div ₹ 4L / (1 - 0.25)]' },
+      { id: 'b', text: '₹ 16.00 Lakhs [Direct sum of Interest ₹ 12L + Pref Div ₹ 4L]' },
+      { id: 'c', text: '₹ 12.00 Lakhs [Interest component only]' },
+      { id: 'd', text: '₹ 20.00 Lakhs' }
+    ],
+    correctOptionId: 'a',
+    trapNote: 'Financial BEP = Interest + [Preference Dividend / (1 - Tax Rate)]. Preference dividends are paid out of AFTER-TAX profits, so they must be grossed up by (1 - T)! ₹ 4L / 0.75 = ₹ 5.33L. Total = 12 + 5.33 = ₹ 17.33 Lakhs.',
+    explanation: 'Financial Break-Even Point is the level of EBIT that covers all fixed financial charges. Since preference dividends are post-tax, pre-tax EBIT needed to pay preference dividend is ₹ 4 Lakhs / (1 - 0.25) = ₹ 5.33 Lakhs. Total Financial BEP = ₹ 12L + ₹ 5.33L = ₹ 17.33 Lakhs.'
+  },
+  {
+    id: 'mcq_p6_adv_mckinsey_7s',
+    subjectId: 'p6_fm_sm',
+    chapterId: 'sm_exec',
+    type: 'mcq',
+    importance: 'HIGH',
+    source: 'ICAI Exam Style: McKinsey 7S Framework Hard vs Soft Elements',
+    marks: 2,
+    difficulty: 'Examiner Favorite',
+    icaiReference: 'McKinsey 7S Framework Classification',
+    questionText: 'Under the McKinsey 7S Framework used in strategic implementation, which three elements are classified as HARD ELEMENTS (easily identified, managed, and changed)?',
+    options: [
+      { id: 'a', text: 'Strategy, Structure, and Systems' },
+      { id: 'b', text: 'Shared Values, Style, and Staff' },
+      { id: 'c', text: 'Skills, Staff, and Shared Values' },
+      { id: 'd', text: 'Style, Systems, and Structure' }
+    ],
+    correctOptionId: 'a',
+    trapNote: 'Hard Elements (Cold/Tangible): Strategy, Structure, Systems. Soft Elements (Warm/Intangible): Shared Values (center), Style, Staff, Skills.',
+    explanation: 'In McKinsey 7S, the 3 Hard elements are Strategy, Structure, and Systems because leadership can directly influence them through organization charts, formal processes, and plans. The 4 Soft elements are Shared Values, Skills, Staff, and Style.'
   }
 ];
 
