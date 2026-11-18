@@ -35,6 +35,7 @@ export const ExamSimulator: React.FC = () => {
   const [markedForReview, setMarkedForReview] = React.useState<Record<number, boolean>>({});
   const [examSubmitted, setExamSubmitted] = React.useState<boolean>(false);
   const [finalScore, setFinalScore] = React.useState<{ totalAwarded: number; maxMarks: number; passed: boolean } | null>(null);
+  const [paperSeed, setPaperSeed] = React.useState<number>(0);
 
   // Filter paper questions with guaranteed full sets
   const paperSubject = CA_INTER_SUBJECTS.find(s => s.id === selectedSubjectId) || CA_INTER_SUBJECTS[0];
@@ -44,7 +45,7 @@ export const ExamSimulator: React.FC = () => {
       list.push(QuestionGeneratorService.generateDynamicMcq(selectedSubjectId));
     }
     return list.slice(0, 5);
-  }, [selectedSubjectId]);
+  }, [selectedSubjectId, paperSeed]);
 
   const paperDesc = React.useMemo(() => {
     const list = [...DESCRIPTIVE_DATABASE.filter(q => q.subjectId === selectedSubjectId)];
@@ -52,8 +53,21 @@ export const ExamSimulator: React.FC = () => {
       list.push(QuestionGeneratorService.generateDynamicDescriptiveQuestion(selectedSubjectId));
     }
     return list.slice(0, 3);
-  }, [selectedSubjectId]);
+  }, [selectedSubjectId, paperSeed]);
   const totalQuestions = paperMcqs.length + paperDesc.length;
+
+  const handleResetExam = () => {
+    setExamStarted(false);
+    setExamSubmitted(false);
+    setFinalScore(null);
+    setMcqAnswers({});
+    setDescAnswers({});
+    setMarkedForReview({});
+    setCurrentQIndex(0);
+    setReadingSecondsLeft(15 * 60);
+    setExamSecondsLeft(180 * 60);
+    setPaperSeed(prev => prev + 1);
+  };
 
   // Timers
   React.useEffect(() => {
@@ -464,12 +478,18 @@ export const ExamSimulator: React.FC = () => {
               </span>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex flex-col sm:flex-row items-center gap-2.5">
               <button
                 onClick={() => setFinalScore(null)}
-                className="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl"
+                className="w-full sm:flex-1 py-2.5 bg-slate-700 hover:bg-slate-600 text-white text-xs font-bold rounded-xl transition-all"
               >
-                Review Answers & Working Notes
+                Review Answers & Notes
+              </button>
+              <button
+                onClick={handleResetExam}
+                className="w-full sm:flex-1 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold rounded-xl shadow-md transition-all"
+              >
+                Start Fresh Simulation
               </button>
             </div>
           </div>

@@ -5,8 +5,9 @@ export class EvaluatorService {
    * Evaluates student's descriptive answer against ICAI rubrics, statutory citations,
    * technical keywords, numerical calculations, and working notes.
    */
-  public static evaluateAnswer(question: DescriptiveQuestion, userAnswerText: string): EvaluationResult {
-    const cleanUserText = userAnswerText.trim().toLowerCase();
+  public static evaluateAnswer(question: DescriptiveQuestion, userAnswerText: string = ''): EvaluationResult {
+    const rawText = userAnswerText || '';
+    const cleanUserText = rawText.trim().toLowerCase();
     
     // Check if empty
     if (!cleanUserText || cleanUserText.length < 15) {
@@ -144,7 +145,7 @@ export class EvaluatorService {
     if (percentage < 60) {
       examinerTips.push('Underline or bullet point key conclusions, figures, and legal doctrines to assist the evaluator in fast step-marking.');
     }
-    if (userAnswerText.length < 250) {
+    if (rawText.length < 250) {
       examinerTips.push('Your answer is on the shorter side for this weightage. In ICAI exams, elaborate on the statutory principle, apply it to the scenario, and state a definite conclusion.');
     } else {
       examinerTips.push('Good answer length and depth. Ensure handwriting is legible and calculations are cleanly boxed in actual ICAI answer sheets.');
@@ -164,11 +165,34 @@ export class EvaluatorService {
     };
   }
 
+  private static normalizeTerm(str: string): string {
+    return str
+      .toLowerCase()
+      .replace(/\bpercent\b/g, '%')
+      .replace(/\bper cent\b/g, '%')
+      .replace(/\bsec\b\.?/g, 'section')
+      .replace(/\bcr\b\.?/g, 'crores')
+      .replace(/\bcrore\b/g, 'crores')
+      .replace(/\blac\b\.?/g, 'lakhs')
+      .replace(/\blacs\b\.?/g, 'lakhs')
+      .replace(/\blakh\b/g, 'lakhs')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
   private static fuzzyContains(text: string, keyword: string): boolean {
-    const words = keyword.split(' ');
-    if (words.length <= 1) return false;
-    // If at least 70% of words in the phrase are found in text in close proximity
-    const matchedCount = words.filter(w => text.includes(w)).length;
-    return (matchedCount / words.length) >= 0.7;
+    const normText = this.normalizeTerm(text);
+    const normKw = this.normalizeTerm(keyword);
+    if (normText.includes(normKw)) return true;
+
+    // Filter out punctuation and short stopwords
+    const words = normKw
+      .replace(/[^a-z0-9\s%]/g, ' ')
+      .split(/\s+/)
+      .filter(w => w.length > 1 && !['of', 'in', 'and', 'the', 'is', 'for', 'to', 'or'].includes(w));
+    if (words.length <= 1) return words.length === 1 && normText.includes(words[0]);
+
+    const matchedCount = words.filter(w => normText.includes(w)).length;
+    return (matchedCount / words.length) >= 0.5;
   }
 }
