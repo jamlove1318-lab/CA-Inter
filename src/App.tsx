@@ -7,9 +7,10 @@ import { CaseStudyLab } from './components/CaseStudyLab';
 import { ExamSimulator } from './components/ExamSimulator';
 import { PastPapersVault } from './components/PastPapersVault';
 import { GameZone } from './components/GameZone/GameZone';
+import { RevisionHub } from './components/RevisionHub';
 import { BeginnerGuideModal } from './components/BeginnerGuideModal';
 import { DescriptiveQuestion } from './types/question';
-import { Layers, HelpCircle, PenTool, FileText, Gamepad2, BookOpen } from 'lucide-react';
+import { Layers, HelpCircle, PenTool, FileText, Gamepad2, BookOpen, RotateCcw } from 'lucide-react';
 
 export function App() {
   const [activeTab, setActiveTab] = React.useState<ActiveTab>('dashboard');
@@ -67,6 +68,10 @@ export function App() {
           />
         )}
 
+        {activeTab === 'revision' && (
+          <RevisionHub />
+        )}
+
         {activeTab === 'descriptive' && (
           <DescriptiveWriter
             initialSubjectId={selectedSubjectId}
@@ -96,14 +101,15 @@ export function App() {
 
       {/* Universal Bottom Navigation Bar (Persistent & 1-Tap Access for Mobile & Desktop) */}
       <nav className="fixed bottom-0 left-0 right-0 z-40 bg-slate-900/95 backdrop-blur-md border-t border-slate-800 shadow-2xl">
-        <div className="max-w-2xl mx-auto flex items-center justify-around py-1.5 px-2">
+        <div className="max-w-3xl mx-auto flex items-center justify-around py-1.5 px-1 sm:px-2">
           {[
             { id: 'dashboard', label: 'Home', icon: Layers },
             { id: 'mcqs', label: 'MCQs', icon: HelpCircle },
+            { id: 'revision', label: 'Revision', icon: RotateCcw, highlight: true },
             { id: 'casestudies', label: 'Case Study', icon: BookOpen },
             { id: 'descriptive', label: 'Evaluator', icon: PenTool },
             { id: 'exam', label: 'Exam', icon: FileText },
-            { id: 'gamezone', label: 'Arcade', icon: Gamepad2, highlight: true }
+            { id: 'gamezone', label: 'Arcade', icon: Gamepad2 }
           ].map(item => {
             const Icon = item.icon;
             const isActive = activeTab === item.id;
@@ -111,16 +117,16 @@ export function App() {
               <button
                 key={item.id}
                 onClick={() => setActiveTab(item.id as ActiveTab)}
-                className={`flex flex-col items-center justify-center py-1 px-2.5 sm:px-4 rounded-xl transition-all ${
+                className={`flex flex-col items-center justify-center py-1 px-1.5 sm:px-3 rounded-xl transition-all ${
                   isActive
                     ? item.highlight
-                      ? 'text-purple-400 font-bold scale-105 bg-purple-950/40'
+                      ? 'text-amber-400 font-bold scale-105 bg-amber-950/40'
                       : 'text-blue-400 font-bold scale-105 bg-blue-950/40'
                     : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
                 }`}
               >
-                <Icon className={`w-5 h-5 ${isActive ? (item.highlight ? 'text-purple-400' : 'text-blue-400') : 'text-slate-400'}`} />
-                <span className="text-[10px] sm:text-xs mt-0.5 whitespace-nowrap">{item.label}</span>
+                <Icon className={`w-4 h-4 sm:w-5 sm:h-5 ${isActive ? (item.highlight ? 'text-amber-400' : 'text-blue-400') : 'text-slate-400'}`} />
+                <span className="text-[9px] sm:text-xs mt-0.5 whitespace-nowrap">{item.label}</span>
               </button>
             );
           })}

@@ -511,6 +511,362 @@ export const MCQS_DATABASE: McqQuestion[] = [
     correctOptionId: 'd',
     trapNote: 'Merely obtaining a large volume of low-quality or biased evidence can NEVER compensate for lack of appropriateness.',
     explanation: 'Under SA 500, Sufficiency is the measure of the quantity of audit evidence, influenced by risk of misstatement. Appropriateness is the measure of the quality of audit evidence, that is, its relevance and its reliability in providing support for the auditor’s opinion.'
+  },
+  // --- ADVANCED HIGH-YIELD ICAI EXAM SCENARIOS ---
+  // Paper 1: Advanced Accounting
+  {
+    id: 'mcq_p1_adv_as15',
+    subjectId: 'p1_adv_acc',
+    chapterId: 'as_revenue_inv',
+    type: 'mcq',
+    importance: 'HIGH',
+    source: 'ICAI Exam Style: AS 15 Employee Benefits Actuarial Treatment',
+    marks: 2,
+    difficulty: 'Examiner Favorite',
+    icaiReference: 'AS 15 (Revised) Employee Benefits - Para 92',
+    questionText: 'Zenith Lifesciences Ltd maintains a defined benefit gratuity plan for its employees. At the end of FY 2023-24, due to sudden increases in employee salary escalation rates, the actuarial valuation of the Defined Benefit Obligation resulted in an actuarial loss of ₹ 18,00,000. How should this actuarial loss be recognized under AS 15 (Revised)?',
+    options: [
+      { id: 'a', text: 'Amortized over the expected average remaining working lives of participating employees' },
+      { id: 'b', text: 'Recognized immediately and in full in the Statement of Profit and Loss' },
+      { id: 'c', text: 'Debited directly to Retained Earnings under Reserves & Surplus without hitting P&L' },
+      { id: 'd', text: 'Deferred as a Miscellaneous Expenditure asset on the Balance Sheet' }
+    ],
+    correctOptionId: 'b',
+    trapNote: 'Under Ind AS 19, actuarial gains/losses go to Other Comprehensive Income (OCI), BUT under AS 15 (which applies to CA Inter under Indian AS), they MUST be recognized IMMEDIATELY IN THE STATEMENT OF PROFIT AND LOSS!',
+    explanation: 'As per AS 15 (Revised) Para 92, actuarial gains and losses should be recognized immediately in the Statement of Profit and Loss as income or expense in the period in which they occur. Deferral or amortization over working lives is strictly prohibited.'
+  },
+  {
+    id: 'mcq_p1_adv_as28',
+    subjectId: 'p1_adv_acc',
+    chapterId: 'as_ppe_dep',
+    type: 'mcq',
+    importance: 'HIGH',
+    source: 'ICAI Exam Style: AS 28 Impairment of Assets CGU Loss Allocation',
+    marks: 2,
+    difficulty: 'Examiner Favorite',
+    icaiReference: 'AS 28 Impairment of Assets - Para 87 & 88',
+    questionText: `A Cash Generating Unit (CGU) has the following carrying amounts:
+- Goodwill: ₹ 40 Lakhs
+- Factory Building: ₹ 120 Lakhs
+- Specialized Plant: ₹ 80 Lakhs
+Total Carrying Amount = ₹ 240 Lakhs.
+At year-end, the Recoverable Amount of the CGU is assessed at ₹ 150 Lakhs. What is the impairment loss allocated to Factory Building as per AS 28?`,
+    options: [
+      { id: 'a', text: '₹ 45 Lakhs' },
+      { id: 'b', text: '₹ 30 Lakhs' },
+      { id: 'c', text: '₹ 37.5 Lakhs' },
+      { id: 'd', text: '₹ 50 Lakhs' }
+    ],
+    correctOptionId: 'b',
+    trapNote: 'Total impairment loss = 240 - 150 = ₹ 90 Lakhs. Students often allocate the full 90L pro-rata across all 3 assets. Under AS 28, the impairment loss is FIRST allocated to write off Goodwill completely (₹ 40L), and ONLY the balance (₹ 50L) is allocated pro-rata to other assets!',
+    explanation: 'Total Impairment Loss = ₹ 240L - ₹ 150L = ₹ 90 Lakhs. Step 1: Reduce Goodwill to NIL = ₹ 40 Lakhs allocated to Goodwill. Step 2: Remaining loss = ₹ 90L - ₹ 40L = ₹ 50 Lakhs allocated pro-rata between Building (120L) and Plant (80L) in the ratio of 120:80 (3:2). Loss to Building = ₹ 50L × (120 / 200) = ₹ 30 Lakhs.'
+  },
+  {
+    id: 'mcq_p1_adv_sched3',
+    subjectId: 'p1_adv_acc',
+    chapterId: 'company_accounts_buyback',
+    type: 'mcq',
+    importance: 'HIGH',
+    source: 'ICAI Exam Style: Schedule III Operating Cycle Classification',
+    marks: 2,
+    difficulty: 'Examiner Favorite',
+    icaiReference: 'Schedule III to Companies Act, 2013 - General Instructions',
+    questionText: 'Mega Infrastructure Ltd has an operating cycle of 22 months for its commercial property development division. Trade receivables amounting to ₹ 14 Crores are expected to be realized in 18 months from the Balance Sheet date. How should these receivables be classified in the Balance Sheet under Schedule III?',
+    options: [
+      { id: 'a', text: 'Non-Current Asset, because settlement period exceeds 12 months' },
+      { id: 'b', text: 'Current Asset, because realization falls within the entity’s normal operating cycle (22 months)' },
+      { id: 'c', text: 'Contingent Asset disclosed only in Notes to Accounts' },
+      { id: 'd', text: 'Split into Current (12 months portion) and Non-Current (6 months portion)' }
+    ],
+    correctOptionId: 'b',
+    trapNote: 'An asset is Current if it is expected to be realized in the entity’s NORMAL OPERATING CYCLE, even if that operating cycle exceeds 12 months!',
+    explanation: 'Under Schedule III Division I, an asset shall be classified as Current when it is expected to be realized in, or is intended for sale or consumption in, the company’s normal operating cycle. Since the operating cycle is 22 months, receivables realizable in 18 months are 100% Current Assets.'
+  },
+
+  // Paper 2: Corporate and Other Laws
+  {
+    id: 'mcq_p2_adv_sec185',
+    subjectId: 'p2_law',
+    chapterId: 'audit_auditors',
+    type: 'mcq',
+    importance: 'HIGH',
+    source: 'ICAI Exam Style: Section 185 Loans to Directors & Controlled Entities',
+    marks: 2,
+    difficulty: 'Examiner Favorite',
+    icaiReference: 'Section 185 Companies Act, 2013',
+    questionText: 'Kalyan Synthetics Ltd (a public company) wishes to grant a corporate loan of ₹ 15 Crores to Vardhman Mills Pvt Ltd. Mr. Kalyan, a director of Kalyan Synthetics Ltd, holds 28% of the voting power in Vardhman Mills Pvt Ltd. Under Section 185, how can this loan be validly advanced?',
+    options: [
+      { id: 'a', text: 'The loan is strictly and totally prohibited under Section 185(1) under any circumstance' },
+      { id: 'b', text: 'Permissible if approved by a Special Resolution in general meeting and the borrowing company uses the funds strictly for its principal business activities' },
+      { id: 'c', text: 'Permissible with simple Board of Directors approval by ordinary majority' },
+      { id: 'd', text: 'Permissible only if prior approval of the National Company Law Tribunal (NCLT) is obtained' }
+    ],
+    correctOptionId: 'b',
+    trapNote: 'Section 185(1) prohibits loans to director/partner/relative. But Section 185(2) permits loans to an entity where director holds >= 25% voting power IF approved by SPECIAL RESOLUTION and utilized by borrowing company for principal business activity!',
+    explanation: 'Under Section 185(2) of the Companies Act, 2013, a company may advance any loan to any person in whom any of the directors is interested (which includes a private company in which director holds >= 25% voting power) if a Special Resolution is passed in General Meeting and the loan is utilized by the borrower for its principal business activities.'
+  },
+  {
+    id: 'mcq_p2_adv_sec188',
+    subjectId: 'p2_law',
+    chapterId: 'mgmt_admin',
+    type: 'mcq',
+    importance: 'HIGH',
+    source: 'ICAI Exam Style: Section 188 Related Party Transactions Arm’s Length',
+    marks: 2,
+    difficulty: 'Examiner Favorite',
+    icaiReference: 'Section 188(1) Proviso Companies Act, 2013',
+    questionText: 'Surya Steel Ltd enters into a contract for sale of specialized steel billets amounting to ₹ 80 Crores with an entity where its Managing Director holds 40% equity. The transaction is entered into in the ordinary course of business and is transacted at prevailing arm’s length market price. Which approval is required under Section 188?',
+    options: [
+      { id: 'a', text: 'Approval of Shareholders by Special Resolution is mandatory due to size exceeding ₹ 50 Crores' },
+      { id: 'b', text: 'Approval of Central Government (MCA) is required' },
+      { id: 'c', text: 'No Board approval or Shareholder approval is required under Section 188 because transactions in the ordinary course of business at arm’s length are exempt' },
+      { id: 'd', text: 'Ordinary Resolution of disinterested shareholders is required' }
+    ],
+    correctOptionId: 'c',
+    trapNote: 'Under the 4th Proviso to Section 188(1), nothing in Section 188(1) shall apply to any transactions entered into by the company in its ordinary course of business other than transactions which are not on an arm’s length basis!',
+    explanation: 'As per the Fourth Proviso to Section 188(1) of the Companies Act, 2013, the requirement of Board approval and Shareholder resolution does NOT apply to any contract entered into by the company in its ordinary course of business, provided the transaction is on an arm’s length basis.'
+  },
+  {
+    id: 'mcq_p2_adv_sec90',
+    subjectId: 'p2_law',
+    chapterId: 'mgmt_admin',
+    type: 'mcq',
+    importance: 'HIGH',
+    source: 'ICAI Exam Style: Section 90 Significant Beneficial Ownership (SBO)',
+    marks: 2,
+    difficulty: 'Examiner Favorite',
+    icaiReference: 'Section 90 Companies Act, 2013 & Companies (SBO) Rules',
+    questionText: 'Under Section 90 of the Companies Act, 2013 read with the SBO Rules, what is the minimum threshold of indirect or direct shareholding/voting rights that constitutes an individual as a "Significant Beneficial Owner" (SBO) in a reporting company?',
+    options: [
+      { id: 'a', text: 'Not less than 25%' },
+      { id: 'b', text: 'Not less than 5%' },
+      { id: 'c', text: 'Not less than 10%' },
+      { id: 'd', text: 'Not less than 51%' }
+    ],
+    correctOptionId: 'c',
+    trapNote: 'In the original Companies Act 2013 text, 25% was referenced, but the Companies (Significant Beneficial Owners) Rules 2018 lowered and prescribed the definitive statutory threshold to strictly NOT LESS THAN 10%!',
+    explanation: 'Under Rule 2(1)(h) of the Companies (Significant Beneficial Owners) Rules, 2018, an individual is an SBO if he holds directly or indirectly not less than 10% of shares, not less than 10% of voting rights, or has the right to receive or participate in not less than 10% of the total distributable dividend.'
+  },
+  {
+    id: 'mcq_p2_adv_gca',
+    subjectId: 'p2_law',
+    chapterId: 'general_clauses_interpretation',
+    type: 'mcq',
+    importance: 'HIGH',
+    source: 'ICAI Exam Style: General Clauses Act 1897 Section 27 Service by Post',
+    marks: 2,
+    difficulty: 'Examiner Favorite',
+    icaiReference: 'Section 27 General Clauses Act, 1897',
+    questionText: 'A statutory show-cause notice was sent by the Registrar to a company by registered post with prepaid postage, properly addressed to its registered office. The envelope was returned with the remark "refused by recipient". As per Section 27 of the General Clauses Act, 1897, what is the legal presumption regarding service?',
+    options: [
+      { id: 'a', text: 'Service is deemed to be properly effected at the time at which the letter would be delivered in the ordinary course of post' },
+      { id: 'b', text: 'Service is completely void and fresh notice must be served by hand delivery' },
+      { id: 'c', text: 'Service is valid only if public advertisement in newspapers is simultaneously issued' },
+      { id: 'd', text: 'The sender must file a police complaint before service is legally recognized' }
+    ],
+    correctOptionId: 'a',
+    trapNote: 'Under Section 27, if a document is properly addressed, prepaid, and posted by registered post, service is DEEMED to have been effected unless contrary is proved by addressee.',
+    explanation: 'Under Section 27 of the General Clauses Act, 1897, service is deemed to be effected by properly addressing, prepaying, and posting by registered post, and unless the contrary is proved, to have been effected at the time at which the letter would be delivered in the ordinary course of post.'
+  },
+
+  // Paper 3: Taxation (Income Tax & GST)
+  {
+    id: 'mcq_p3_adv_marginal_relief',
+    subjectId: 'p3_tax',
+    chapterId: 'total_income_comp',
+    type: 'mcq',
+    importance: 'HIGH',
+    source: 'ICAI Exam Style: Section 115BAC Marginal Relief Computation',
+    marks: 2,
+    difficulty: 'Examiner Favorite',
+    icaiReference: 'Section 115BAC(1A) Proviso read with Section 87A',
+    questionText: 'Mr. Arvind (resident individual, age 32) has Total Taxable Income of ₹ 7,15,000 for AY 2024-25 under the default tax regime under Section 115BAC(1A). Compute his net tax liability before health & education cess, considering statutory Marginal Relief under Section 87A proviso.',
+    options: [
+      { id: 'a', text: '₹ 26,500' },
+      { id: 'b', text: '₹ 15,000' },
+      { id: 'c', text: '₹ 11,500' },
+      { id: 'd', text: 'NIL' }
+    ],
+    correctOptionId: 'b',
+    trapNote: 'Tax on 7,15,000 under slab rates = 15,000 (up to 6L) + 11,500 (10% on 1.15L) = ₹ 26,500. Income exceeding ₹ 7,00,000 is only ₹ 15,000! Under Marginal Relief, tax cannot exceed the amount by which income exceeds ₹ 7 Lakhs (i.e. max tax is ₹ 15,000)!',
+    explanation: 'Under the Proviso to Section 115BAC(1A), where Total Income exceeds ₹ 7,00,000 by a small amount, marginal relief ensures that the tax payable shall not exceed the income in excess of ₹ 7,00,000. Income above ₹ 7L = ₹ 7,15,000 - ₹ 7,00,000 = ₹ 15,000. Slab tax = ₹ 26,500. Marginal Relief = ₹ 26,500 - ₹ 15,000 = ₹ 11,500. Net tax before cess = ₹ 15,000.'
+  },
+  {
+    id: 'mcq_p3_adv_sec194q',
+    subjectId: 'p3_tax',
+    chapterId: 'pgbp_deductions',
+    type: 'mcq',
+    importance: 'HIGH',
+    source: 'ICAI Exam Style: Section 194Q TDS vs Section 206C(1H) TCS Conflict',
+    marks: 2,
+    difficulty: 'Examiner Favorite',
+    icaiReference: 'Section 194Q(5) & Section 206C(1H) Second Proviso',
+    questionText: 'Company A (Buyer, turnover ₹ 25 Crores in preceding FY) purchases industrial polymers worth ₹ 85 Lakhs from Company B (Seller, turnover ₹ 18 Crores in preceding FY). Who is liable to deduct TDS or collect TCS under the Income-tax Act, 1961?',
+    options: [
+      { id: 'a', text: 'Company B must collect TCS @ 0.1% on ₹ 35 Lakhs under Section 206C(1H)' },
+      { id: 'b', text: 'Company A must deduct TDS @ 0.1% on ₹ 35 Lakhs under Section 194Q, and Section 206C(1H) shall NOT apply' },
+      { id: 'c', text: 'Both Company A must deduct TDS and Company B must collect TCS simultaneously' },
+      { id: 'd', text: 'No tax is deductible or collectible because threshold is ₹ 1 Crore' }
+    ],
+    correctOptionId: 'b',
+    trapNote: 'Under Section 206C(1H) second proviso, if buyer is liable to deduct TDS under Section 194Q, TCS under Section 206C(1H) does NOT apply! Section 194Q has statutory primacy over 206C(1H)!',
+    explanation: 'Under Section 194Q, a buyer having turnover > ₹ 10 Cr must deduct TDS @ 0.1% on value exceeding ₹ 50 Lakhs (₹ 85L - ₹ 50L = ₹ 35 Lakhs). By virtue of Section 194Q(5) and the second proviso to Section 206C(1H), if a transaction is subject to TDS u/s 194Q, TCS u/s 206C(1H) shall not apply.'
+  },
+  {
+    id: 'mcq_p3_adv_gst_tos',
+    subjectId: 'p3_tax',
+    chapterId: 'gst_supply_charge',
+    type: 'mcq',
+    importance: 'HIGH',
+    source: 'ICAI Exam Style: GST Time of Supply Continuous Supply of Services',
+    marks: 2,
+    difficulty: 'Examiner Favorite',
+    icaiReference: 'Section 13(2) read with Section 31(5) of CGST Act, 2017',
+    questionText: 'M/s SecureTech provides annual security surveillance services under a contract where quarterly billing statements are issued on the last day of each quarter. For the quarter ending 30th September, the billing statement was issued on 30th September. Tax invoice was issued on 22nd October. Payment was credited to bank account on 15th October. What is the Time of Supply under GST?',
+    options: [
+      { id: 'a', text: '22nd October (Date of Invoice)' },
+      { id: 'b', text: '30th September (Date of Statement / Due Date of Payment)' },
+      { id: 'c', text: '15th October (Date of Payment Credit)' },
+      { id: 'd', text: '20th November (Due date of GSTR-3B)' }
+    ],
+    correctOptionId: 'b',
+    trapNote: 'Under Section 31(5), in continuous supply of services, invoice MUST be issued on or before the date of statement (30th Sept). Since invoice was delayed to 22nd Oct, time of supply falls back to date of provision / due date under Section 13(2)(b), which is 30th September!',
+    explanation: 'Under Section 31(5)(a), where the due date of payment or statement is ascertainable from contract, invoice must be issued on or before that date (30th Sept). Since invoice was issued after the due date, Time of Supply as per Section 13(2)(b) is the earlier of date of provision (30th Sept) or date of payment (15th Oct), which is 30th September.'
+  },
+
+  // Paper 4: Cost and Management Accounting
+  {
+    id: 'mcq_p4_adv_idle_time',
+    subjectId: 'p4_costing',
+    chapterId: 'standard_costing',
+    type: 'mcq',
+    importance: 'HIGH',
+    source: 'ICAI Exam Style: Standard Costing Idle Time Variance Treatment',
+    marks: 2,
+    difficulty: 'Examiner Favorite',
+    icaiReference: 'Standard Costing Principles - Labour Variances',
+    questionText: 'In a manufacturing plant, standard hourly wage is ₹ 60. During the week, 50 workers worked 42 hours each and were paid @ ₹ 65 per hour. Due to a major power breakdown, 150 worker-hours were lost as idle time. What is the Idle Time Variance, and how is it always characterized?',
+    options: [
+      { id: 'a', text: '₹ 9,000 Adverse (Idle time variance is ALWAYS Adverse)' },
+      { id: 'b', text: '₹ 9,750 Adverse' },
+      { id: 'c', text: '₹ 9,000 Favourable if production targets were met' },
+      { id: 'd', text: 'NIL, because power breakdown is an uncontrollable external event' }
+    ],
+    correctOptionId: 'a',
+    trapNote: 'Idle Time Variance = Idle Hours × STANDARD RATE (not actual rate!). 150 hrs × ₹ 60 = ₹ 9,000 Adverse. Idle time variance can NEVER be Favourable!',
+    explanation: 'Idle Time Variance is calculated as: Idle Hours × Standard Rate = 150 hours × ₹ 60 = ₹ 9,000 (Adverse). Because standard cost systems do not budget for abnormal idle time, idle time variance is by definition ALWAYS ADVERSE.'
+  },
+  {
+    id: 'mcq_p4_adv_limiting_factor',
+    subjectId: 'p4_costing',
+    chapterId: 'marginal_costing',
+    type: 'mcq',
+    importance: 'HIGH',
+    source: 'ICAI Exam Style: Marginal Costing Limiting Factor Optimum Mix',
+    marks: 2,
+    difficulty: 'Examiner Favorite',
+    icaiReference: 'Marginal Costing Decision Rule for Key Factor',
+    questionText: `A company manufactures two products: Product X and Product Y. Machine hours are the limiting factor (bottleneck constraint).
+- Product X: Selling price ₹ 150, Variable cost ₹ 90, Machine hours required per unit = 2 hours.
+- Product Y: Selling price ₹ 220, Variable cost ₹ 140, Machine hours required per unit = 4 hours.
+To maximize profitability under constrained capacity, which product should be given highest production priority?`,
+    options: [
+      { id: 'a', text: 'Product Y, because it generates higher unit contribution of ₹ 80' },
+      { id: 'b', text: 'Product X, because it generates higher contribution per machine hour of ₹ 30' },
+      { id: 'c', text: 'Both should be produced equally in a 50:50 ratio' },
+      { id: 'd', text: 'Product Y, because its selling price is higher' }
+    ],
+    correctOptionId: 'b',
+    trapNote: 'Students mistakenly rank by unit contribution (Y has ₹ 80 vs X has ₹ 60). Under a limiting factor, ranking must strictly be done by Contribution PER UNIT OF LIMITING FACTOR!',
+    explanation: 'Contribution per unit: Product X = ₹ 150 - ₹ 90 = ₹ 60; Product Y = ₹ 220 - ₹ 140 = ₹ 80. Contribution per machine hour: Product X = ₹ 60 / 2 hrs = ₹ 30 per hour; Product Y = ₹ 80 / 4 hrs = ₹ 20 per hour. Since Product X yields ₹ 30/hr vs ₹ 20/hr for Y, Product X must be given highest production priority.'
+  },
+
+  // Paper 5: Auditing and Ethics
+  {
+    id: 'mcq_p5_adv_sa705_disclaimer',
+    subjectId: 'p5_audit',
+    chapterId: 'audit_report',
+    type: 'mcq',
+    importance: 'HIGH',
+    source: 'ICAI Exam Style: SA 705 Disclaimer of Opinion Scope Limitation',
+    marks: 2,
+    difficulty: 'Examiner Favorite',
+    icaiReference: 'SA 705 (Revised) Modifications to the Opinion - Para 9 & 10',
+    questionText: 'An auditor is unable to obtain sufficient appropriate audit evidence regarding opening balances and 45% of current year trade receivables and inventory due to a complete destruction of accounting servers by ransomware without backups. The potential effects are both material and pervasive. What opinion must the auditor express under SA 705?',
+    options: [
+      { id: 'a', text: 'Adverse Opinion' },
+      { id: 'b', text: 'Qualified Opinion' },
+      { id: 'c', text: 'Disclaimer of Opinion' },
+      { id: 'd', text: 'Unmodified Opinion with Key Audit Matter paragraph' }
+    ],
+    correctOptionId: 'c',
+    trapNote: 'An Adverse Opinion is expressed when the auditor HAS obtained evidence of misstatement that is material and pervasive. When the auditor is UNABLE TO OBTAIN evidence (scope limitation) and effects are material and pervasive, it is strictly a DISCLAIMER OF OPINION!',
+    explanation: 'Under SA 705 Para 9, the auditor shall disclaim an opinion when the auditor is unable to obtain sufficient appropriate audit evidence on which to base the opinion, and the auditor concludes that the possible effects on the financial statements of undetected misstatements, if any, could be both material and pervasive.'
+  },
+  {
+    id: 'mcq_p5_adv_sec143_12',
+    subjectId: 'p5_audit',
+    chapterId: 'fraud_responsibilities',
+    type: 'mcq',
+    importance: 'HIGH',
+    source: 'ICAI Exam Style: Section 143(12) Fraud Reporting to Central Government',
+    marks: 2,
+    difficulty: 'Examiner Favorite',
+    icaiReference: 'Section 143(12) read with Rule 13 of Companies (Audit and Auditors) Rules, 2014',
+    questionText: 'During the audit of a listed company, the statutory auditor discovers an offense involving fraud committed by an officer amounting to ₹ 1.8 Crores. As per Section 143(12) and Rule 13, within what timeline must the auditor report this fraud to the Central Government (MCA) in Form ADT-4?',
+    options: [
+      { id: 'a', text: 'Directly report to Central Government within 2 days of discovery without asking management' },
+      { id: 'b', text: 'Forward report to Board/Audit Committee within 2 days for reply within 45 days, and on receipt of reply (or failure to reply), forward report to Central Government within 15 days in Form ADT-4' },
+      { id: 'c', text: 'Report to Central Government only if Board fails to file a police FIR within 90 days' },
+      { id: 'd', text: 'Disclose only in the Auditor’s Report under CARO 2020 at the AGM' }
+    ],
+    correctOptionId: 'b',
+    trapNote: 'Auditor must first report to Board/Audit Committee within 2 days asking for reply within 45 days, and thereafter report to Central Government within 15 days in Form ADT-4.',
+    explanation: 'Under Section 143(12) read with Rule 13, for fraud >= ₹ 1 Crore, the auditor shall report the matter to Board/Audit Committee within 2 days seeking reply within 45 days. On receipt of reply or expiry of 45 days, the auditor shall forward the report along with reply to the Central Government within 15 days in Form ADT-4.'
+  },
+
+  // Paper 6: Financial Management and Strategic Management
+  {
+    id: 'mcq_p6_adv_wacc_capm',
+    subjectId: 'p6_fm_sm',
+    chapterId: 'fm_cost_of_capital',
+    type: 'mcq',
+    importance: 'HIGH',
+    source: 'ICAI Exam Style: Cost of Equity CAPM with Market Risk Premium',
+    marks: 2,
+    difficulty: 'Examiner Favorite',
+    icaiReference: 'Cost of Capital Estimation - Capital Asset Pricing Model',
+    questionText: `A company's equity beta is 1.4. The risk-free rate of return (Government Treasury bond yield) is 7%. The expected market return (Rm) is 15%. What is the cost of equity (Ke) using the Capital Asset Pricing Model (CAPM)?`,
+    options: [
+      { id: 'a', text: '18.2%' },
+      { id: 'b', text: '21.0%' },
+      { id: 'c', text: '14.5%' },
+      { id: 'd', text: '16.8%' }
+    ],
+    correctOptionId: 'a',
+    trapNote: 'CAPM formula: Ke = Rf + Beta × (Rm - Rf). Students often forget to subtract Rf from Rm and multiply Beta by Rm directly. Market Risk Premium = 15% - 7% = 8%. Ke = 7% + 1.4 × 8% = 18.2%.',
+    explanation: 'Ke = Rf + β(Rm - Rf) = 7% + 1.4 × (15% - 7%) = 7% + 1.4 × 8% = 7% + 11.2% = 18.2%.'
+  },
+  {
+    id: 'mcq_p6_adv_bcg_matrix',
+    subjectId: 'p6_fm_sm',
+    chapterId: 'sm_strategic_mgmt',
+    type: 'mcq',
+    importance: 'HIGH',
+    source: 'ICAI Exam Style: BCG Growth-Share Matrix Strategic Quadrants',
+    marks: 2,
+    difficulty: 'Examiner Favorite',
+    icaiReference: 'BCG Growth-Share Matrix Framework',
+    questionText: 'Under the Boston Consulting Group (BCG) Growth-Share Matrix, a Strategic Business Unit (SBU) that operates in a high-growth market but currently possesses a low relative market share is categorized as:',
+    options: [
+      { id: 'a', text: 'Cash Cow' },
+      { id: 'b', text: 'Question Mark (Problem Child)' },
+      { id: 'c', text: 'Star' },
+      { id: 'd', text: 'Dog' }
+    ],
+    correctOptionId: 'b',
+    trapNote: 'High Growth + Low Market Share = Question Mark. High Growth + High Market Share = Star. Low Growth + High Market Share = Cash Cow. Low Growth + Low Market Share = Dog.',
+    explanation: 'In the BCG matrix, SBUs in high-growth markets with low market share are called Question Marks or Problem Children. They require substantial cash infusion to maintain market share and have the potential to become Stars if nurtured, or Dogs if neglected.'
   }
 ];
 

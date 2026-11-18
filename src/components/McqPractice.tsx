@@ -38,7 +38,6 @@ export const McqPractice: React.FC<McqPracticeProps> = ({
   );
   const [selectedChapterId, setSelectedChapterId] = React.useState<string>('all');
   const [onlyHighYield, setOnlyHighYield] = React.useState<boolean>(false);
-  const [revisionMode, setRevisionMode] = React.useState<boolean>(false);
   const [masteryTier, setMasteryTier] = React.useState<'all' | 'beginner' | 'intermediate' | 'hard'>(
     initialMasteryTier || 'all'
   );
@@ -70,30 +69,28 @@ export const McqPractice: React.FC<McqPracticeProps> = ({
   const [sessionTotal, setSessionTotal] = React.useState<number>(0);
   const [currentStreak, setCurrentStreak] = React.useState<number>(0);
 
-  // Initialize or re-populate queue when subject/filter/tier/revision changes
+  // Initialize or re-populate queue when subject/filter/tier changes
   React.useEffect(() => {
+    // 1. Filter out all previously attempted questions
     const curated = SpacedRepetitionService.filterQuestions(MCQS_DATABASE, {
       subjectId: selectedSubjectId,
       chapterId: selectedChapterId,
       onlyHighYield,
-      masteryTier,
-      revisionOnly: revisionMode
+      masteryTier
     });
 
-    // Populate with curated questions (options shuffled)
+    // 2. Populate with unattempted curated questions (shuffled options)
     const initialList: McqQuestion[] = curated.map(q => shuffleMcqOptions(q));
     
-    // In practice mode, add fresh dynamic questions matching tier
-    if (!revisionMode) {
-      for (let i = 0; i < 10; i++) {
-        initialList.push(QuestionGeneratorService.generateDynamicMcq(
-          selectedSubjectId,
-          masteryTier === 'all' ? undefined : masteryTier
-        ));
-      }
+    // 3. Always add 15 fresh algorithmic ICAI questions generated on the fly
+    for (let i = 0; i < 15; i++) {
+      initialList.push(QuestionGeneratorService.generateDynamicMcq(
+        selectedSubjectId,
+        masteryTier === 'all' ? undefined : masteryTier
+      ));
     }
 
-    // Fisher-Yates shuffle initial list so questions never follow a predictable sequence
+    // 4. Fisher-Yates shuffle the entire mix so questions never follow a predictable sequence
     for (let i = initialList.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [initialList[i], initialList[j]] = [initialList[j], initialList[i]];
@@ -103,7 +100,7 @@ export const McqPractice: React.FC<McqPracticeProps> = ({
     setCurrentIndex(0);
     setSelectedOptionId(null);
     setShowExplanation(false);
-  }, [selectedSubjectId, selectedChapterId, onlyHighYield, masteryTier, revisionMode]);
+  }, [selectedSubjectId, selectedChapterId, onlyHighYield, masteryTier]);
 
   const currentQuestion: McqQuestion = questionQueue[currentIndex] || QuestionGeneratorService.generateDynamicMcq(
     selectedSubjectId,
@@ -118,10 +115,12 @@ export const McqPractice: React.FC<McqPracticeProps> = ({
     }
   }, [currentIndex, currentQuestion]);
 
-  // Ensure queue never runs dry: auto-append questions as user progresses
+  // Ensure queue never runs dry: auto-append 5 fresh questions as user progresses
   const handleNextQuestion = () => {
-    if (currentIndex >= questionQueue.length - 2) {
+    if (currentIndex >= questionQueue.length - 3) {
       const moreQuestions = [
+        QuestionGeneratorService.generateDynamicMcq(selectedSubjectId, masteryTier === 'all' ? undefined : masteryTier),
+        QuestionGeneratorService.generateDynamicMcq(selectedSubjectId, masteryTier === 'all' ? undefined : masteryTier),
         QuestionGeneratorService.generateDynamicMcq(selectedSubjectId, masteryTier === 'all' ? undefined : masteryTier),
         QuestionGeneratorService.generateDynamicMcq(selectedSubjectId, masteryTier === 'all' ? undefined : masteryTier),
         QuestionGeneratorService.generateDynamicMcq(selectedSubjectId, masteryTier === 'all' ? undefined : masteryTier)
@@ -219,20 +218,12 @@ export const McqPractice: React.FC<McqPracticeProps> = ({
           )}
         </div>
 
-        {/* Live Session Counter & Streak */}
+        {/* Live Session Counter & Anti-Repetition Shield */}
         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-          {/* Revision Mode Switch */}
-          <button
-            onClick={() => setRevisionMode(prev => !prev)}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
-              revisionMode
-                ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20'
-                : 'bg-slate-900 text-slate-300 hover:text-white border border-slate-700'
-            }`}
-          >
-            <RotateCcw className={`w-3.5 h-3.5 ${revisionMode ? 'animate-spin' : ''}`} />
-            <span>{revisionMode ? 'Revision (Important Only)' : 'Practice (Fresh Qs)'}</span>
-          </button>
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-950/60 border border-emerald-700/60 text-emerald-300 text-xs font-semibold">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span>Anti-Repetition Shield: Active</span>
+          </div>
 
           <div className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 text-xs font-bold font-mono">
             <span className="text-slate-400">Score:</span>
@@ -283,23 +274,29 @@ export const McqPractice: React.FC<McqPracticeProps> = ({
         </div>
       </div>
 
-      {/* Empty State for Revision Mode */}
+      {/* Empty State */}
       {questionQueue.length === 0 && (
         <div className="bg-slate-800 rounded-3xl border border-slate-700/90 p-8 sm:p-12 text-center space-y-4 shadow-xl">
-          <div className="w-16 h-16 mx-auto rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-3xl">
-            🏆
+          <div className="w-16 h-16 mx-auto rounded-2xl bg-blue-500/20 text-blue-400 flex items-center justify-center text-3xl">
+            📚
           </div>
-          <h3 className="text-xl font-bold text-white">All Caught Up in Revision!</h3>
+          <h3 className="text-xl font-bold text-white">Generating More ICAI Questions...</h3>
           <p className="text-sm text-slate-300 max-w-md mx-auto leading-relaxed">
-            {revisionMode 
-              ? "You have no attempted high-importance questions pending revision for this selection. High-importance questions you attempt will automatically appear here for spaced revision. Low-importance questions are permanently retired once attempted."
-              : "No questions match your current filter. Try selecting 'All Levels' or another subject."}
+            All previously attempted questions have been filtered out by the Anti-Repetition Shield.
           </p>
           <button
-            onClick={() => setRevisionMode(false)}
+            onClick={() => {
+              const freshQs = [
+                QuestionGeneratorService.generateDynamicMcq(selectedSubjectId),
+                QuestionGeneratorService.generateDynamicMcq(selectedSubjectId),
+                QuestionGeneratorService.generateDynamicMcq(selectedSubjectId)
+              ];
+              setQuestionQueue(freshQs);
+              setCurrentIndex(0);
+            }}
             className="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-bold rounded-xl transition-all shadow-md shadow-blue-600/30"
           >
-            Switch to Fresh Practice Mode
+            Load 100% Brand New Questions
           </button>
         </div>
       )}

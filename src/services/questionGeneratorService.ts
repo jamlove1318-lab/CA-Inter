@@ -79,7 +79,13 @@ export class QuestionGeneratorService {
       this.generateAccountsInternalRecon,
       this.generateAccountsAmalgamation,
       this.generateAccountsBranch,
-      this.generateAccountsAs12
+      this.generateAccountsAs12,
+      this.generateAccountsAs15EmployeeBenefits,
+      this.generateAccountsAs28ImpairmentCGU,
+      this.generateAccountsAs11ForeignExchange,
+      this.generateAccountsSchedule3Classification,
+      this.generateAccountsPieceMealDistribution,
+      this.generateAccountsAs10SpareParts
     ];
     const pick = generators[Math.floor(Math.random() * generators.length)];
     return pick();
@@ -378,6 +384,174 @@ export class QuestionGeneratorService {
     );
   }
 
+  // AS 15 Employee Benefits Actuarial Treatment
+  private static generateAccountsAs15EmployeeBenefits(): McqQuestion {
+    const lossAmt = [1200000, 1500000, 1800000, 2400000][Math.floor(Math.random() * 4)];
+    return QuestionGeneratorService.buildShuffledMcq(
+      {
+        id: `dyn_acc_as15_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        subjectId: 'p1_adv_acc',
+        chapterId: 'as_revenue_inv',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'ICAI Exam Style: AS 15 Actuarial Gains & Losses',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'AS 15 (Revised) Employee Benefits - Para 92',
+        questionText: `An unlisted company determines an actuarial loss of ₹ ${lossAmt.toLocaleString('en-IN')} on its defined benefit pension scheme at the end of the financial year. How must this actuarial loss be accounted for under AS 15 (Revised)?`,
+        trapNote: 'Do not confuse Indian AS 15 with Ind AS 19. Under AS 15, actuarial gains and losses MUST be recognized immediately in the Statement of Profit and Loss, not OCI or reserves.',
+        explanation: 'As per AS 15 Para 92, actuarial gains and losses should be recognized immediately in the Statement of Profit and Loss as income or expense in the period in which they arise.'
+      },
+      'Recognized immediately and in full in the Statement of Profit and Loss as an expense',
+      [
+        'Deferred and amortized over the expected average remaining working lives of employees',
+        'Debited directly to Other Comprehensive Income (OCI) without touching P&L',
+        'Carried as an asset under Miscellaneous Expenditure until settled'
+      ]
+    );
+  }
+
+  // AS 28 Impairment Loss Allocation to CGU
+  private static generateAccountsAs28ImpairmentCGU(): McqQuestion {
+    const gw = 30; // Lakhs
+    const bld = 90;
+    const plant = 60;
+    const carryingTotal = gw + bld + plant; // 180
+    const recAmt = 110; // Impairment = 70
+    const totalLoss = carryingTotal - recAmt; // 70
+    const lossToBld = Math.round((totalLoss - gw) * (bld / (bld + plant))); // (70 - 30) * (90/150) = 40 * 0.6 = 24
+
+    return QuestionGeneratorService.buildShuffledMcq(
+      {
+        id: `dyn_acc_as28_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        subjectId: 'p1_adv_acc',
+        chapterId: 'as_ppe_dep',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'ICAI Exam Style: AS 28 CGU Impairment Loss Allocation',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'AS 28 Impairment of Assets - Para 87',
+        questionText: `A Cash Generating Unit (CGU) consists of Goodwill: ₹ ${gw} Lakhs, Factory Building: ₹ ${bld} Lakhs, and Machinery: ₹ ${plant} Lakhs (Total Carrying Amount ₹ ${carryingTotal} Lakhs).
+At year end, the Recoverable Amount of the CGU is assessed at ₹ ${recAmt} Lakhs. What is the impairment loss allocated to the Factory Building as per AS 28?`,
+        trapNote: 'Under AS 28, the impairment loss must FIRST reduce the carrying amount of any goodwill allocated to the CGU to ZERO, and only the remaining loss is allocated pro rata to other assets!',
+        explanation: `Total impairment loss = ₹ ${carryingTotal}L - ₹ ${recAmt}L = ₹ ${totalLoss} Lakhs. First, Goodwill absorbs ₹ ${gw} Lakhs (reducing it to zero). The remaining loss of ₹ ${totalLoss - gw} Lakhs is allocated between Building (₹ ${bld}L) and Machinery (₹ ${plant}L) in ratio of 90:60 (3:2). Loss to Building = ₹ ${totalLoss - gw}L × (90 / 150) = ₹ ${lossToBld} Lakhs.`
+      },
+      `₹ ${lossToBld} Lakhs (Goodwill reduced to zero first, then remaining loss allocated pro-rata)`,
+      [
+        `₹ ${Math.round(totalLoss * (bld / carryingTotal))} Lakhs (Allocating total loss pro-rata across all assets including goodwill)`,
+        `₹ ${totalLoss - gw} Lakhs (Allocating entire balance to building only)`,
+        `₹ ${gw} Lakhs`
+      ]
+    );
+  }
+
+  // AS 11 Foreign Exchange Monetary vs Non-Monetary
+  private static generateAccountsAs11ForeignExchange(): McqQuestion {
+    return QuestionGeneratorService.buildShuffledMcq(
+      {
+        id: `dyn_acc_as11_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        subjectId: 'p1_adv_acc',
+        chapterId: 'as_revenue_inv',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'ICAI Exam Style: AS 11 Balance Sheet Foreign Currency Reporting',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'AS 11 The Effects of Changes in Foreign Exchange Rates - Para 11',
+        questionText: 'At each balance sheet date, how should foreign currency monetary items and non-monetary items carried at historical cost be reported as per AS 11?',
+        trapNote: 'Monetary items (debtors, creditors, bank loans) are reported using CLOSING RATE with exchange differences in P&L. Non-monetary items (plant, machinery, inventory at cost) remain at historical transaction rate!',
+        explanation: 'As per AS 11 Para 11, foreign currency monetary items should be reported using the closing rate, and exchange differences recognized in P&L. Non-monetary items which are carried in terms of historical cost should be reported using the exchange rate at the date of the transaction.'
+      },
+      'Monetary items at Closing Rate (exchange difference to P&L); Non-monetary items at Transaction Date Historical Rate',
+      [
+        'Both monetary and non-monetary items must be translated at Closing Rate with differences in Capital Reserve',
+        'Both monetary and non-monetary items remain permanently at historical transaction rate',
+        'Monetary items at average annual rate; Non-monetary items at replacement market rate'
+      ]
+    );
+  }
+
+  // Schedule III Operating Cycle Classification
+  private static generateAccountsSchedule3Classification(): McqQuestion {
+    const opCycle = [18, 20, 24][Math.floor(Math.random() * 3)];
+    const settlementMonths = opCycle - 3;
+    return QuestionGeneratorService.buildShuffledMcq(
+      {
+        id: `dyn_acc_sch3_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        subjectId: 'p1_adv_acc',
+        chapterId: 'company_accounts_buyback',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'ICAI Exam Style: Schedule III Operating Cycle & Current Classification',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'Schedule III Division I to Companies Act, 2013',
+        questionText: `A construction contractor has an identified normal operating cycle of ${opCycle} months for infrastructure projects. Trade payables for raw cement amounting to ₹ 8 Crores are due for settlement in ${settlementMonths} months from the balance sheet date. How should these payables be classified under Schedule III?`,
+        trapNote: 'A liability is classified as CURRENT if it is expected to be settled in the company’s normal operating cycle, even if that operating cycle is longer than 12 months!',
+        explanation: `Under Schedule III Division I, a liability is classified as Current when it is expected to be settled in the company's normal operating cycle. Since the normal operating cycle is ${opCycle} months, payables due in ${settlementMonths} months are Current Liabilities.`
+      },
+      `Current Liability, because settlement falls within the company’s normal operating cycle (${opCycle} months)`,
+      [
+        `Non-Current Liability, because settlement exceeds 12 months`,
+        `Split into Current (12 months portion) and Non-Current (balance portion)`,
+        `Contingent Liability disclosed only in notes`
+      ]
+    );
+  }
+
+  // Partnership Piece-Meal Distribution Order
+  private static generateAccountsPieceMealDistribution(): McqQuestion {
+    return QuestionGeneratorService.buildShuffledMcq(
+      {
+        id: `dyn_acc_piecemeal_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        subjectId: 'p1_adv_acc',
+        chapterId: 'branch_accounts',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'ICAI Exam Style: Piecemeal Cash Distribution Order of Priority',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'Section 48 of the Indian Partnership Act, 1932',
+        questionText: 'In the piecemeal distribution of cash on dissolution of a partnership firm, what is the strict statutory order of priority for application of realized assets under Section 48?',
+        trapNote: 'Order: 1. Realization expenses, 2. Outside third-party creditors, 3. Partners loans ratably, 4. Partners capital accounts ratably.',
+        explanation: 'Under Section 48 of the Partnership Act: (a) First pay debts of the firm to third parties (after realization expenses); (b) Next pay to each partner ratably what is due to him on account of advances/loans; (c) Next pay to each partner ratably what is due to him on account of capital.'
+      },
+      'Realization Expenses ➔ Outside Creditors ➔ Partners’ Loans (ratably) ➔ Partners’ Capitals',
+      [
+        'Partners’ Capitals ➔ Partners’ Loans ➔ Outside Creditors ➔ Realization Expenses',
+        'Outside Creditors ➔ Partners’ Capitals ➔ Partners’ Loans ➔ Realization Expenses',
+        'All claimants (creditors and partners) share proportionately on a pro-rata basis simultaneously'
+      ]
+    );
+  }
+
+  // AS 10 Major Spare Parts & Standby Equipment
+  private static generateAccountsAs10SpareParts(): McqQuestion {
+    return QuestionGeneratorService.buildShuffledMcq(
+      {
+        id: `dyn_acc_as10_spares_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        subjectId: 'p1_adv_acc',
+        chapterId: 'as_ppe_dep',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'ICAI Exam Style: AS 10 Spare Parts & Standby Equipment',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'AS 10 (Revised) Property, Plant and Equipment - Para 8',
+        questionText: 'A manufacturing company acquires major machinery standby equipment and dedicated spare parts costing ₹ 25 Lakhs that can be used only in connection with an item of PPE and whose use is expected to exceed 12 months. How should they be recognized under AS 10 (Revised)?',
+        trapNote: 'Under revised AS 10, items such as spare parts, stand-by equipment and servicing equipment are recognized as PPE when they meet the definition of PPE. Otherwise, they are classified as inventory under AS 2.',
+        explanation: 'Under AS 10 (Revised) Para 8, spare parts and stand-by equipment are capitalized as Property, Plant and Equipment when they meet the definition of PPE (held for use in production/services and expected to be used during more than one period). They are depreciated over their useful life or the remaining life of the related asset, whichever is shorter.'
+      },
+      'Capitalized as Property, Plant and Equipment (PPE) and depreciated over their useful life',
+      [
+        'Treated as Inventory under AS 2 until actual installation/consumption',
+        'Charged immediately to Profit and Loss as repairs and maintenance expenditure',
+        'Treated as a Deferred Revenue Expenditure asset amortized over 3 years'
+      ]
+    );
+  }
+
   // =========================================================================
   // PAPER 2: CORPORATE AND OTHER LAWS (WHOLE SYLLABUS)
   // =========================================================================
@@ -392,7 +566,13 @@ export class QuestionGeneratorService {
       this.generateLawAuditDisqual,
       this.generateLawGca,
       this.generateLawInterpretation,
-      this.generateLawFema
+      this.generateLawFema,
+      this.generateLawSec185Loans,
+      this.generateLawSec186Investments,
+      this.generateLawSec188RelatedParty,
+      this.generateLawSec138InternalAudit,
+      this.generateLawSec90Sbo,
+      this.generateLawHeydonMischief
     ];
     const pick = generators[Math.floor(Math.random() * generators.length)];
     return pick();
@@ -667,6 +847,173 @@ Is the company required to constitute a Corporate Social Responsibility (CSR) Co
     );
   }
 
+  // Section 185 Loans to Entities where Director is Interested
+  private static generateLawSec185Loans(): McqQuestion {
+    const loanCr = [10, 15, 25, 40][Math.floor(Math.random() * 4)];
+    const sharePct = [26, 30, 40, 45][Math.floor(Math.random() * 4)];
+    return QuestionGeneratorService.buildShuffledMcq(
+      {
+        id: `dyn_law_sec185_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        subjectId: 'p2_law',
+        chapterId: 'audit_auditors',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'ICAI Exam Style: Section 185 Loans to Interested Entities',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'Section 185(2) Companies Act, 2013',
+        questionText: `A public company proposes to advance a corporate loan of ₹ ${loanCr} Crores to an enterprise in which its director holds ${sharePct}% of total voting power. What are the mandatory legal prerequisites under Section 185(2)?`,
+        trapNote: 'Section 185(1) bars loans to director personally, but Section 185(2) permits loans to entities in which director is interested if approved by SPECIAL RESOLUTION and funds are utilized strictly for principal business activities.',
+        explanation: 'Under Section 185(2), a company may advance a loan to any person in whom any of its directors is interested if: (a) a Special Resolution is passed in General Meeting; and (b) the loans are utilized by the borrowing company for its principal business activities.'
+      },
+      'Special Resolution passed in General Meeting AND borrower utilizes funds strictly for its principal business activities',
+      [
+        'Ordinary Resolution in general meeting and approval of National Company Law Tribunal (NCLT)',
+        'Unanimous Board of Directors approval alone without need for shareholder meeting',
+        'Strictly and completely prohibited under all circumstances under Section 185'
+      ]
+    );
+  }
+
+  // Section 186 Loans and Investments Ceiling
+  private static generateLawSec186Investments(): McqQuestion {
+    const capital = 100;
+    const freeReserves = 60;
+    const secPremium = 40;
+    const test1 = (capital + freeReserves + secPremium) * 0.60; // 60% of 200 = 120
+    const test2 = freeReserves + secPremium; // 100% of 100 = 100
+    const ceiling = Math.max(test1, test2); // 120
+
+    return QuestionGeneratorService.buildShuffledMcq(
+      {
+        id: `dyn_law_sec186_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        subjectId: 'p2_law',
+        chapterId: 'mgmt_admin',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'ICAI Exam Style: Section 186 Inter-Corporate Loan Limits',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'Section 186(2) & 186(3) Companies Act, 2013',
+        questionText: `A company has Paid-up Capital ₹ ${capital} Cr, Free Reserves ₹ ${freeReserves} Cr, and Securities Premium ₹ ${secPremium} Cr.
+Up to what aggregate limit can the Board of Directors advance loans or make investments WITHOUT requiring prior approval by Special Resolution under Section 186?`,
+        trapNote: 'Ceiling is HIGHER of: (a) 60% of (Paid-up capital + Free reserves + Securities premium) OR (b) 100% of (Free reserves + Securities premium).',
+        explanation: `Under Section 186(2), the Board limit is higher of: (a) 60% of (100 + 60 + 40) = 60% of 200 = ₹ 120 Crores; or (b) 100% of (60 + 40) = ₹ 100 Crores. The higher figure is ₹ ${ceiling} Crores. Any loan exceeding this requires a Special Resolution.`
+      },
+      `₹ ${ceiling} Crores (Higher of 60% of owned funds or 100% of free reserves & premium)`,
+      [
+        `₹ ${test2} Crores (100% of Free Reserves and Securities Premium only)`,
+        `₹ 60 Crores (60% of Paid-up Capital only)`,
+        `₹ 50 Crores`
+      ]
+    );
+  }
+
+  // Section 188 Related Party Transactions Arm's Length
+  private static generateLawSec188RelatedParty(): McqQuestion {
+    return QuestionGeneratorService.buildShuffledMcq(
+      {
+        id: `dyn_law_sec188_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        subjectId: 'p2_law',
+        chapterId: 'mgmt_admin',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'ICAI Exam Style: Section 188 Arm’s Length Exemption',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'Section 188(1) Fourth Proviso Companies Act, 2013',
+        questionText: 'Under Section 188 of the Companies Act, 2013, which of the following related party contracts is EXEMPT from requiring Board approval and Shareholder approval?',
+        trapNote: 'Contracts entered into in the ORDINARY COURSE OF BUSINESS on an ARM’S LENGTH BASIS are completely exempt under the 4th Proviso to Section 188(1).',
+        explanation: 'Under the Fourth Proviso to Section 188(1), nothing contained in subsection (1) shall apply to any transactions entered into by the company in its ordinary course of business other than transactions which are not on an arm’s length basis.'
+      },
+      'Any contract entered into in the ordinary course of business on an arm’s length basis',
+      [
+        'Any contract below ₹ 1 Crore regardless of whether it is at arm’s length',
+        'Any contract approved unanimously by all non-executive directors alone',
+        'Contracts involving purchase of immovable property situated in India'
+      ]
+    );
+  }
+
+  // Section 138 Internal Audit Applicability
+  private static generateLawSec138InternalAudit(): McqQuestion {
+    const loans = [105, 120, 140][Math.floor(Math.random() * 3)];
+    return QuestionGeneratorService.buildShuffledMcq(
+      {
+        id: `dyn_law_sec138_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        subjectId: 'p2_law',
+        chapterId: 'audit_auditors',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'ICAI Exam Style: Section 138 Internal Audit Thresholds',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'Section 138 Companies Act, 2013 read with Rule 13 of PAS Rules',
+        questionText: `An unlisted public company has Paid-up share capital of ₹ 35 Crores, Turnover of ₹ 160 Crores, and Outstanding loans/borrowings from banks of ₹ ${loans} Crores at any point of time during the preceding financial year. Is internal audit mandatory under Section 138?`,
+        trapNote: 'For unlisted public companies, internal audit is mandatory if: Capital >= 50 Cr, Turnover >= 200 Cr, Loans from banks/FIs >= 100 Cr, or Deposits >= 25 Cr. Meeting ANY ONE triggers internal audit!',
+        explanation: `Under Rule 13 of Companies (Accounts) Rules, 2014, an unlisted public company is required to appoint an internal auditor if outstanding loans or borrowings from banks or public financial institutions exceed ₹ 100 Crores at any point of time during the preceding FY. Since borrowings are ₹ ${loans} Cr (> 100 Cr), internal audit is MANDATORY.`
+      },
+      `Yes, because outstanding loans/borrowings from banks exceed ₹ 100 Crores at any point during the preceding financial year`,
+      [
+        `No, because turnover is below ₹ 200 Crores and paid-up capital is below ₹ 50 Crores`,
+        `No, internal audit applies only to listed companies`,
+        `Yes, only if approved by 90% of lenders`
+      ]
+    );
+  }
+
+  // Section 90 Significant Beneficial Ownership
+  private static generateLawSec90Sbo(): McqQuestion {
+    return QuestionGeneratorService.buildShuffledMcq(
+      {
+        id: `dyn_law_sec90_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        subjectId: 'p2_law',
+        chapterId: 'mgmt_admin',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'ICAI Exam Style: Section 90 SBO Reporting & Forms',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'Section 90 Companies Act, 2013 read with SBO Rules',
+        questionText: 'An individual who becomes a Significant Beneficial Owner (SBO) in a reporting company is required to make a declaration to the company in Form ________ within ________ days, and the company must file a return with the ROC in Form ________ within ________ days.',
+        trapNote: 'SBO declares in Form BEN-1 within 30 days. Company files Form BEN-2 with ROC within 30 days of receiving declaration.',
+        explanation: 'Under Section 90(1) & (4) read with the SBO Rules, every individual who is a significant beneficial owner shall make a declaration in Form BEN-1 to the company within 30 days of acquiring such ownership. The company shall file a return of significant beneficial ownership in Form BEN-2 with the Registrar within 30 days from receipt of declaration.'
+      },
+      'Form BEN-1 within 30 days; Form BEN-2 with ROC within 30 days',
+      [
+        'Form MGT-7 within 60 days; Form AOC-4 within 30 days',
+        'Form DIR-12 within 15 days; Form PAS-3 within 15 days',
+        'Form BEN-2 within 90 days; Form BEN-3 with ROC within 60 days'
+      ]
+    );
+  }
+
+  // Interpretation of Statutes Heydon's Mischief Rule
+  private static generateLawHeydonMischief(): McqQuestion {
+    return QuestionGeneratorService.buildShuffledMcq(
+      {
+        id: `dyn_law_heydon_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        subjectId: 'p2_law',
+        chapterId: 'general_clauses_interpretation',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'ICAI Exam Style: Heydon’s Case (Mischief Rule of Interpretation)',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'Interpretation of Statutes - The Mischief Rule (Heydon’s Case)',
+        questionText: 'The "Mischief Rule" (Rule in Heydon’s Case) requires a court interpreting an ambiguous statute to consider four crucial matters. Which of the following is NOT one of those four matters?',
+        trapNote: 'Heydon’s case 4 matters: 1. What was the common law before act? 2. What was the mischief/defect? 3. What remedy did Parliament appoint? 4. The true reason of the remedy. The private intent of individual MPs is NEVER a matter!',
+        explanation: 'In Heydon’s Case (1584), four things are to be considered: (1) What was the common law before making of the Act; (2) What was the mischief and defect for which the common law did not provide; (3) What remedy Parliament hath resolved and appointed; (4) The true reason of the remedy. Subjective speeches of individual members of Parliament are not considered.'
+      },
+      'The subjective opinions and debates of individual members of Parliament during voting',
+      [
+        'What was the common law before the making of the Act',
+        'What was the mischief and defect for which the common law did not provide',
+        'What remedy the Parliament hath resolved and appointed to cure the defect'
+      ]
+    );
+  }
+
   // =========================================================================
   // PAPER 3: TAXATION (WHOLE SYLLABUS - INCOME TAX & GST)
   // =========================================================================
@@ -681,7 +1028,13 @@ Is the company required to constitute a Corporate Social Responsibility (CSR) Co
       this.generateTaxGstRcm,
       this.generateTaxGstItcBlocked,
       this.generateTaxGstDiscount,
-      this.generateTaxGstEway
+      this.generateTaxGstEway,
+      this.generateTax115BacMarginalRelief,
+      this.generateTax44AdPresumptiveDigital,
+      this.generateTax194QPriority,
+      this.generateTaxLossSetOff,
+      this.generateTaxGstTimeOfSupplyContinuous,
+      this.generateTaxGstPlaceOfSupply
     ];
     const pick = generators[Math.floor(Math.random() * generators.length)];
     return pick();
@@ -962,6 +1315,171 @@ Is the company required to constitute a Corporate Social Responsibility (CSR) Co
     );
   }
 
+  // Section 115BAC Marginal Relief
+  private static generateTax115BacMarginalRelief(): McqQuestion {
+    const excess = [10000, 15000, 20000][Math.floor(Math.random() * 3)];
+    const totalIncome = 700000 + excess;
+    return QuestionGeneratorService.buildShuffledMcq(
+      {
+        id: `dyn_tax_marginal_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        subjectId: 'p3_tax',
+        chapterId: 'total_income_comp',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'ICAI Exam Style: Section 115BAC Marginal Relief over ₹ 7 Lakhs',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'Section 115BAC(1A) Proviso read with Section 87A',
+        questionText: `Mr. Suresh (resident, age 40) has Total Income of ₹ ${totalIncome.toLocaleString('en-IN')} for AY 2024-25 under the default new tax regime under Section 115BAC(1A).
+What is his net tax liability before health and education cess, after providing for statutory Marginal Relief?`,
+        trapNote: 'Under Marginal Relief, the tax payable cannot exceed the amount by which Total Income exceeds ₹ 7,00,000! So if excess is ₹ 15,000, max tax before cess is strictly ₹ 15,000.',
+        explanation: `Under Section 115BAC(1A) Proviso, marginal relief restricts the tax liability so that it does not exceed the income in excess of ₹ 7,00,000 (i.e. ₹ ${excess.toLocaleString('en-IN')}). Hence, tax before cess is capped at ₹ ${excess.toLocaleString('en-IN')}.`
+      },
+      `₹ ${excess.toLocaleString('en-IN')} (Capped at income exceeding ₹ 7,00,000 under Marginal Relief)`,
+      [
+        `₹ 26,500 (Standard slab tax without marginal relief)`,
+        `NIL, because income is within 10% of rebate threshold`,
+        `₹ ${(excess * 0.20).toLocaleString('en-IN')}`
+      ]
+    );
+  }
+
+  // Section 44AD Presumptive Taxation with Digital Receipts
+  private static generateTax44AdPresumptiveDigital(): McqQuestion {
+    const turnoverCr = [2.2, 2.5, 2.8][Math.floor(Math.random() * 3)];
+    const digitalTurnover = turnoverCr * 0.95; // 95% digital
+    const cashTurnover = turnoverCr * 0.05; // 5% cash
+    const deemedProfitLakhs = Math.round(((digitalTurnover * 100 * 0.06) + (cashTurnover * 100 * 0.08)) * 100) / 100;
+
+    return QuestionGeneratorService.buildShuffledMcq(
+      {
+        id: `dyn_tax_44ad_dig_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        subjectId: 'p3_tax',
+        chapterId: 'pgbp_deductions',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'ICAI Exam Style: Section 44AD Enhanced ₹ 3 Cr Threshold & Deemed Profit',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'Section 44AD(1) & First Proviso',
+        questionText: `An eligible resident individual business owner has a turnover of ₹ ${turnoverCr} Crores during FY 2023-24, of which 95% is received through account payee cheques and UPI (digital mode) and 5% in cash.
+Is he eligible for Section 44AD, and what is the minimum statutory presumptive profit under Section 44AD?`,
+        trapNote: 'The threshold is enhanced from ₹ 2 Cr to ₹ 3 Cr if aggregate cash receipts <= 5% of turnover. Deemed profit is 6% on digital turnover and 8% on cash turnover!',
+        explanation: `Under Section 44AD First Proviso, the threshold limit is ₹ 3 Crores where cash receipts do not exceed 5% of turnover. Deemed profit = 6% on digital turnover (₹ ${(digitalTurnover * 100).toFixed(1)}L × 6% = ₹ ${(digitalTurnover * 100 * 0.06).toFixed(2)}L) + 8% on cash turnover (₹ ${(cashTurnover * 100).toFixed(1)}L × 8% = ₹ ${(cashTurnover * 100 * 0.08).toFixed(2)}L) = ₹ ${deemedProfitLakhs} Lakhs.`
+      },
+      `Eligible (limit is ₹ 3 Crores); Minimum presumptive profit is ₹ ${deemedProfitLakhs} Lakhs (6% on digital + 8% on cash)`,
+      [
+        `Ineligible, because Section 44AD is capped strictly at ₹ 2 Crores without exception`,
+        `Eligible; Deemed profit is flat 8% on entire turnover of ₹ ${turnoverCr} Crores`,
+        `Eligible; Deemed profit is flat 5% on total receipts`
+      ]
+    );
+  }
+
+  // Section 194Q Buyer TDS Priority over Section 206C(1H) Seller TCS
+  private static generateTax194QPriority(): McqQuestion {
+    return QuestionGeneratorService.buildShuffledMcq(
+      {
+        id: `dyn_tax_194q_prio_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        subjectId: 'p3_tax',
+        chapterId: 'pgbp_deductions',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'ICAI Exam Style: Section 194Q TDS vs Section 206C(1H) TCS Precedence',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'Section 194Q(5) and Section 206C(1H) Second Proviso',
+        questionText: 'Company X (Buyer, turnover ₹ 20 Crores) buys goods of ₹ 70 Lakhs from Company Y (Seller, turnover ₹ 15 Crores). How should tax deduction/collection be handled under the Income-tax Act?',
+        trapNote: 'If a transaction is subject to both Section 194Q (buyer TDS) and Section 206C(1H) (seller TCS), Section 194Q OVERRULES Section 206C(1H)! The buyer must deduct TDS and seller shall NOT collect TCS.',
+        explanation: 'Under Section 194Q(5) read with the second proviso to Section 206C(1H), if buyer is liable to deduct TDS under Section 194Q, TCS under Section 206C(1H) shall not apply. Company X must deduct TDS @ 0.1% on ₹ 20 Lakhs (excess over ₹ 50 Lakhs).'
+      },
+      'Company X must deduct TDS @ 0.1% on ₹ 20 Lakhs under Section 194Q; Section 206C(1H) does NOT apply',
+      [
+        'Company Y must collect TCS under Section 206C(1H) and Section 194Q does not apply',
+        'Both Company X and Company Y must deduct and collect tax simultaneously',
+        'Neither applies because transaction is between corporate entities'
+      ]
+    );
+  }
+
+  // Set-off & Carry Forward Restrictions
+  private static generateTaxLossSetOff(): McqQuestion {
+    return QuestionGeneratorService.buildShuffledMcq(
+      {
+        id: `dyn_tax_setoff_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        subjectId: 'p3_tax',
+        chapterId: 'total_income_comp',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'ICAI Exam Style: Section 71 Set-Off of Business Loss Restrictions',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'Section 71(2A) Income-tax Act, 1961',
+        questionText: 'Under Section 71(2A) of the Income-tax Act, 1961, a loss from business or profession CANNOT be set off against income under which of the following heads?',
+        trapNote: 'Section 71(2A) specifically prohibits setting off business loss against "Salaries"! It CAN be set off against House Property, Capital Gains, or IFOS.',
+        explanation: 'Under Section 71(2A), where the net result of computation under the head "Profits and gains of business or profession" is a loss to the assessee, such loss shall NOT be set off against income under the head "Salaries".'
+      },
+      'Income from Salaries',
+      [
+        'Income from House Property',
+        'Income from Other Sources',
+        'Capital Gains'
+      ]
+    );
+  }
+
+  // GST Continuous Supply Time of Supply
+  private static generateTaxGstTimeOfSupplyContinuous(): McqQuestion {
+    return QuestionGeneratorService.buildShuffledMcq(
+      {
+        id: `dyn_tax_tos_cont_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        subjectId: 'p3_tax',
+        chapterId: 'gst_supply_charge',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'ICAI Exam Style: GST Time of Supply Continuous Supply of Services',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'Section 13(2) read with Section 31(5) of CGST Act, 2017',
+        questionText: 'In a continuous supply of services where payment is linked to completion of an event, when is the supplier required to issue the tax invoice under Section 31(5)(c)?',
+        trapNote: 'In continuous supply of services where payment is linked to completion of an event, the invoice must be issued ON OR BEFORE the date of completion of that event.',
+        explanation: 'As per Section 31(5)(c) of the CGST Act, 2017, where payment is linked to the completion of an event, the invoice shall be issued on or before the date of completion of that event.'
+      },
+      'On or before the date of completion of that event',
+      [
+        'Within 30 days from the date of completion of the event',
+        'Within 60 days from the date of receipt of payment',
+        'On the last day of the financial year'
+      ]
+    );
+  }
+
+  // GST Place of Supply Bill-to Ship-to
+  private static generateTaxGstPlaceOfSupply(): McqQuestion {
+    return QuestionGeneratorService.buildShuffledMcq(
+      {
+        id: `dyn_tax_pos_b2s_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        subjectId: 'p3_tax',
+        chapterId: 'gst_supply_charge',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'ICAI Exam Style: Section 10(1)(b) Bill-to Ship-to Place of Supply',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'Section 10(1)(b) of IGST Act, 2017',
+        questionText: 'Buyer X in Maharashtra orders machinery from Supplier Y in Gujarat, with instructions to deliver the machinery directly to X’s factory job-worker Z in Rajasthan. Under Section 10(1)(b) of the IGST Act, what is the Place of Supply for the sale from Supplier Y to Buyer X?',
+        trapNote: 'In a "Bill-to Ship-to" model, the goods are deemed to be delivered to the third person (Buyer X). Hence, Place of Supply is the PRINCIPAL PLACE OF BUSINESS OF BUYER X (Maharashtra), NOT Rajasthan where physical delivery occurred!',
+        explanation: 'Under Section 10(1)(b) of the IGST Act, 2017, where goods are delivered to a recipient on the instruction of a third person, it shall be deemed that the said third person has received the goods and the place of supply of such goods shall be the principal place of business of such third person (Maharashtra).'
+      },
+      'Principal place of business of Buyer X in Maharashtra (Deemed delivery under Section 10(1)(b))',
+      [
+        'Location of job-worker Z in Rajasthan where goods are physically delivered',
+        'Location of Supplier Y in Gujarat where goods originated',
+        'Place where the contract was signed'
+      ]
+    );
+  }
+
   // =========================================================================
   // PAPER 4: COST AND MANAGEMENT ACCOUNTING (WHOLE SYLLABUS)
   // =========================================================================
@@ -976,7 +1494,13 @@ Is the company required to constitute a Corporate Social Responsibility (CSR) Co
       this.generateCostingJointProducts,
       this.generateCostingStandardCosting,
       this.generateCostingMarginalBep,
-      this.generateCostingMarginOfSafety
+      this.generateCostingMarginOfSafety,
+      this.generateCostingIdleTimeVariance,
+      this.generateCostingLimitingFactor,
+      this.generateCostingMultiProductBep,
+      this.generateCostingJointProductsNrv,
+      this.generateCostingAbcHierarchy,
+      this.generateCostingShutDownPoint
     ];
     const pick = generators[Math.floor(Math.random() * generators.length)];
     return pick();
@@ -1289,6 +1813,178 @@ Is the company required to constitute a Corporate Social Responsibility (CSR) Co
     );
   }
 
+  // Idle Time Variance
+  private static generateCostingIdleTimeVariance(): McqQuestion {
+    const stdRate = [50, 60, 75, 80][Math.floor(Math.random() * 4)];
+    const actRate = stdRate + 5;
+    const idleHours = [100, 120, 150, 200][Math.floor(Math.random() * 4)];
+    const variance = idleHours * stdRate;
+
+    return QuestionGeneratorService.buildShuffledMcq(
+      {
+        id: `dyn_cost_idle_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        subjectId: 'p4_costing',
+        chapterId: 'standard_costing',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'ICAI Exam Style: Idle Time Variance Computation & Sign',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'Standard Costing Labour Variance Rules',
+        questionText: `In a manufacturing department, standard wage rate is ₹ ${stdRate} per hour. Actual wage paid was ₹ ${actRate} per hour. During a major machine breakdown, ${idleHours} hours were lost as abnormal idle time. What is the Idle Time Variance?`,
+        trapNote: 'Idle Time Variance is computed as: Idle Hours × STANDARD RATE (not actual rate!). Idle time variance can NEVER be Favourable; it is ALWAYS Adverse!',
+        explanation: `Idle Time Variance = Idle Hours × Standard Rate = ${idleHours} hours × ₹ ${stdRate} = ₹ ${variance.toLocaleString('en-IN')} Adverse. Standard cost systems never plan for abnormal idle time, making it universally Adverse.`
+      },
+      `₹ ${variance.toLocaleString('en-IN')} Adverse (Idle time variance is strictly computed at standard rate and is always Adverse)`,
+      [
+        `₹ ${(idleHours * actRate).toLocaleString('en-IN')} Adverse (Computed using actual wage rate)`,
+        `₹ ${variance.toLocaleString('en-IN')} Favourable`,
+        `NIL, because machine breakdown is an unavoidable normal event`
+      ]
+    );
+  }
+
+  // Limiting Factor Ranking
+  private static generateCostingLimitingFactor(): McqQuestion {
+    return QuestionGeneratorService.buildShuffledMcq(
+      {
+        id: `dyn_cost_limit_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        subjectId: 'p4_costing',
+        chapterId: 'marginal_costing',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'ICAI Exam Style: Marginal Costing Limiting Factor Priority',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'Key Factor / Limiting Factor Decision Rule',
+        questionText: `When a key production factor (such as skilled labour hours or raw material supply) is restricted in availability, how should different products be ranked for optimum production allocation?`,
+        trapNote: 'Products must be ranked based on Contribution per UNIT OF KEY FACTOR, NOT based on total contribution per unit or P/V ratio!',
+        explanation: 'Under marginal costing decision making, when a limiting or key factor exists, products must be ranked and produced according to their Contribution per unit of Limiting Factor (e.g. Contribution per machine hour or Contribution per kg of scarce raw material).'
+      },
+      'By Contribution per unit of the Limiting / Key Factor',
+      [
+        'By highest Unit Contribution alone',
+        'By highest Profit/Volume (P/V) ratio',
+        'By highest Selling Price per unit'
+      ]
+    );
+  }
+
+  // Multi-Product Composite Break-Even Point
+  private static generateCostingMultiProductBep(): McqQuestion {
+    const fixedCostLakhs = [12, 15, 18, 24][Math.floor(Math.random() * 4)];
+    const compPvRatio = 30; // 30%
+    const compositeBep = Math.round((fixedCostLakhs * 100000) / (compPvRatio / 100));
+
+    return QuestionGeneratorService.buildShuffledMcq(
+      {
+        id: `dyn_cost_multibep_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        subjectId: 'p4_costing',
+        chapterId: 'marginal_costing',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'ICAI Exam Style: Multi-Product Composite Break-Even Point',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'Multi-Product Marginal Costing BEP = Total Fixed Cost / Composite P/V Ratio',
+        questionText: `A company manufactures three products in a fixed sales mix with a Composite P/V Ratio of ${compPvRatio}%. Total annual fixed overheads are ₹ ${fixedCostLakhs} Lakhs. What is the Composite Break-Even Sales Value for the enterprise?`,
+        trapNote: 'Composite Break-Even Sales = Total Fixed Costs / Composite P/V Ratio. ₹ 15 Lakhs / 0.30 = ₹ 50 Lakhs.',
+        explanation: `Composite Break-Even Sales (Value) = Total Fixed Costs / Composite P/V Ratio = ₹ ${fixedCostLakhs * 100000} / 0.30 = ₹ ${compositeBep.toLocaleString('en-IN')}.`
+      },
+      `₹ ${compositeBep.toLocaleString('en-IN')} (Total Fixed Cost / Composite P/V Ratio)`,
+      [
+        `₹ ${(compositeBep * 0.70).toLocaleString('en-IN')}`,
+        `₹ ${(fixedCostLakhs * 100000).toLocaleString('en-IN')}`,
+        `₹ ${(compositeBep * 1.5).toLocaleString('en-IN')}`
+      ]
+    );
+  }
+
+  // Joint Products Further Processing Decision
+  private static generateCostingJointProductsNrv(): McqQuestion {
+    return QuestionGeneratorService.buildShuffledMcq(
+      {
+        id: `dyn_cost_joint_further_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        subjectId: 'p4_costing',
+        chapterId: 'job_batch_costing',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'ICAI Exam Style: Joint Products Further Processing Rule',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'Joint Products Decision Making - Incremental Analysis',
+        questionText: 'In joint product costing, when should management decide to process a joint product beyond the split-off point rather than selling it immediately at the split-off point?',
+        trapNote: 'Pre-separation joint costs are SUNK costs and totally IRRELEVANT to the further processing decision! Only Incremental Revenue beyond split-off must exceed Incremental Further Processing Cost.',
+        explanation: 'Joint costs incurred prior to the split-off point are past, sunk costs and are completely irrelevant to the decision. A joint product should be further processed only if Incremental Revenue from further processing EXCEEDS the Incremental Further Processing Costs.'
+      },
+      'When Incremental Revenue beyond split-off exceeds Incremental Further Processing Cost (joint costs are sunk and irrelevant)',
+      [
+        'When Total Revenue after processing exceeds Total Joint Costs plus further processing costs',
+        'When unit selling price after processing is at least double the price at split-off',
+        'Never, joint products should always be sold at split-off to minimize working capital'
+      ]
+    );
+  }
+
+  // ABC Cost Hierarchy Classification
+  private static generateCostingAbcHierarchy(): McqQuestion {
+    return QuestionGeneratorService.buildShuffledMcq(
+      {
+        id: `dyn_cost_abc_hier_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        subjectId: 'p4_costing',
+        chapterId: 'activity_based_costing',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'ICAI Exam Style: ABC Cost Hierarchy Categorization',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'Activity Based Costing System - 4 Levels of Cost Hierarchy',
+        questionText: 'Under Activity-Based Costing (ABC), machine setup costs, procurement purchase order costs, and batch quality inspection costs are categorized under which level of the cost hierarchy?',
+        trapNote: 'Cost hierarchy levels: 1. Unit-level (direct materials, power), 2. Batch-level (setups, purchase orders, material handling), 3. Product-sustaining (redesigning, testing), 4. Facility-sustaining (factory rent, security).',
+        explanation: 'Batch-level activities are activities performed each time a batch of goods is handled or processed, regardless of how many units are in the batch. Examples include machine setups, purchase order processing, and batch inspections.'
+      },
+      'Batch-Level Activities',
+      [
+        'Unit-Level Activities',
+        'Product-Sustaining Activities',
+        'Facility-Sustaining Activities'
+      ]
+    );
+  }
+
+  // Shut-Down Point Calculation
+  private static generateCostingShutDownPoint(): McqQuestion {
+    const totalFixed = 800000;
+    const unavFixed = 300000;
+    const avFixed = totalFixed - unavFixed; // 500000
+    const contrPerUnit = 25;
+    const shutDownUnits = avFixed / contrPerUnit; // 20000
+
+    return QuestionGeneratorService.buildShuffledMcq(
+      {
+        id: `dyn_cost_shutdown_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        subjectId: 'p4_costing',
+        chapterId: 'marginal_costing',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'ICAI Exam Style: Marginal Costing Shut-Down Point Computation',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'Shut-Down Point = Avoidable Fixed Costs / Contribution per unit',
+        questionText: `A manufacturing plant has Total Fixed Overheads of ₹ 8,00,000 p.a. If plant operations are temporarily closed, ₹ 3,00,000 of fixed overheads will still have to be incurred (unavoidable fixed costs).
+Selling price is ₹ 60 and variable cost is ₹ 35 per unit. What is the Shut-Down Point in units below which it is better to temporarily suspend operations?`,
+        trapNote: 'Shut-Down Point = Avoidable Fixed Costs / Contribution per unit. Avoidable fixed costs = 8,00,000 - 3,00,000 = ₹ 5,00,000. Contribution = 60 - 35 = ₹ 25. Shut-down point = 5,00,000 / 25 = 20,000 units.',
+        explanation: 'Shut-Down Point (Units) = Avoidable Fixed Costs / Contribution per unit = (₹ 8,00,000 - ₹ 3,00,000) / ₹ 25 = ₹ 5,00,000 / ₹ 25 = 20,000 Units. If demand drops below 20,000 units, the operating loss exceeds the shutdown loss, making shutdown optimal.'
+      },
+      '20,000 Units (Avoidable Fixed Costs / Unit Contribution)',
+      [
+        '32,000 Units (Total Fixed Costs / Unit Contribution)',
+        '12,000 Units (Unavoidable Fixed Costs / Unit Contribution)',
+        '15,000 Units'
+      ]
+    );
+  }
+
   // =========================================================================
   // PAPER 5: AUDITING AND ETHICS (WHOLE SYLLABUS)
   // =========================================================================
@@ -1303,7 +1999,13 @@ Is the company required to constitute a Corporate Social Responsibility (CSR) Co
       this.generateAuditRotation,
       this.generateAuditSqc1,
       this.generateAuditCaro2020,
-      this.generateAuditKamSa701
+      this.generateAuditKamSa701,
+      this.generateAuditSa210Preconditions,
+      this.generateAuditSa240FraudReporting,
+      this.generateAuditSa315InternalControl,
+      this.generateAuditCaro2020WorkingCapital,
+      this.generateAuditSection140Resignation,
+      this.generateAuditSection144ProhibitedServices
     ];
     const pick = generators[Math.floor(Math.random() * generators.length)];
     return pick();
@@ -1559,6 +2261,162 @@ Is the company required to constitute a Corporate Social Responsibility (CSR) Co
     );
   }
 
+  // SA 210 Agreeing Terms & Preconditions
+  private static generateAuditSa210Preconditions(): McqQuestion {
+    return QuestionGeneratorService.buildShuffledMcq(
+      {
+        id: `dyn_audit_210_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        subjectId: 'p5_audit',
+        chapterId: 'audit_report',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'ICAI Exam Style: SA 210 Preconditions for an Audit',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'SA 210 Agreeing the Terms of Audit Engagements - Para 6',
+        questionText: 'Under SA 210, which of the following is a fundamental "Precondition for an Audit" that the auditor must establish before accepting an audit engagement?',
+        trapNote: 'Preconditions: 1. Determine whether financial reporting framework is acceptable; 2. Obtain management agreement acknowledging responsibility for preparation of FS, internal controls, and providing unrestricted access.',
+        explanation: 'Under SA 210 Para 6, in order to establish whether the preconditions for an audit are present, the auditor shall: (a) determine whether the financial reporting framework to be applied in the preparation of the financial statements is acceptable; and (b) obtain the agreement of management that it acknowledges and understands its responsibility.'
+      },
+      'Obtaining management’s agreement acknowledging its responsibility for preparation of financial statements and internal controls',
+      [
+        'Obtaining a clean bank reference certificate guaranteeing zero bad debts',
+        'Verifying that company has made profits in at least 2 out of 3 preceding years',
+        'Ensuring that internal audit is conducted by a Big-4 audit firm'
+      ]
+    );
+  }
+
+  // SA 240 / Section 143(12) Fraud Reporting to Central Government
+  private static generateAuditSa240FraudReporting(): McqQuestion {
+    return QuestionGeneratorService.buildShuffledMcq(
+      {
+        id: `dyn_audit_143_12_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        subjectId: 'p5_audit',
+        chapterId: 'fraud_responsibilities',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'ICAI Exam Style: Section 143(12) Reporting of Fraud to Central Govt',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'Section 143(12) Companies Act, 2013 read with Rule 13',
+        questionText: 'An auditor uncovers an offense of fraud committed against the company by its officers involving an amount of ₹ 2.5 Crores. Under Section 143(12) and Rule 13, the auditor is mandatorily required to report the matter to:',
+        trapNote: 'For fraud >= ₹ 1 Crore, the auditor must report to the CENTRAL GOVERNMENT (MCA) in Form ADT-4 (after seeking Board reply). For fraud < ₹ 1 Crore, report ONLY to Board/Audit Committee.',
+        explanation: 'Under Section 143(12) read with Rule 13, if an auditor has reason to believe that an offense of fraud involving an amount of ₹ 1 Crore or above is being or has been committed against the company by its officers or employees, the auditor shall report the matter to the Central Government.'
+      },
+      'The Central Government (MCA) in Form ADT-4 within prescribed timelines (since fraud amount is ₹ 1 Crore or above)',
+      [
+        'Only to the Audit Committee or Board, because reporting to Central Government applies only to listed firms',
+        'Directly to the Institute of Chartered Accountants of India (ICAI) Disciplinary Directorate',
+        'To the local police cyber cell within 24 hours'
+      ]
+    );
+  }
+
+  // SA 315 Assessing Risk of Material Misstatement
+  private static generateAuditSa315InternalControl(): McqQuestion {
+    return QuestionGeneratorService.buildShuffledMcq(
+      {
+        id: `dyn_audit_315_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        subjectId: 'p5_audit',
+        chapterId: 'audit_evidence',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'ICAI Exam Style: SA 315 Understanding Entity & Internal Controls',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'SA 315 Identifying and Assessing Risks of Material Misstatement - Para 12',
+        questionText: 'Under SA 315, which of the following is considered one of the five interrelated components of an entity’s Internal Control system?',
+        trapNote: 'The 5 components of internal control under SA 315: 1. Control Environment, 2. Entity’s Risk Assessment Process, 3. Information System, 4. Control Activities, 5. Monitoring of Controls.',
+        explanation: 'Under SA 315, internal control consists of five interrelated components: (1) Control Environment, (2) Entity’s Risk Assessment Process, (3) The Information System and Business Processes, (4) Control Activities, and (5) Monitoring of Controls.'
+      },
+      'The Control Environment (governance attitude, awareness, and actions regarding internal control)',
+      [
+        'The External Auditor’s Engagement Letter',
+        'The Statutory Tax Audit Report u/s 44AB',
+        'The Shareholder Voting Register'
+      ]
+    );
+  }
+
+  // CARO 2020 Working Capital Statements Reconciliation
+  private static generateAuditCaro2020WorkingCapital(): McqQuestion {
+    return QuestionGeneratorService.buildShuffledMcq(
+      {
+        id: `dyn_audit_caro_wc_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        subjectId: 'p5_audit',
+        chapterId: 'company_audit',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'ICAI Exam Style: CARO 2020 Clause ii(b) Working Capital Quarterly Returns',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'CARO 2020 Clause (ii)(b)',
+        questionText: 'Under Clause (ii)(b) of CARO 2020, if an entity has been sanctioned working capital limits from banks or financial institutions on the basis of security of current assets, at what sanctioned threshold does the auditor have to report whether quarterly statements filed with banks agree with books of account?',
+        trapNote: 'The threshold under CARO 2020 Clause (ii)(b) is in excess of ₹ 5 CRORES sanctioned working capital limits!',
+        explanation: 'Under Clause (ii)(b) of CARO 2020, where the company has been sanctioned working capital limits in excess of ₹ 5 Crores, in aggregate, from banks or financial institutions on the basis of security of current assets, the auditor must report whether quarterly returns or statements filed by the company with such banks agree with the books of account.'
+      },
+      'Working capital limits sanctioned in excess of ₹ 5 Crores in aggregate',
+      [
+        'Working capital limits sanctioned in excess of ₹ 1 Crore',
+        'Working capital limits sanctioned in excess of ₹ 10 Crores',
+        'Applicable to all entities having bank loans regardless of sanctioned limit'
+      ]
+    );
+  }
+
+  // Section 140 Resignation of Auditor Form ADT-3
+  private static generateAuditSection140Resignation(): McqQuestion {
+    return QuestionGeneratorService.buildShuffledMcq(
+      {
+        id: `dyn_audit_sec140_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        subjectId: 'p5_audit',
+        chapterId: 'company_audit',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'ICAI Exam Style: Section 140(2) Resignation of Auditor Statement in ADT-3',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'Section 140(2) & 140(3) Companies Act, 2013',
+        questionText: 'A statutory auditor who resigns from the company is mandatorily required under Section 140(2) to file a statement indicating the reasons and facts for resignation in Form ________ within ________ days from the date of resignation.',
+        trapNote: 'Resigning auditor must file Form ADT-3 within 30 days with the company and the Registrar (and C&AG if government company). Penalty for failure under Section 140(3) is minimum ₹ 50,000 or auditor remuneration.',
+        explanation: 'Under Section 140(2) of the Companies Act, 2013, the auditor who has resigned from the company shall file within a period of 30 days from the date of resignation, a statement in Form ADT-3 with the company and the Registrar indicating the reasons and other facts as may be relevant with regard to his resignation.'
+      },
+      'Form ADT-3 within 30 days with the company and the Registrar of Companies',
+      [
+        'Form ADT-1 within 15 days with the Central Government',
+        'Form MGT-14 within 60 days with ROC',
+        'Form DIR-12 within 30 days'
+      ]
+    );
+  }
+
+  // Section 144 Prohibited Non-Audit Services
+  private static generateAuditSection144ProhibitedServices(): McqQuestion {
+    return QuestionGeneratorService.buildShuffledMcq(
+      {
+        id: `dyn_audit_sec144_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        subjectId: 'p5_audit',
+        chapterId: 'company_audit',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'ICAI Exam Style: Section 144 Prohibited Services by Statutory Auditor',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'Section 144 Companies Act, 2013',
+        questionText: 'Under Section 144 of the Companies Act, 2013, which of the following services CAN be lawfully rendered by the statutory auditor to the company being audited?',
+        trapNote: 'Section 144 strictly prohibits: internal audit, book keeping, actuarial services, investment advisory/banking, management services. Rendering STATUTORY TAX AUDIT under Section 44AB of Income-tax Act is permitted and not prohibited!',
+        explanation: 'Section 144 lists prohibited services: accounting and book keeping, internal audit, design and implementation of financial IT systems, actuarial services, investment advisory, investment banking, and management services. Routine tax audits u/s 44AB or certification required by regulators is permitted.'
+      },
+      'Statutory Tax Audit under Section 44AB of the Income-tax Act, 1961',
+      [
+        'Internal Audit Services under Section 138',
+        'Accounting and Book-keeping services',
+        'Actuarial and Investment Advisory services'
+      ]
+    );
+  }
+
   // =========================================================================
   // PAPER 6: FINANCIAL MANAGEMENT & STRATEGIC MANAGEMENT (WHOLE SYLLABUS)
   // =========================================================================
@@ -1573,7 +2431,13 @@ Is the company required to constitute a Corporate Social Responsibility (CSR) Co
       this.generateSmAnsoff,
       this.generateSmPorterGeneric,
       this.generateSmBcgMatrix,
-      this.generateSmStrategicControl
+      this.generateSmStrategicControl,
+      this.generateFmCapBudgetingSensitivity,
+      this.generateFmWaccCapm,
+      this.generateFmWorkingCapitalMpbf,
+      this.generateSmBcgGrowthShare,
+      this.generateSmPorterValueChain,
+      this.generateSmAnsoffQuadrants
     ];
     const pick = generators[Math.floor(Math.random() * generators.length)];
     return pick();
@@ -1848,6 +2712,225 @@ Is the company required to constitute a Corporate Social Responsibility (CSR) Co
         `Implementation Control`,
         `Special Alert Control`,
         `Strategic Surveillance`
+      ]
+    );
+  }
+
+  private static generateFmCapBudgetingSensitivity(): McqQuestion {
+    const initialOutflow = [40, 50, 80][Math.floor(Math.random() * 3)]; // Lakhs
+    const pvInflows = initialOutflow + [10, 15, 20][Math.floor(Math.random() * 3)]; // Lakhs
+    const npv = pvInflows - initialOutflow;
+    const sensitivityInflow = Math.round((npv / pvInflows) * 10000) / 100;
+    const sensitivityOutflow = Math.round((npv / initialOutflow) * 10000) / 100;
+
+    return QuestionGeneratorService.buildShuffledMcq(
+      {
+        id: `dyn_fm_sens_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        subjectId: 'p6_fm_sm',
+        chapterId: 'fm_capital_budgeting',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'ICAI Exam Style: Sensitivity Analysis in Capital Budgeting',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'Sensitivity Analysis: (NPV / PV of Factor) × 100',
+        questionText: `A project requires an Initial Cash Outflow of ₹${initialOutflow} Lakhs and generates Present Value of Future Cash Inflows of ₹${pvInflows} Lakhs (NPV = ₹${npv} Lakhs). What is the sensitivity of the project with respect to Present Value of Annual Cash Inflows (i.e. by what percentage can cash inflows fall before NPV becomes zero)?`,
+        trapNote: 'Sensitivity of PV of Cash Inflows = (NPV / PV of Inflows) × 100, NOT (NPV / Initial Outlay). The lower the sensitivity percentage, the more critical and sensitive that factor is!',
+        explanation: `Sensitivity of a factor is the adverse percentage change required to reduce NPV to zero.\nSensitivity of Cash Inflows = (NPV / PV of Cash Inflows) × 100\n= (₹${npv} Lakhs / ₹${pvInflows} Lakhs) × 100 = ${sensitivityInflow}%.\n(In contrast, sensitivity of Initial Outlay = ${npv}/${initialOutflow} = ${sensitivityOutflow}%).`
+      },
+      `${sensitivityInflow}% (adverse fall in inflows will make NPV zero)`,
+      [
+        `${sensitivityOutflow}% (adverse rise in initial outlay)`,
+        `${Math.round((initialOutflow / pvInflows) * 10000) / 100}% (PI factor percentage)`,
+        `${Math.round((npv / (initialOutflow + pvInflows)) * 10000) / 100}% (NPV to total cash flow ratio)`
+      ]
+    );
+  }
+
+  private static generateFmWaccCapm(): McqQuestion {
+    const rf = [6.5, 7.0, 7.5][Math.floor(Math.random() * 3)];
+    const beta = [1.2, 1.25, 1.4][Math.floor(Math.random() * 3)];
+    const rm = [14.0, 15.0, 16.0][Math.floor(Math.random() * 3)];
+    const marketRiskPremium = Math.round((rm - rf) * 10) / 10;
+    const ke = Math.round((rf + beta * marketRiskPremium) * 100) / 100;
+    const trapKe = Math.round((rf + beta * rm) * 100) / 100;
+
+    return QuestionGeneratorService.buildShuffledMcq(
+      {
+        id: `dyn_fm_wacc_capm_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        subjectId: 'p6_fm_sm',
+        chapterId: 'fm_cost_of_capital',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'ICAI Exam Style: CAPM Cost of Equity with Market Risk Premium Trap',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'Ke = Rf + Beta × [E(Rm) - Rf]',
+        questionText: `An analyst is computing Cost of Equity (Ke) under CAPM for Alpha Ltd. Risk-free rate (Rf) is ${rf}%, Equity Beta (β) is ${beta}, and the Market Return (Rm) is ${rm}%. Calculate the required rate of return on equity (Ke):`,
+        trapNote: 'Trap alert: Market Risk Premium is [Rm - Rf] = (${rm}% - ${rf}% = ${marketRiskPremium}%). Students often multiply Beta directly with Rm (${beta} × ${rm}%) forgetting to subtract Rf, which yields the incorrect answer ${trapKe}%.',
+        explanation: `Under CAPM:\nKe = Rf + β × (Rm - Rf)\n= ${rf}% + ${beta} × (${rm}% - ${rf}%)\n= ${rf}% + (${beta} × ${marketRiskPremium}%)\n= ${rf}% + ${Math.round(beta * marketRiskPremium * 100) / 100}% = ${ke}%.`
+      },
+      `${ke}% per annum`,
+      [
+        `${trapKe}% (erroneously multiplying Beta directly by Rm without subtracting Rf)`,
+        `${Math.round((rf + marketRiskPremium) * 100) / 100}% (ignoring beta factor)`,
+        `${Math.round(beta * rm * 100) / 100}% (beta multiplied by expected market return)`
+      ]
+    );
+  }
+
+  private static generateFmWorkingCapitalMpbf(): McqQuestion {
+    const totalCa = [160, 200, 240][Math.floor(Math.random() * 3)]; // Lakhs
+    const clOtherThanBank = [40, 50, 60][Math.floor(Math.random() * 3)]; // Lakhs
+    const wcGap = totalCa - clOtherThanBank;
+    const mpbfMethod1 = Math.round(0.75 * wcGap);
+    const mpbfMethod2 = Math.round((0.75 * totalCa) - clOtherThanBank);
+
+    return QuestionGeneratorService.buildShuffledMcq(
+      {
+        id: `dyn_fm_mpbf_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        subjectId: 'p6_fm_sm',
+        chapterId: 'fm_working_capital',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'ICAI Exam Style: Tandon Committee MPBF (Method 2 Calculation)',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'Tandon Committee Recommendations on Working Capital Finance',
+        questionText: `Z Ltd. has Total Current Assets of ₹${totalCa} Lakhs and Current Liabilities (other than bank borrowings) of ₹${clOtherThanBank} Lakhs. Calculate the Maximum Permissible Bank Finance (MPBF) under Tandon Committee METHOD 2:`,
+        trapNote: 'Method 1 MPBF = 75% of (CA - CL excl. bank) = 75% of ₹${wcGap}L = ₹${mpbfMethod1}L. Method 2 MPBF = (75% of CA) - (CL excl. bank) = (0.75 × ₹${totalCa}L) - ₹${clOtherThanBank}L = ₹${mpbfMethod2}L. Under Method 2, the borrower must finance at least 25% of Total Current Assets out of long-term sources.',
+        explanation: `Under Tandon Committee Method 2:\nLong-term fund contribution required = 25% of Total Current Assets = 0.25 × ₹${totalCa} Lakhs = ₹${Math.round(0.25 * totalCa)} Lakhs.\nMPBF = (Total Current Assets - 25% of Current Assets) - Current Liabilities (excl. bank)\n= (75% of ₹${totalCa} Lakhs) - ₹${clOtherThanBank} Lakhs\n= ₹${Math.round(0.75 * totalCa)} Lakhs - ₹${clOtherThanBank} Lakhs = ₹${mpbfMethod2} Lakhs.`
+      },
+      `₹${mpbfMethod2} Lakhs (Method 2: 75% of CA less CL other than bank borrowings)`,
+      [
+        `₹${mpbfMethod1} Lakhs (Method 1: 75% of Working Capital Gap)`,
+        `₹${wcGap} Lakhs (Total Working Capital Gap without mandatory margin)`,
+        `₹${Math.round(0.75 * totalCa)} Lakhs (75% of Current Assets without deducting CL)`
+      ]
+    );
+  }
+
+  private static generateSmBcgGrowthShare(): McqQuestion {
+    const scenarios = [
+      {
+        quadrant: 'Cash Cows',
+        share: 'High Relative Market Share',
+        growth: 'Low Industry Growth Rate',
+        strategy: 'Harvest or Hold (funds are used to finance Stars and Question Marks)',
+        distractor: 'Stars (High Share, High Growth)'
+      },
+      {
+        quadrant: 'Question Marks (Problem Children)',
+        share: 'Low Relative Market Share',
+        growth: 'High Industry Growth Rate',
+        strategy: 'Build (invest heavily to gain market share) or Divest',
+        distractor: 'Cash Cows (High Share, Low Growth)'
+      },
+      {
+        quadrant: 'Dogs',
+        share: 'Low Relative Market Share',
+        growth: 'Low Industry Growth Rate',
+        strategy: 'Divest or Retrench (generates barely enough cash to sustain themselves)',
+        distractor: 'Question Marks (Low Share, High Growth)'
+      }
+    ];
+    const pick = scenarios[Math.floor(Math.random() * scenarios.length)];
+
+    return QuestionGeneratorService.buildShuffledMcq(
+      {
+        id: `dyn_sm_bcg_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        subjectId: 'p6_fm_sm',
+        chapterId: 'sm_choices',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'ICAI Exam Style: BCG Growth-Share Matrix Strategic Quadrants',
+        marks: 2,
+        difficulty: 'Standard ICAI',
+        icaiReference: 'BCG Matrix: Relative Market Share vs Industry Growth Rate',
+        questionText: `In the Boston Consulting Group (BCG) Growth-Share Matrix, a Strategic Business Unit (SBU) characterized by ${pick.share} operating in an industry with ${pick.growth} is classified as:`,
+        trapNote: 'BCG Matrix axes: Vertical axis is Market Growth Rate (High/Low); Horizontal axis is Relative Market Share (High/Low). Stars = High/High, Cash Cows = High Share/Low Growth, Question Marks = Low Share/High Growth, Dogs = Low Share/Low Growth.',
+        explanation: `Under BCG Matrix:\n- ${pick.share} + ${pick.growth} represents '${pick.quadrant}'.\n- Strategic objective for ${pick.quadrant}: ${pick.strategy}.`
+      },
+      `${pick.quadrant}`,
+      [
+        pick.distractor,
+        `Core Competence Hub`,
+        `Cash Trap Unit`
+      ]
+    );
+  }
+
+  private static generateSmPorterValueChain(): McqQuestion {
+    return QuestionGeneratorService.buildShuffledMcq(
+      {
+        id: `dyn_sm_vchain_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        subjectId: 'p6_fm_sm',
+        chapterId: 'sm_strategic_analysis',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'ICAI Exam Style: Michael Porter Value Chain Classification',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'Michael Porter Value Chain: Primary vs Support Activities',
+        questionText: 'Under Michael Porter’s Value Chain Analysis, which of the following is classified strictly as a SUPPORT ACTIVITY, rather than a Primary Activity?',
+        trapNote: 'ICAI favorite trap: Many students confuse Procurement with Inbound Logistics. Inbound logistics (receiving, storing, and distributing inputs) is a PRIMARY activity. Procurement (the function of purchasing inputs across all activities) is a SUPPORT activity!',
+        explanation: 'Michael Porter’s Value Chain divides activities into:\n1. Primary Activities: Inbound Logistics, Operations, Outbound Logistics, Marketing & Sales, and Customer Service.\n2. Support Activities: Firm Infrastructure, Human Resource Management, Technology Development, and Procurement.'
+      },
+      'Procurement (purchasing inputs, contracts, and supplier negotiations across all units)',
+      [
+        'Inbound Logistics (receiving, storing, and disseminating inputs internally)',
+        'Operations (machining, packaging, assembly, and testing)',
+        'Outbound Logistics (warehousing finished goods and order processing)'
+      ]
+    );
+  }
+
+  private static generateSmAnsoffQuadrants(): McqQuestion {
+    const matrix = [
+      {
+        product: 'New Product',
+        market: 'Existing Market',
+        strategy: 'Product Development',
+        example: 'Launching a new sugar-free energy drink to existing beverage consumers',
+        distractor: 'Market Development (Existing Product into New Market)'
+      },
+      {
+        product: 'New Product',
+        market: 'New Market',
+        strategy: 'Diversification (Conglomerate / Concentric)',
+        example: 'A footwear manufacturer entering the renewable energy or electric vehicles business',
+        distractor: 'Market Penetration (Existing Product in Existing Market)'
+      },
+      {
+        product: 'Existing Product',
+        market: 'Existing Market',
+        strategy: 'Market Penetration',
+        example: 'Increasing promotional expenditure and discounts to gain higher market share in the current city',
+        distractor: 'Product Development (New Product in Existing Market)'
+      }
+    ];
+    const pick = matrix[Math.floor(Math.random() * matrix.length)];
+
+    return QuestionGeneratorService.buildShuffledMcq(
+      {
+        id: `dyn_sm_ansoff_quad_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        subjectId: 'p6_fm_sm',
+        chapterId: 'sm_choices',
+        type: 'mcq',
+        importance: 'HIGH',
+        source: 'ICAI Exam Style: Ansoff Growth Vector Quadrants',
+        marks: 2,
+        difficulty: 'Examiner Favorite',
+        icaiReference: 'Igor Ansoff Product-Market Growth Matrix',
+        questionText: `An enterprise decides to introduce a **${pick.product}** into an **${pick.market}** (e.g. ${pick.example}). Under Igor Ansoff's Growth Matrix, this strategic growth posture is designated as:`,
+        trapNote: 'Market Penetration = Existing Product / Existing Market; Market Development = Existing Product / New Market; Product Development = New Product / Existing Market; Diversification = New Product / New Market.',
+        explanation: `According to the Ansoff Growth Matrix:\n- ${pick.product} + ${pick.market} = ${pick.strategy}.\nThis allows the enterprise to leverage its existing customer relationship and brand trust to sell novel offerings.`
+      },
+      `${pick.strategy}`,
+      [
+        pick.distractor,
+        `Vertical Backward Integration`,
+        `Turnaround Retrenchment`
       ]
     );
   }

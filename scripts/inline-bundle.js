@@ -69,6 +69,8 @@ const standaloneHtml = `<!DOCTYPE html>
           }
         });
       }
+      // Cache-busting version identifier
+      console.log('[CA Inter Pro] Active Build: ' + new Date().toISOString());
     </script>
     <style>
 /* Inlined CSS for 100% Offline Standalone Support */
@@ -77,7 +79,7 @@ ${cssContent}
   </head>
   <body class="bg-slate-900 text-slate-100 antialiased font-sans selection:bg-blue-600 selection:text-white min-h-screen">
     <div id="root"></div>
-    <script>
+    <script type="module">
 /* Inlined JS Bundle for Zero-Server / File:// Protocol Execution */
 ${jsContent}
     </script>

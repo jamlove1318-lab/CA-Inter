@@ -2,7 +2,7 @@ import React from 'react';
 import { Volume2, VolumeX, Flame } from 'lucide-react';
 import { AudioService } from '../services/audioService';
 
-export type ActiveTab = 'dashboard' | 'mcqs' | 'casestudies' | 'descriptive' | 'exam' | 'pastpapers' | 'gamezone';
+export type ActiveTab = 'dashboard' | 'mcqs' | 'revision' | 'casestudies' | 'descriptive' | 'exam' | 'pastpapers' | 'gamezone';
 
 interface NavbarProps {
   onGoHome: () => void;

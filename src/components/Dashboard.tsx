@@ -103,18 +103,27 @@ export const Dashboard: React.FC<DashboardProps> = ({
         </div>
       </div>
 
-      {/* Smart Repetition Status - Simple & Non-intrusive */}
-      <div className="bg-slate-800/60 border border-slate-700/60 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+      {/* Smart Repetition Status - Interactive Link to Revision Hub */}
+      <div className="bg-slate-800/80 border border-slate-700/80 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
         <div className="flex items-center gap-2.5 text-slate-300">
-          <span className="w-2 h-2 rounded-full bg-emerald-400" />
+          <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse" />
           <span>
-            <strong className="text-white">Smart Repetition Filter:</strong> High-importance ICAI questions repeat on spaced review. Low-importance questions never repeat once attempted.
+            <strong className="text-white">ICAI Revision Rule:</strong> Only High-Importance questions repeat on spaced review. Low-importance questions are permanently retired.
           </span>
         </div>
-        <div className="flex items-center gap-4 text-slate-400 font-mono text-[11px] self-end sm:self-auto">
-          <span>Active in Revision: <strong className="text-amber-400">{stats.activeHighYieldLoopCount}</strong></span>
-          <span>•</span>
-          <span>Retired: <strong className="text-emerald-400">{stats.retiredLowImportanceCount}</strong></span>
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 text-slate-400 font-mono text-[11px]">
+            <span>Active in Revision: <strong className="text-amber-400">{stats.activeHighYieldLoopCount}</strong></span>
+            <span>•</span>
+            <span>Retired: <strong className="text-emerald-400">{stats.retiredLowImportanceCount}</strong></span>
+          </div>
+          <button
+            onClick={() => setActiveTab('revision')}
+            className="flex items-center gap-1 px-3 py-1 bg-amber-600/20 hover:bg-amber-600 text-amber-300 hover:text-white rounded-lg font-bold border border-amber-500/30 transition-all text-xs shrink-0"
+          >
+            <span>Revision Tab</span>
+            <ArrowRight className="w-3 h-3" />
+          </button>
         </div>
       </div>
 
